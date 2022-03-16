@@ -1,0 +1,129 @@
+<mat-tab-group color="primary">
+  <mat-tab label="{{'MULTIMEDIA.MAIN_COLORS' | translate}}">
+    <div class="container tab-container">
+      <div class="card">
+        <div class="card-header">
+          <div class="font-14 font-weight-bold">{{'MULTIMEDIA.MAIN_COLORS' | translate}}</div>
+        </div>
+
+        <div class="card-body">
+          <h6>{{'MULTIMEDIA.THEME.MAIN_COLORS' | translate}}</h6>
+          <div class="color-input-container">
+            <div class="color-picker-square"
+                 [style.backgroundColor]="mainColor"
+                 [(colorPicker)]="mainColor">
+            </div>
+            <div>{{'MULTIMEDIA.THEME.MAIN_COLOR' | translate}}</div>
+          </div>
+          <div class="color-input-container">
+            <div class="color-picker-square"
+                 [style.backgroundColor]="secondaryColor"
+                 [(colorPicker)]="secondaryColor">
+            </div>
+            <div>{{'MULTIMEDIA.THEME.SECOND_COLOR' | translate}}</div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-4">
+              <h6>{{'MULTIMEDIA.THEME.HEADER_THEME' | translate}}</h6>
+              <mat-radio-group [(ngModel)]="headerColor">
+                <mat-radio-button value="DARK" class="mr-2" color="primary">{{'MULTIMEDIA.THEME.DARK' | translate}}</mat-radio-button>
+                <mat-radio-button value="Light"class="mr-2" color="primary">{{'MULTIMEDIA.THEME.LIGHT' | translate}}</mat-radio-button>
+                <mat-radio-button value="COLOR" color="primary">
+                  <div class="color-input-container">
+                    <div class="color-picker-square"
+                         [style.backgroundColor]="headerColorValue"
+                         [(colorPicker)]="headerColorValue">
+                    </div>
+                  </div>
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <div class="form-group col-4" *ngIf="headerColor === 'COLOR'">
+              <h6>{{'MULTIMEDIA.THEME.HEADER_ICONS_THEME' | translate}}</h6>
+              <div class="color-input-container">
+                <div class="color-picker-square"
+                     [style.backgroundColor]="headerIconsColor"
+                     [(colorPicker)]="headerIconsColor">
+                </div>
+                <div>{{'MULTIMEDIA.THEME.HEADER_ICONS_THEME' | translate}}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <h6>{{'MULTIMEDIA.THEME.SUB_HEADER_THEME' | translate}}</h6>
+            <mat-radio-group [(ngModel)]="subHeaderColor">
+              <mat-radio-button value="DARK" class="mr-2" color="primary">{{'MULTIMEDIA.THEME.DARK' | translate}}</mat-radio-button>
+              <mat-radio-button value="Light" class="mr-2" color="primary">{{'MULTIMEDIA.THEME.LIGHT' | translate}}</mat-radio-button>
+              <mat-radio-button value="COLOR" color="primary">
+                <div class="color-input-container">
+                  <div class="color-picker-square"
+                       [style.backgroundColor]="subHeaderColorValue"
+                       [(colorPicker)]="subHeaderColorValue">
+                  </div>
+                </div>
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div class="form-row">
+
+            <div class="form-group col-4">
+              <h6>{{'MULTIMEDIA.THEME.FOOTER_THEME' | translate}}</h6>
+              <mat-radio-group [(ngModel)]="footerColor">
+                <mat-radio-button value="DARK" class="mr-2" color="primary">{{'MULTIMEDIA.THEME.DARK' | translate}}</mat-radio-button>
+                <mat-radio-button value="LIGHT"  class="mr-2" color="primary">{{'MULTIMEDIA.THEME.LIGHT' | translate}}</mat-radio-button>
+                <mat-radio-button value="COLOR" color="primary">
+                  <div class="color-input-container">
+                    <div class="color-picker-square"
+                         [style.backgroundColor]="footerColorValue"
+                         [(colorPicker)]="footerColorValue">
+                    </div>
+                  </div>
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <div class="form-group col-4" *ngIf="footerColor === 'COLOR'">
+              <h6>{{'MULTIMEDIA.THEME.SOCIAL_ICONS_THEME' | translate}}</h6>
+              <div class="color-input-container">
+                <div class="color-picker-square"
+                     [style.backgroundColor]="socialIconsColor"
+                     [(colorPicker)]="socialIconsColor">
+                </div>
+                <div>{{'MULTIMEDIA.THEME.SOCIAL_ICONS_THEME' | translate}}</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <h6>{{'MULTIMEDIA.THEME.SUB_FOOTER_THEME' | translate}}</h6>
+              <mat-radio-group [(ngModel)]="subFooterColor">
+                <mat-radio-button value="DARK" class="mr-2" color="primary">{{'MULTIMEDIA.THEME.DARK' | translate}}</mat-radio-button>
+                <mat-radio-button value="LIGHT"  class="mr-2" color="primary">{{'MULTIMEDIA.THEME.LIGHT' | translate}}</mat-radio-button>
+                <mat-radio-button value="COLOR" color="primary">
+                  <div class="color-input-container">
+                    <div class="color-picker-square"
+                         [style.backgroundColor]="subFooterColorValue"
+                         [(colorPicker)]="subFooterColorValue">
+                    </div>
+                  </div>
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer d-flex justify-content-end">
+          <button mat-flat-button color="primary" (click)="saveTheme()">
+            {{'BUTTONS.SAVE' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

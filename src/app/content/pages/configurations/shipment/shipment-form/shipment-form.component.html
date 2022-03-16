@@ -1,0 +1,262 @@
+<div mat-dialog-title style="border-bottom: 1px solid gainsboro; margin-bottom: 15px;">
+  <h1 *ngIf="!data.editMode">
+    {{'SHIPMENT_FORM.NEW_SHIPMENT' | translate}}
+  </h1>
+  <h1 *ngIf="data.editMode">
+    {{'SHIPMENT_FORM.EDIT_SHIPMENT' | translate}}
+  </h1>
+</div>
+
+
+<div mat-dialog-content>
+  <form [formGroup]="shipmentForm" id="addForm">
+    <div class="form-row">
+      <div class="form-group col-lg-6 col-md-3">
+        <label>{{'SHIPMENT_FORM.DESCRIPTION' | translate}}</label>
+        <div class="input-group">
+          <input type="text" class="form-control form-control-sm" formControlName="description" #descriptionInput
+                 [ngClass]="{'is-invalid': submitted && shipmentForm.get('description').invalid}">
+          <div class="input-group-append">
+              <span class="input-group-text">
+                <i class="fa fa-plus" (click)="openTranslationModal(modalTranslationDescription)"></i>
+              </span>
+          </div>
+        </div>
+        <div *ngIf="submitted && shipmentForm.get('description').invalid;" class="d-block invalid-feedback">
+          {{'SHIPMENT_FORM.INVALID_DESCRIPTION' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group col-lg-6 col-md-3">
+        <label>{{'SHIPMENT_FORM.DELIVERY_TIME' | translate}}</label>
+        <input type="text" class="form-control form-control-sm" formControlName="deliveryTime"/>
+      </div>
+
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-lg-6 col-md-3">
+        <div class="input-group-icon input-group-icon-left">
+          <label>{{'SHIPMENT_FORM.SHIPPING_FEES' | translate}}</label>
+          <mat-checkbox formControlName="shippingFees" class="ml-2"></mat-checkbox>
+        </div>
+      </div>
+      <div class="form-group col-lg-6 col-md-3 text-right">
+        <div class="input-group-icon input-group-icon-left">
+          <label>{{'SHIPMENT_FORM.STATUS' | translate}}</label>
+          <mat-checkbox formControlName="enabled" class="ml-2"></mat-checkbox>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row" *ngIf="!shipmentForm.controls.shippingFees.value">
+      <div class="form-group col-lg-4 col-md-3">
+        <label>{{'SHIPMENT_FORM.COST' | translate}}</label>
+        <input type="tel" currencyMask  class="form-control form-control-sm" formControlName="shippingCosts">
+      </div>
+    </div>
+
+    <div class="form-row" *ngIf="shipmentForm.controls.shippingFees.value">
+      <div class="form-group col-lg-12 col-md-12">
+        {{'SHIPMENT_FORM.COST_TABLE' | translate}}
+        <i class="fa fa-plus" (click)="openAddCost(modalCost)"></i>
+      </div>
+
+      <div class="form-group col-lg-12 col-md-12">
+        <table class="table table-bordered">
+          <tr>
+            <th>{{'SHIPMENT_FORM.TYPE' | translate}}</th>
+            <th>{{'SHIPMENT_FORM.MIN_SPEND' | translate}}</th>
+            <th>{{'SHIPMENT_FORM.MAX_SPEND' | translate}}</th>
+            <th>{{'SHIPMENT_FORM.TOTAL' | translate}}</th>
+            <th>&nbsp;</th>
+          </tr>
+          <tr *ngIf="!shipmentCostList.length">
+            <td colspan="5" class="text-center">
+              {{'SHIPMENT_FORM.NO_COST' | translate}}
+            </td>
+          </tr>
+          <tr *ngFor="let cost of shipmentCostList, let i=index">
+            <td>
+              {{cost.type.toString() === 'COST' ?
+              ('SHIPMENT_FORM.TOTAL_CART_COST' | translate)
+              : ('SHIPMENT_FORM.TOTAL_CART_WEIGHT' | translate)}}
+            </td>
+            <td>{{cost.minExpense | number: "1.2-2" | numberCommaseparator }}</td>
+            <td>{{cost.maxExpense | number: "1.2-2" | numberCommaseparator}}</td>
+            <td>
+              {{cost.cost | number: "1.2-2" | numberCommaseparator}}
+            </td>
+            <td>
+              <i class="fa fa-edit" (click)="openEditCost(modalCost, cost, i)"></i>
+              <i class="fa fa-trash ml-2" (click)="deleteCost(i)"></i>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-lg-12 col-md-12">
+        <label>
+          {{'SHIPMENT_FORM.NOTE' | translate}}
+          <i class="fa fa-plus" (click)="openTranslationModal(modalTranslationNote)"></i>
+        </label>
+        <textarea class="form-control form-control-sm" rows="5" formControlName="note">
+        </textarea>
+      </div>
+    </div>
+
+  </form>
+</div>
+<hr>
+
+
+<div mat-dialog-actions class="d-flex justify-content-between"
+     [ngClass]="{'justify-content-between': !data.editMode&&!data.fromProduct,
+           'justify-content-end': data.editMode||data.fromProduct}">
+  <label class="checkbox checkbox-success" *ngIf="!data.editMode&&!data.fromProduct">
+    <input [formControl]="addMultipleCheckbox" type="checkbox"><span
+    style="font-size: 10px">{{'CONFIGURATION.ADD_NEW_ELEMENT' | translate}}</span>
+  </label>
+  <div style="margin-left: auto;">
+    <button mat-button color="secondary" class="ml-2"
+            (click)="dialogRef.close(addedElement)">{{'BUTTONS.CLOSE' | translate}}</button>
+    <button mat-flat-button color="primary"
+            form="addForm"
+            (click)="save()">{{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+</div>
+
+<ng-template #modalCost>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'SHIPMENT_FORM.COST' | translate}}</h4>
+    <button type="button" mat-button (click)="modalRef?.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="shipmentCostForm" id="addCost">
+      <div class="form-row">
+        <div class="form-group col-lg-12 col-md-12">
+          <label>{{'SHIPMENT_FORM.TYPE' | translate}}</label>
+          <ng-select [items]="[{label:'SHIPMENT_FORM.TOTAL_CART_COST' | translate,value:'COST'},
+          {label:'SHIPMENT_FORM.TOTAL_CART_WEIGHT' | translate,value:'WEIGHT'}]"
+                     [tabIndex]="1"
+                     [bindLabel]="'label'"
+                     [bindValue]="'value'"
+                     [clearable]="false"
+                     class="ng-select-sm"
+                     formControlName="type"
+                     placeholder="{{'SHIPMENT_FORM.TYPE' | translate}}"
+                     >
+          </ng-select>
+        </div>
+        <div class="form-group col-lg-12 col-md-12">
+          <label>{{'SHIPMENT_FORM.MIN_SPEND' | translate}}</label>
+          <input type="tel" currencyMask class="form-control form-control-sm" formControlName="minExpense">
+        </div>
+        <div class="form-group col-lg-12 col-md-12">
+          <label>{{'SHIPMENT_FORM.MAX_SPEND' | translate}}</label>
+          <input type="tel" currencyMask class="form-control form-control-sm" formControlName="maxExpense">
+        </div>
+        <div class="form-group col-lg-12 col-md-12">
+          <label>{{'SHIPMENT_FORM.TOTAL' | translate}}</label>
+          <input type="tel" currencyMask class="form-control form-control-sm" formControlName="cost">
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <div style="margin-left: auto;">
+      <button mat-button color="secondary" class="ml-2" (click)="modalRef?.close()">
+        {{'BUTTONS.CLOSE' | translate}}
+      </button>
+      <button mat-flat-button color="primary" form="addCost"
+              (click)="saveCost()" [disabled]="shipmentCostForm.invalid">
+        {{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #modalTranslationDescription>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'SHIPMENT_FORM.TRANSLATION' | translate}}</h4>
+    <button type="button" mat-button (click)="modalRef?.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="container-fluid" style="max-height: 500px; overflow-y: auto; overflow-x: none;">
+      <div class="form-row" *ngFor="let lang of languageList, let i=index">
+        <div class="form-group col-lg-2 col-md-2">
+          <label *ngIf="i===0">{{'SHIPMENT_FORM.LANG' | translate}}</label>
+          <input type="text" class="form-control form-control-sm" [value]="lang.code?.toUpperCase()" readonly>
+        </div>
+        <div class="form-group col-lg-10 col-md-10">
+          <label *ngIf="i===0">{{'SHIPMENT_FORM.DESCRIPTION' | translate}}</label>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="shipmentDescriptionList[i]" >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div style="margin-left: auto;">
+      <button mat-button color="secondary" class="ml-2"
+              (click)="modalRef?.close()">
+        {{'BUTTONS.CLOSE' | translate}}
+      </button>
+      <button mat-flat-button color="primary" form="addCost"
+              (click)="saveDescriptionTranslation()">
+        {{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #modalTranslationNote>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'SHIPMENT_FORM.TRANSLATION' | translate}}</h4>
+    <button type="button" mat-button (click)="modalRef?.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="container-fluid" style="max-height: 500px; overflow-y: auto; overflow-x: none;">
+      <div class="form-row" *ngFor="let lang of languageList, let i=index">
+        <div class="form-group col-lg-2 col-md-2">
+          <label *ngIf="i===0">{{'SHIPMENT_FORM.LANG' | translate}}</label>
+          <input type="text" class="form-control form-control-sm" [value]="lang.code?.toUpperCase()" readonly>
+        </div>
+        <div class="form-group col-lg-10 col-md-10">
+          <label *ngIf="i===0">{{'SHIPMENT_FORM.NOTE' | translate}}</label>
+          <textarea class="form-control form-control-sm" rows="5" [(ngModel)]="shipmentNoteList[i]">
+        </textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div style="margin-left: auto;">
+      <button mat-button color="secondary" class="ml-2"
+              (click)="modalRef?.close()">
+        {{'BUTTONS.CLOSE' | translate}}
+      </button>
+      <button mat-flat-button color="primary" form="addCost"
+              (click)="saveNoteTranslation()">
+        {{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>
+

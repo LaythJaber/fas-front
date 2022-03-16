@@ -1,0 +1,47 @@
+
+// QUICK SIDEBAR
+// ===================
+
+.quick-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: -400px;
+    background-color: #fff;
+    width: 400px;
+    max-width: 95%;
+    transition: all 0.3s ease-in-out;
+    z-index: ($zindex-backdrop + 1);
+    box-shadow: 0px 4px 15px 1px rgba(113, 106, 202, 0.2);
+    &.shined {
+        right: 0;
+    }
+    .nav-pills {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        padding: 0 1.5rem;
+        .nav-item {
+            flex-basis: 0;
+            flex-grow: 1;
+            text-align: center;
+            &:not(:last-child) {
+                margin-right: .5rem;
+            }
+        }
+    }
+    .tab-content {
+        flex-basis: 0;
+        flex-grow: 1;
+        min-height: 1px;
+        > .tab-pane {
+            height: 100%;
+        }
+    }
+    .quick-sidebar-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 1.8rem;
+    }
+}

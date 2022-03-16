@@ -1,0 +1,41 @@
+<div class="container tab-container">
+  <div class="card">
+    <div class="card-header">
+      Testo del sito
+    </div>
+    <div class="card-body" *ngIf="siteInfoForm">
+      <form [formGroup]="siteInfoForm">
+        <div class="form-row">
+          <div class="form-group col-lg-10 col-10">
+            <mat-tab-group formArrayName="transInfo" [selectedIndex]="selectedTab" #matTabGroup>
+              <mat-tab *ngFor="let lang of languageList; let i = index" label="{{lang.description}}" [formGroupName]="i">
+                <div class="py-3">
+                  <div class="form-group">
+                    <input type="text" autocomplete="off" id="title" class="form-control-sm form-control"
+                           placeholder="Title" formControlName="title">
+                  </div>
+                  <ckeditor class="w-100 col-12" formControlName="content" [config]="config"></ckeditor>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+          <div class="form-group col-lg-2 col-2">
+            <div class="color-input-container">
+              <div class="color-picker-square"
+                   [style.backgroundColor]="bgColor"
+                   [(colorPicker)]="bgColor">
+              </div>
+              <div>Background  color</div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer text-right">
+      <button class="btn btn-primary" (click)="save()">
+        <em class="fas fa-save"></em>
+        {{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</div>

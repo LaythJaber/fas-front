@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-between">
+  <h3>
+    {{'HEADER.TYPES_OF_ACTIVITIES' | translate}}
+  </h3>
+  <button mat-mini-fab color="primary" (click)="openFormDialog()"
+          placement="left"
+          tooltipClass="custom-tooltip"
+          ngbTooltip="{{'BUTTONS.ADD'|translate}}"><i
+    class="fas fa-plus"></i>
+  </button>
+</div>
+<div class="card card-fullheight">
+  <div class="card-body table-responsive">
+
+    <table class="table table-sm  table-hover table-bordered">
+      <thead>
+      <tr>
+        <th>{{'ID' | translate}}</th>
+        <th>{{'DATA_TABLE.DESCRIPTION' | translate}}</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let t of typesOfActivities">
+        <td>{{t.id}}</td>
+        <td>{{t.description}}</td>
+        <td class="text-right">
+          <button mat-icon-button color="primary" (click)="openFormDialog(t)"><i class="ft-edit-1"></i></button>
+          <button mat-icon-button color="warn" (click)="delete(t)"><i class="ft-trash-2"></i></button>
+        </td>
+      </tr>
+      <tr *ngIf="typesOfActivities.length === 0">
+        <td colspan="2" class="text-center">{{'ADMIN.TYPES_ACTIVITIES.NO_ACTIVITY_FOUND' | translate}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

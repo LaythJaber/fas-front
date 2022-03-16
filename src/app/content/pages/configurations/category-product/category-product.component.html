@@ -1,0 +1,324 @@
+<div class="subheader">
+  <div class="container-fluid">
+    <form [formGroup]="filterForm">
+      <div class="row">
+
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'SUBHEADER.SEARCH' | translate}}</label>
+          <div class="search-input">
+            <div class="form-group">
+              <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn"
+                      (click)="filterForm.controls.textSearch.setValue(null)">
+                  <em class="ft-x"></em>
+                </span>
+                <input type="text" class="form-control form-control-sm"
+                       placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                       formControlName="textSearch"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-3 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'CATEGORY_FORM.STATUS' | translate}}</label>
+            <ng-select [items]="[{label:'CATEGORY_FORM.ALL'|translate,value:-1},
+            {label:'CATEGORY_FORM.VISIBLE'|translate,value:1},
+            {label:'CATEGORY_FORM.INVISIBLE'|translate,value:0}]"
+                       formControlName="status"
+                       class="ng-select-sm"
+                       bindValue="value"
+                       bindLabel="label"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       [clearable]="false"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'DATA_TABLE.CREATED' | translate}}</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/yyyy" [matDatepicker]="createdAtPicker"
+                   class="form-control form-control-sm"
+                   formControlName="createdAt" #createAtElem>
+            <span class="input-icon input-icon-right"
+                  (click)="createdAtPicker.opened ? createdAtPicker.close() : createdAtPicker.open()">
+              <em class="fas fa-calendar"></em>
+            </span>
+          </div>
+          <mat-datepicker #createdAtPicker></mat-datepicker>
+        </div>
+
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'DATA_TABLE.UPDATED' | translate}}</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/yyyy" [matDatepicker]="updatedAtPicker"
+                   class="form-control form-control-sm"
+                   formControlName="updatedAt" #createAtElem>
+            <span class="input-icon input-icon-right"
+                  (click)="updatedAtPicker.opened ? updatedAtPicker.close() : updatedAtPicker.open()">
+              <em class="fas fa-calendar"></em>
+            </span>
+          </div>
+          <mat-datepicker #updatedAtPicker></mat-datepicker>
+        </div>
+
+      </div>
+    </form>
+  </div>
+  <div class="action-btns" style="width: 25%;">
+    <button mat-mini-fab color="primary" class="btn-custom"
+            tooltipClass="custom-tooltip"
+            ngbTooltip="{{'CATEGORY_FORM.TRI_CATEGORY_TOOLTIP' | translate}}"
+            (click)="showOrderModal(modalOrderCategory)">
+      <em class="ft-list" style="font-size: 18px"></em>
+    </button>
+    <button mat-mini-fab color="primary" class="btn-custom"
+            (click)="openAddCategoryForm(this.categoryLazyRequest.parentId)"
+            tooltipClass="custom-tooltip"
+            ngbTooltip="{{'CONFIGURATION.NEW_CATEGORY'|translate}}">
+      <em class="ft-plus" style="font-size: 18px"></em>
+    </button>
+  </div>
+</div>
+
+<div class="card card-fullheight">
+  <div class="card-body table-responsive">
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="categoryLazyRequest.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table  table-sm  table-hover table-bordered">
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns" scope="col" class="text-center">{{c | translate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr *ngFor="let category of categoryList; let i = index" >
+        <td>
+          {{category.id}}
+        </td>
+
+        <td class="text-center p-1">
+          <img *ngIf="category.menuImage" src="{{category.menuImage}}"
+               alt="{{category.name}}" style="max-width: 90%; height: 50px;"
+          />
+          <img *ngIf="!category.menuImage" src="/assets/img/products/product-default.jpg"
+               alt="{{category.name}}" style="width: 50px; height: 50px;" />
+        </td>
+
+        <td>
+          {{category.code}}
+        </td>
+
+        <td>
+          <ngb-highlight [result]="category | localTranslate: 'name'"
+                         [term]="filterForm.controls.textSearch.value?.trim()"></ngb-highlight>
+          <span (click)="showCategoryTranslation(modalTranslation, category)">
+            <mat-icon aria-label="true" style="float: right; font-size: 20px !important;">language</mat-icon>
+          </span>
+        </td>
+
+        <td>
+          <ngb-highlight [result]="(category | localTranslate: 'description')?.substring(0, 30)"
+                         [term]="filterForm.controls.textSearch.value?.trim()">
+          </ngb-highlight>
+          <span *ngIf="(category | localTranslate: 'description')?.length >= 30"
+                (click)="showFullCategoryDescription(modalFullDescription, category)"
+                style="color: #ff0000;">
+            [...]
+          </span>
+        </td>
+
+        <td class="text-center">
+          <em (click)="changeCategoryVisibility(category)" *ngIf="!category.statusInLoading"
+             [ngStyle]="{'color':category.status? '#06B5B6':'#E50054'}"
+             class="ft-power" placement="top" tooltipClass="custom-tooltip"
+             ngbTooltip="{{'PROVIDER_FORM.ACTIVE'|translate}} / {{'PROVIDER_FORM.DEACTIVATED'|translate}}">
+          </em>
+          <em class="fa fa-spin fa-spinner" *ngIf="category.statusInLoading"></em>
+        </td>
+
+        <td>
+          {{category.auditSection?.createdAt |date : 'dd-MM-yyyy HH:mm'}}
+        </td>
+
+        <td>
+          {{category.auditSection?.updatedAt |date : 'dd-MM-yyyy HH:mm'}}
+        </td>
+
+        <td class="text-center">
+          <button class="btn btn-link mb-2 mr-2" (click)="openSubCategoryList(category)">
+            <em class="ft-layers"></em>
+          </button>
+          <span>({{category?.subCategoryList?.length}})</span>
+        </td>
+
+        <td class="text-center">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-link" id="dropdownBasic1" ngbDropdownToggle><em class="ft-more-vertical"></em>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem (click)="openEditCategoryForm(category)">
+                <em class="ft-edit-1"></em> {{'CONFIGURATION.EDIT' | translate }}</button>
+              <button ngbDropdownItem (click)="deleteCategory(category)">
+                <em class="ft-trash-2"></em> {{'CONFIGURATION.DELETE' | translate }}</button>
+              <button ngbDropdownItem (click)="openAddCategoryForm(category.id, category)">
+                <em class="ft-plus"></em>{{'CONFIGURATION.ADD_SUBCATEGORIES' | translate }}
+              </button>
+            </div>
+          </div>
+        </td>
+      </tr>
+
+      <tr *ngIf="categoryList?.length === 0 && !loading" class="text-center">
+        <td colspan="11">{{'CATEGORY_FORM.NO_CATEGORY' | translate}}</td>
+      </tr>
+
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center"
+                    [collectionSize]="totalRecords"
+                    size="sm"
+                    [pageSize]="categoryLazyRequest.pageSize"
+                    [ellipses]="true"
+                    [maxSize]="10"
+                    [page]="categoryLazyRequest.page"
+                    *ngIf="!loading && totalRecords !== 0 && totalRecords > this.categoryLazyRequest.pageSize"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="categoryLazyRequest.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalFullDescription>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{selectedCategory | localTranslate: 'name'}}</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-row">
+      <div class="form-group col-lg-12 col-md-12">
+        <textarea class="form-control form-control-sm" rows="10" readonly style="background: white !important;">
+          {{selectedCategory | localTranslate: 'description'}}
+        </textarea>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalTranslation>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{selectedCategory | localTranslate: 'name'}}</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="max-height: 600px; overflow-y: auto;">
+    <div class="form-row" *ngFor="let ct of selectedCategory.transInfo"
+         style="border-bottom: 1px solid gainsboro">
+      <div class="form-group col-lg-12 col-md-12">
+        <label><strong>{{'CATEGORY_FORM.LANGUAGE' | translate}}</strong></label>:
+        {{ct.language.code}}
+      </div>
+      <div class="form-group col-lg-12 col-md-12">
+        <label><strong>{{'CATEGORY_FORM.NAME' | translate}}</strong></label>:
+        {{ct.name}}
+      </div>
+      <div class="form-group col-lg-12 col-md-12">
+        <label><strong>{{'CATEGORY_FORM.DESCRIPTION' | translate}}</strong></label>:
+        {{ct.description}}
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalOrderCategory>
+
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'CATEGORY_FORM.TRI_CATEGORY_TITLE' | translate}}</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="triForm">
+      <div class="container-fluid nmp">
+        <div class="row nmp" style="margin-bottom: 5px !important;">
+          <div class="form-group col-lg-6 col-md-6 nmp">
+            <span>{{'CATEGORY_FORM.TRI_TYPE' | translate}} </span>
+            <ng-select [items]="[
+            {label:'CATEGORY_FORM.TRI_ALPHA_ASC'|translate,value:1},
+            {label:'CATEGORY_FORM.TRI_ALPHA_DES'|translate,value:2}
+            ]"
+                       formControlName="type"
+                       class="ng-select"
+                       style="display: inline-block !important; width: 60%;"
+                       bindValue="value"
+                       bindLabel="label"
+                       placeholder="{{'CATEGORY_FORM.TRI_CHOOSE' | translate}}"
+                       [clearable]="false"
+                       (change)="applyTri()"
+            >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div style="height: 500px; overflow-y: auto" cdkScrollable #scrollContainer>
+      <table cdkDropList cdkDropListOrientation="vertical" class="table-sm table-hover table-bordered" style="width: 100%;"
+             (cdkDropListDropped)="dropTable($event)" [cdkDropListData]="subCategoryList">
+        <thead>
+        <tr>
+          <th style="font-size: 12px !important;padding:5px !important;" *ngFor="let c of columns | slice: 0: 3" scope="col">{{c | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr cdkDrag class="row-box"  *ngFor="let c of subCategoryList" [cdkDragData]="c"
+            [cdkDropListScrollContainer]="scrollContainer"
+            cdkDragBoundary=".modal-body" cdkDragLockAxis="y">
+          <div *cdkDragPreview> {{c.id}}: {{c.name}} </div>
+          <td style="padding:5px !important;">
+            {{c.id}}
+          </td>
+          <td style="padding:5px !important;">
+            {{c.name}}
+          </td>
+          <td style="padding:5px !important;">
+            {{c.description?.substring(0, 20)}}
+            <span *ngIf="c.description?.length >= 20"
+                  (click)="showFullCategoryDescription(modalFullDescription, c)">
+            [...]
+          </span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button mat-flat-button color="primary" (click)="setPriorities()">
+      {{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+
+</ng-template>
+

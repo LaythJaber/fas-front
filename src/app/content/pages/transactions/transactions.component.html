@@ -1,0 +1,189 @@
+<div class="subheader">
+  <div class="container-fluid">
+    <form [formGroup]="filterForm">
+      <div class="row">
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'SUBHEADER.SEARCH' | translate}}</label>
+          <div class="search-input">
+            <div class="form-group">
+              <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn"
+                      (click)="filterForm.controls.textSearch.setValue(null)">
+                  <i class="ft-x"></i>
+                </span>
+                <input type="text" class="form-control form-control-sm"
+                       placeholder="Cerca per ID, Codice, Cliente"
+                       formControlName="textSearch"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-3 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'CATEGORY_FORM.STATUS' | translate}}</label>
+            <ng-select [items]="stateList"
+                       formControlName="status"
+                       class="ng-select-sm"
+                       [bindValue]="'id'"
+                       [bindLabel]="'label'"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       [clearable]="true"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{'TRANSACTION_FORM.STATE.'+item.label | translate}}</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+                <span>{{'TRANSACTION_FORM.STATE.'+item.label | translate}}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'TRANSACTION_FORM.PAYMENT' | translate}}</label>
+            <ng-select [items]="paymentList"
+                       formControlName="paymentId"
+                       class="ng-select-sm"
+                       [bindValue]="'id'"
+                       [bindLabel]="'description'"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       [clearable]="true"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{item | localTranslate: 'descriptionWeb'}}</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+                <span>{{item | localTranslate: 'descriptionWeb'}}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'DATA_TABLE.SELL_POINTS' | translate}}</label>
+            <ng-select [items]="sellPointList"
+                       formControlName="sellPointId"
+                       class="form-control"
+                       class="ng-select-sm ng-select-required"
+                       [bindValue]="'id'"
+                       [bindLabel]="'name'"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       [clearable]="true"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'DATA_TABLE.CREATED' | translate}}</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/aaaa" [matDatepicker]="createdAtPicker"
+                   class="form-control form-control-sm"
+                   formControlName="createdAt" #createAtElem>
+            <span class="input-icon input-icon-right"
+                  (click)="createdAtPicker.opened ? createdAtPicker.close() : createdAtPicker.open()">
+              <i class="fas fa-calendar"></i>
+            </span>
+          </div>
+          <mat-datepicker #createdAtPicker></mat-datepicker>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'DATA_TABLE.UPDATED' | translate}}</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/aaaa" [matDatepicker]="updatedAtPicker"
+                   class="form-control form-control-sm"
+                   formControlName="updatedAt" #createAtElem>
+            <span class="input-icon input-icon-right"
+                  (click)="updatedAtPicker.opened ? updatedAtPicker.close() : updatedAtPicker.open()">
+              <i class="fas fa-calendar"></i>
+            </span>
+          </div>
+          <mat-datepicker #updatedAtPicker></mat-datepicker>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card card-fullheight">
+  <div class="card-body table-responsive pt-1">
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table table-sm table-hover">
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns" scope="col" class="text-center">
+          {{c | translate}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let transaction of transactionResponse?.data, let i = index" (click)="openDetails(transaction)" >
+
+        <td class="text-center">
+          <ngb-highlight [result]="transaction?.id" [term]="filterForm.controls.textSearch.value?.trim()"></ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <ngb-highlight [result]="transaction?.code" [term]="filterForm.controls.textSearch.value?.trim()"></ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <ngb-highlight [result]="transaction?.purchase?.client?.firstName + ' ' + transaction?.purchase?.client?.lastName"
+                         [term]="filterForm.controls.textSearch.value?.trim()">
+          </ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          {{'TRANSACTION_FORM.STATE.' + transaction.status.toString() | translate}}
+        </td>
+
+        <td class="text-center">
+          {{transaction.payment | localTranslate: 'descriptionWeb' }}
+        </td>
+
+        <td class="text-center">
+          {{transaction.purchase?.sellPoint?.name}}
+        </td>
+
+        <td class="text-center">
+          {{transaction.createdAt |date : 'dd-MM-yyyy HH:mm'}}
+        </td>
+
+        <td class="text-center">
+          {{transaction.updatedAt |date : 'dd-MM-yyyy HH:mm'}}
+        </td>
+      </tr>
+      <tr *ngIf="transactionResponse?.totalRecords === 0" class="text-center">
+        <td colspan="8">Nessun transazioni trovato</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center"
+                    *ngIf="transactionResponse?.totalRecords > 0"
+                    [collectionSize]="transactionResponse?.totalRecords"
+                    size="sm"
+                    [pageSize]="request.pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="request.page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>

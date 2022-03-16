@@ -1,0 +1,28 @@
+
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'PRODUCT_FORM.TRADUCTIONS' | translate}}</h4>
+  </div>
+  <div class="modal-body">
+
+    <div class="row" *ngFor="let internat of internationalizationArray.controls;" >
+      <ng-container [formGroup]="internat">
+        <div class="form-group col-lg-6 col-md-6">
+          <input type="text" class="form-control form-control-sm" formControlName="description"
+                 [ngClass]="{ 'is-invalid': editMode && editClicked && !internat.get('description').value }"
+          >
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <input type="text" class="form-control form-control-sm" formControlName="langCode" disabled>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div mat-dialog-actions>
+      <button mat-flat-button color="primary" class="mr-3" (click)="save(false)">{{'BUTTONS.CLOSE' |
+        translate}}
+      </button>
+      <button mat-flat-button color="primary" *ngIf="editMode && editClicked" (click)="save(true)" >{{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>

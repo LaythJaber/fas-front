@@ -1,0 +1,99 @@
+<div class="card">
+<div class="wrapper">
+  <!-- Sidebar  -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <h3>{{student?.firstName}} {{student?.lastName}}</h3>
+    </div>
+
+    <div class="m-3">
+      <div class="py-2"><a>First Name: {{student?.firstName}}</a></div>
+    <div class="py-2"><a> Last Name: {{student?.lastName}}</a></div>
+    <div class="py-2"><a>Address: {{student?.address}}</a></div>
+    <div class="py-2"><a>Country: {{student?.country}}</a></div>
+    <div class="py-2"><a>Number: {{student?.mobile}}</a></div>
+    </div>
+
+
+    <ul class="list-unstyled components">
+
+      <li (click)="tabController('DOCUMENTS')" [class.active]= "documentActive">
+        <a>Documents</a>
+      </li>
+      <li (click)="tabController('DS')" [class.active]= "dsActive">
+        <a>Ds</a>
+      </li>
+      <li (click)="tabController('APPLICATIONS')" [class.active]= "applicationsActive">
+        <a>Applications</a>
+      </li>
+    </ul>
+
+  </nav>
+
+  <!-- Page Content  -->
+  <div id="content">
+
+
+    <div class="card">
+      <div class="card-body">
+        <nav class="navbar navbar-expand-lg navbar-light bg-custom">
+          <div class="container-fluid">
+
+            <button type="button" id="sidebarCollapse" class="btn btn-info">
+              <span>ID : {{student?.id}}</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <i class="fas fa-align-justify"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" ></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link pointer" (click)="addMeet()">Make appointment</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link pointer text-warning" (click)="meet()">Video call</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+        <ng-container *ngIf="documentActive">
+        <div class="card">
+          <div class="card-body">
+            <app-documents-tab [userId]="userId"></app-documents-tab>
+          </div>
+        </div>
+        </ng-container>
+
+        <ng-container *ngIf="dsActive">
+          <div class="card">
+            <div class="card-body">
+            <app-ds-tab></app-ds-tab>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="applicationsActive">
+          <div class="card">
+            <div class="card-body">
+           <app-applications-tab  [userId]="userId"  [applications]="student.userApplications"></app-applications-tab>
+            </div>
+          </div>
+        </ng-container>
+
+
+      </div>
+    </div>
+
+
+
+
+  </div>
+</div>
+
+</div>

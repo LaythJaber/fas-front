@@ -1,0 +1,54 @@
+<div class="container" style="padding-top: 10px !important; margin-top: 0 !important;" >
+
+<div class="row">
+     <div class="form-group col-lg-3 col-md-3">
+       <div class="search-input">
+         <div class="form-group">
+           <div class="input-group-icon input-group-icon-right">
+        <span class="input-icon input-icon-right reset-search-btn" >
+          <i class="ft-x"></i>
+        </span>
+             <input type="text" class="form-control" placeholder="{{'SUBHEADER.SEARCH' | translate}}" [(ngModel)]="searchText">
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+   <hr>
+  <div class="table-responsive mb-2" style="height: 500px;  overflow-y: scroll">
+    <table class="table table-bordered table-striped" aria-hidden="true" >
+      <caption></caption>
+      <thead>
+      <tr>
+        <td>{{'PRODUCT_FORM.ID' | translate}}</td>
+        <td>{{'DATA_TABLE.FULL_NAME' | translate}}</td>
+        <td>{{'DATA_TABLE.GENDER' | translate}}</td>
+        <td>{{'CLIENT_FORM.DETAILS.MOBILE' | translate}}</td>
+        <td>{{'CLIENT_FORM.DETAILS.EMAIL' | translate}}</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let c of client  | filter:searchText">
+        <td> {{c.clientId}}  </td>
+        <td>{{c.firstName + ' ' + c.lastName}}</td>
+        <td>
+          <i  aria-hidden="true" class="fas fa-mars" style="color: #06B5B6" *ngIf=" c?.gender?.toString() === 'MALE'"></i>
+          <i  aria-hidden="true" class="fas fa-venus" style="color: #E50054" *ngIf="c?.gender?.toString() === 'FEMALE'"></i>
+          <i  aria-hidden="true" class="fas fa-transgender" id="transgender" *ngIf="c?.gender?.toString() === 'OTHER'"></i>
+        </td>
+
+        <td>{{c.mobilePrefix + ' ' + c.mobile}}</td>
+        <td>{{c.email}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+ </div>
+
+<div mat-dialog-actions align="end">
+  <button mat-flat-button color="warn" [matDialogClose]="" class="ml-2"><i  aria-hidden="true"
+                                                                            class="ft-x"></i> {{'BUTTONS.CLOSE' | translate}}
+  </button>
+</div>
+
+

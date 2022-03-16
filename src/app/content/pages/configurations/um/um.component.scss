@@ -1,0 +1,10 @@
+.subheader {
+  display: flex;
+  justify-content: space-between;
+}
+.mat-column-action {
+  text-align: right;
+}
+
+.mat-dialog-content, .mat-dialog-container{overflow: visible !important;}
+.mat-dialog-actions{clear: both;}

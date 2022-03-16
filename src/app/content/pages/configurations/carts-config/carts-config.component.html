@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      {{'SIDENAV.CART_CONFIG' | translate}}
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="cartConfigForm">
+        <div class="row form-group">
+          <div class="input-group-icon input-group-icon-right">
+            <ng-select [items]="sellPointList"
+                       formControlName="sellPointId"
+                       (change)="setSellPoint($event)"
+                       class="ng-select-sm ng-select-required"
+                       [bindValue]="'id'"
+                       [bindLabel]="'name'"
+                       placeholder="Scegli Punto vendita"
+                       [clearable]="false">
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <mat-checkbox color="primary" formControlName="replaceableCheck">Attiva sostituibilità prodotti</mat-checkbox>
+        </div>
+        <div class="form-row mb-3" *ngIf="languageList" style="border: 1px solid gainsboro">
+          <div class="col-12 form-group">
+            <mat-tab-group formArrayName="transInfo" [selectedIndex]="selectedTab">
+              <mat-tab *ngFor="let lang of languageList; let i = index" label="{{lang.description}}" [formGroupName]="i">
+                <div class="form-group mt-2">
+                  <label for="rpt">{{'Messaggio di sostituibilità del prodotto' | translate}}</label>
+                  <input id="rpt" type="text" autocomplete="off" class="form-control-sm form-control"
+                         placeholder="{{'Messaggio di sostituibilità del prodotto' | translate}}"
+                         formControlName="replaceDescription">
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <mat-checkbox color="primary" formControlName="minimumCheck">Attiva controllo ordine minimo</mat-checkbox>
+          </div>
+          <div class="form-group col-md-5 col-sm-5 col-5">
+            <input id="time" type="number" formControlName="minimumCart" min="1"
+                   placeholder="Carrello minima ordine" style="width: 80%"/>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="card-footer d-flex justify-content-end">
+      <button mat-flat-button color="primary" (click)="save()">{{'BUTTONS.SAVE' | translate}}</button>
+    </div>
+  </div>
+</div>

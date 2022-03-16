@@ -1,0 +1,57 @@
+.button-container {
+    .main-button {
+      width: 100%;
+  
+      a {
+        width: 100%;
+        border-radius: 5px;
+        padding: 7px 29px !important;
+      }
+  
+      background-image: linear-gradient(var(--theme-deafult) 100%, transparent 100%);
+    }
+  
+    .quantity-box {
+      .quantity-left-minus {
+        border: 1px solid gainsboro;
+        border-right: none !important;
+        border-radius: 5px 0 0 5px;
+        padding: 3px 6px;
+      }
+  
+      input {
+        height: 38px;
+        padding: 5px;
+        font-size: 16px;
+        text-align: center !important;
+      }
+  
+      /* Chrome, Safari, Edge, Opera */
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+  
+      /* Firefox */
+      input[type=number] {
+        -moz-appearance: textfield;
+      }
+  
+      .quantity-right-plus {
+        border: 1px solid gainsboro;
+        border-left: none !important;
+        border-radius: 0 5px 5px 0;
+        padding: 3px 6px;
+      }
+    }
+  
+  }
+  
+  
+  .add-button-centered {
+    text-align: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+    display: grid !important;
+  }

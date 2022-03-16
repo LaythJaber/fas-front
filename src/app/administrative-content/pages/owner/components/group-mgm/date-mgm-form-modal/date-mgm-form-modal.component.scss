@@ -1,0 +1,14 @@
+.btn-outline-gray {
+  border: 1.2px solid #b2b2b2;
+  background: white;
+  color: #b2b2b2;
+}
+.btn-outline-gray.active {
+  border: 1.2px solid #262e89;
+  background-color: #262e89;
+  color: white;
+}
+.no-border-radius {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}

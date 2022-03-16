@@ -1,0 +1,397 @@
+<div class="form-content">
+  <div class="row d-flex justify-content-end align-items-center p-2 mt-5">
+    <button mat-stroked-button color="primary" *ngIf="formStatus == 'nothing_clicked' "
+            style="margin-right: 12px" (click)="activateAdd()">
+      <mat-icon>add</mat-icon>
+      {{'BUTTONS.ADD' | translate}}
+    </button>
+
+    <button mat-stroked-button color="primary" *ngIf="formStatus == 'add_clicked' || formStatus ==  'update_clicked'"
+            style="margin-right: 12px" (click)="deactivateform()">
+      <mat-icon>clear</mat-icon>
+      {{'BUTTONS.CANCEL' | translate}}
+    </button>
+
+    <button mat-stroked-button color="primary" *ngIf="formStatus == 'update_clicked' "
+            style="margin-right: 12px" (click)="saveUpdates()" [disabled]="!form.valid">
+      <mat-icon>save</mat-icon>
+      {{'BUTTONS.EDIT' | translate}}
+    </button>
+
+    <button mat-stroked-button color="primary" *ngIf="formStatus == 'add_clicked'"
+            style="margin-right: 12px" (click)="add()" [disabled]="!form.valid">
+      <mat-icon>save</mat-icon>
+      {{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+
+  <div *ngIf="formStatus == 'nothing_clicked'">
+    <div class="form-row">
+      <div class="col-lg-4 col-md-6"
+           *ngFor="let address of addresses">
+        <div class="card p-2 m-1" style="border: 1px solid rgba(0,0,0,0.2)">
+          <div class="form-row">
+            <div class="form-group col-lg-10 col-md-8">
+              <h5>{{address?.name + " " + address?.surname}}</h5>
+              <p>{{address?.zipCode?.province + " " + address?.zipCode?.cap + " " + address?.zipCode?.city }}</p>
+              <p>{{address?.mobilePrefix+ " " + address?.mobile}}</p>
+            </div>
+            <div class="form-group col-lg-2 col-md-2 text-right">
+              <label class="checkbox checkbox-outline-primary" style="float: right !important;"
+                     title="{{'CLIENT_FORM.ADDRESS.DEFAULT' | translate}}">
+                <input (click)="onSetMainAddress(address.addressId)"
+                       [disabled]="address?.isMain === true"
+                       [checked]="address?.isMain === true" type="checkbox">
+                <span>&nbsp;</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-12 text-right">
+              <button (click)="onUpdateClick(address)" mat-stroked-button color="primary" style="margin-right: 12px" >
+                <mat-icon>edit</mat-icon>
+                {{'BUTTONS.EDIT' | translate}}
+              </button>
+              <button (click)="delete(address.addressId)" mat-stroked-button color="primary"  style="margin-right: 12px">
+                <mat-icon>delete</mat-icon>
+                {{'BUTTONS.DELETE' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form *ngIf="formStatus == 'add_clicked' " class="form p-3 pb-3 m-2" [formGroup]="form">
+    <div class="row">
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.DETAILS.FIRST_NAME' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.DETAILS.FIRST_NAME' | translate}}"
+               class="form-control form-control-sm" formControlName="name">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.DETAILS.LAST_NAME' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.DETAILS.LAST_NAME' | translate}}"
+               class="form-control form-control-sm" formControlName="surname">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.DETAILS.MOBILE' | translate}}</label>
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend" ngbDropdown #myDrop="ngbDropdown">
+            <button class="btn btn-outline-secondary" type="button"
+                    ngbDropdownToggle>{{form.get('mobilePrefix').value || 'BUTTONS.CHOOSE' | translate}}
+            </button>
+            <div class="dropdown-menu py-0" tabindex="1" ngbDropdownMenu>
+              <ng-select [items]="prefixList" [bindLabel]="'label'"
+                         [tabIndex]="1"
+                         autofocus
+                         [bindValue]="'prefix'" formControlName="mobilePrefix" placeholder="search"
+                         (change)="myDrop.close()" >
+              </ng-select>
+            </div>
+          </div>
+          <input type="tel" placeholder="{{'CLIENT_FORM.DETAILS.MOBILE' | translate}}"
+                 class="form-control form-control-sm" formControlName="mobile">
+        </div>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.SHIPPING' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.SHIPPING' | translate}}"
+               class="form-control form-control-sm" formControlName="shippingAddress">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.STREET' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.STREET' | translate}}"
+               class="form-control form-control-sm" formControlName="streetNumber">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.COUNTRY' | translate}}</label>
+        <ng-select class="ng-select-sm"
+                   placeholder="{{'CLIENT_FORM.ADDRESS.COUNTRY' | translate}}"
+                   [formControl]="countryFormControl" [items]="[{country: 'IT'}]"
+                   bindLabel="country"
+                   bindValue="country">
+        </ng-select>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.CAP' | translate}}</label>
+        <ng-select class="ng-select-sm" [virtualScroll]="true"
+                   placeholder="{{'CLIENT_FORM.ADDRESS.CAP' | translate}}"
+                   [searchFn]="capSearch"
+                   [loading]="zipCodeLoading"
+                   formControlName="zipCodeId" [items]="zipCodes" bindLabel="cap"
+                   bindValue="id">
+          <ng-template ng-option-tmp let-item="item">
+            <span class="font-11"><strong>{{item.city}}</strong> : {{item.cap}}</span>
+          </ng-template>
+        </ng-select>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.PROVINCE' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.PROVINCE' | translate}}"
+               class="form-control form-control-sm" [formControl]="provinceFormControl">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.CITY' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.CITY' | translate}}"
+               class="form-control form-control-sm" [formControl]="cityFormControl">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.FLOOR' | translate}}</label>
+        <input type="number" placeholder="{{'CLIENT_FORM.ADDRESS.FLOOR' | translate}}"
+               class="form-control form-control-sm" formControlName="floor">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.APARTMENT' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.APARTMENT' | translate}}"
+               class="form-control form-control-sm" formControlName="apartment">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.INTERCOM' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.INTERCOM' | translate}}"
+               class="form-control form-control-sm" formControlName="intercom">
+      </div>
+
+      <div class="form-group col-lg-10">
+        <label>{{'CLIENT_FORM.ADDRESS.NOTE' | translate}}</label>
+        <textarea class="form-control" placeholder="{{'CLIENT_FORM.ADDRESS.NOTE' | translate}}"
+                  rows="3" style="resize: none" formControlName="notes"></textarea>
+      </div>
+
+
+      <div class="form-group col-lg-2 col-md-4" style="margin-top: 35px">
+        <label class="checkbox checkbox-outline-primary">
+          <input type="checkbox" formControlName="elevator">
+          <span>{{'CLIENT_FORM.ADDRESS.ELEVATOR' | translate}}</span>
+        </label>
+
+        <label class="checkbox checkbox-outline-primary mt-3">
+          <input type="checkbox" formControlName="enabled">
+          <span>{{'CLIENT_FORM.ADDRESS.ENABLED' | translate}}</span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label class="checkbox checkbox-outline-primary">
+          <input #billingCheckBox (click)="setBillingAddress(billingCheckBox.checked)" type="checkbox">
+          <span>{{'CLIENT_FORM.ADDRESS.BILLING_DATA' | translate}}</span>
+        </label>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.ADDRESS' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.ADDRESS' | translate}}"
+               class="form-control form-control-sm" formControlName="address">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.DETAILS.FISCAL_CODE' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.DETAILS.FISCAL_CODE' | translate}}"
+               class="form-control form-control-sm" formControlName="fiscalCode">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.VAT' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.VAT' | translate}}"
+               class="form-control form-control-sm" formControlName="iva">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.PEC' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.PEC' | translate}}"
+               class="form-control form-control-sm" formControlName="pec">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.DESTINATION_CODE' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.DESTINATION_CODE' | translate}}"
+               class="form-control form-control-sm" formControlName="codeDestination">
+      </div>
+
+    </div>
+  </form>
+
+  <form *ngIf="formStatus == 'update_clicked' " class="form px-3 pb-3" [formGroup]="updateForm">
+    <div class="row">
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.DETAILS.FIRST_NAME' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.DETAILS.FIRST_NAME' | translate}}"
+               class="form-control form-control-sm" formControlName="name">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.DETAILS.LAST_NAME' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.DETAILS.LAST_NAME' | translate}}"
+               class="form-control form-control-sm" formControlName="surname">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.DETAILS.MOBILE' | translate}}</label>
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend" ngbDropdown #myDrop="ngbDropdown">
+            <button class="btn btn-outline-secondary" type="button"
+                    ngbDropdownToggle>{{form.get('mobilePrefix').value || 'BUTTONS.CHOOSE' | translate}}
+            </button>
+            <div class="dropdown-menu py-0" tabindex="1" ngbDropdownMenu>
+              <ng-select [items]="prefixList" [bindLabel]="'label'"
+                         [tabIndex]="1"
+                         autofocus
+                         [bindValue]="'prefix'" formControlName="mobilePrefix" placeholder="search"
+                         (change)="myDrop.close()" >
+              </ng-select>
+            </div>
+          </div>
+          <input type="tel" placeholder="{{'CLIENT_FORM.DETAILS.MOBILE' | translate}}"
+                 class="form-control form-control-sm" formControlName="mobile">
+        </div>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.SHIPPING' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.SHIPPING' | translate}}"
+               class="form-control form-control-sm" formControlName="shippingAddress">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.STREET' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.STREET' | translate}}"
+               class="form-control form-control-sm" formControlName="streetNumber">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.COUNTRY' | translate}}</label>
+        <ng-select class="ng-select-sm"
+                   placeholder="{{'CLIENT_FORM.ADDRESS.COUNTRY' | translate}}"
+                   [formControl]="countryFormControl" [items]="[{country: 'IT'}]"
+                   bindLabel="country"
+                   bindValue="country">
+        </ng-select>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.CAP' | translate}}</label>
+        <ng-select class="ng-select-sm"
+                   placeholder="{{'CLIENT_FORM.ADDRESS.CAP' | translate}}"
+                   [virtualScroll]="true"
+                   [searchFn]="capSearch"
+                   [loading]="zipCodeLoading"
+                   formControlName="zipCodeId" [items]="zipCodes" bindLabel="cap"
+                   bindValue="id">
+          <ng-template ng-option-tmp let-item="item">
+            <span class="font-11"><strong>{{item.city}}</strong> : {{item.cap}}</span>
+          </ng-template>
+        </ng-select>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.PROVINCE' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.PROVINCE' | translate}}"
+               class="form-control form-control-sm" [formControl]="provinceFormControl">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.CITY' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.CITY' | translate}}"
+               class="form-control form-control-sm" [formControl]="cityFormControl">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.FLOOR' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.FLOOR' | translate}}"
+               class="form-control form-control-sm" formControlName="floor">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.APARTMENT' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.APARTMENT' | translate}}"
+               class="form-control form-control-sm" formControlName="apartment">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.INTERCOM' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.INTERCOM' | translate}}"
+               class="form-control form-control-sm" formControlName="intercom">
+      </div>
+
+      <div class="form-group col-lg-10">
+        <label>{{'CLIENT_FORM.ADDRESS.NOTE' | translate}}</label>
+        <textarea class="form-control" placeholder="{{'CLIENT_FORM.ADDRESS.NOTE' | translate}}"
+                  rows="3" style="resize: none" formControlName="notes"></textarea>
+      </div>
+
+
+      <div class="form-group col-lg-2 col-md-4" style="margin-top: 35px">
+        <label class="checkbox checkbox-outline-primary">
+          <input type="checkbox" formControlName="elevator">
+          <span>{{'CLIENT_FORM.ADDRESS.ELEVATOR' | translate}}</span>
+        </label>
+
+        <label class="checkbox checkbox-outline-primary mt-3">
+          <input type="checkbox" formControlName="enabled">
+          <span>{{'CLIENT_FORM.ADDRESS.ENABLED' | translate}}</span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label class="checkbox checkbox-outline-primary">
+          <input #billingCheckBox (click)="setBillingAddress(billingCheckBox.checked)" type="checkbox">
+          <span>{{'CLIENT_FORM.ADDRESS.BILLING_DATA' | translate}}</span>
+        </label>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.ADDRESS' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.ADDRESS' | translate}}"
+               class="form-control form-control-sm" formControlName="address">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.DETAILS.FISCAL_CODE' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.DETAILS.FISCAL_CODE' | translate}}"
+               class="form-control form-control-sm" formControlName="fiscalCode">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.VAT' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.VAT' | translate}}"
+               class="form-control form-control-sm" formControlName="iva">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.PEC' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.PEC' | translate}}"
+               class="form-control form-control-sm" formControlName="pec">
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'CLIENT_FORM.ADDRESS.DESTINATION_CODE' | translate}}</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.ADDRESS.DESTINATION_CODE' | translate}}"
+               class="form-control form-control-sm" formControlName="codeDestination">
+      </div>
+
+    </div>
+  </form>
+
+</div>

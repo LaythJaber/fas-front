@@ -1,0 +1,49 @@
+<div mat-dialog-title style="border-bottom: 1px solid gainsboro;">
+  <h1>
+    <!--{{'CLIENT_FORM.MGM.TITLE' | translate}} --> New Administrator
+    <button mat-raised-button color="primary" type="button" class="pull-right" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </h1>
+</div>
+
+<!--<div mat-dialog-content>-->
+
+    <mat-tab-group [dynamicHeight]="true" [animationDuration]="'0'" mat-align-tabs="center" style="width: 100% !important;">
+      <mat-tab>
+        <ng-template matTabLabel>{{'CLIENT_FORM.MGM.DETAILS' | translate}}</ng-template>
+        <ng-template matTabContent>
+          <app-client-mgm-informations [editMode]="editMode" (saved)="savedClient($event)" [client]="client">
+          </app-client-mgm-informations>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab *ngIf="editMode">
+        <ng-template matTabLabel>{{'CLIENT_FORM.MGM.ADDRESS' | translate}}</ng-template>
+        <ng-template matTabContent>
+          <app-client-mgm-addresses [editMode]="editMode" [client]="client" ></app-client-mgm-addresses>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab *ngIf="editMode">
+        <ng-template matTabLabel>
+          {{'CLIENT_FORM.MGM.FAVORITES' | translate}}
+          <span class="btn-badge">{{wishNumber}}</span>
+        </ng-template>
+        <ng-template matTabContent>
+          <app-client-mgm-favorites [client]="client"></app-client-mgm-favorites>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab *ngIf="editMode">
+        <ng-template matTabLabel>
+          {{'CLIENT_FORM.MGM.CART' | translate}}
+          <span class="btn-badge">{{productsNumber}}</span>
+        </ng-template>
+        <ng-template matTabContent>
+          <app-client-mgm-cart [client]="client"></app-client-mgm-cart>
+        </ng-template>
+      </mat-tab>
+
+    </mat-tab-group>
+<!--</div>-->

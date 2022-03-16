@@ -1,0 +1,116 @@
+<div class="subheader">
+  <div class="search-input w-250">
+    <div class="form-group">
+      <div class="input-group-icon input-group-icon-right">
+        <span class="input-icon input-icon-right reset-search-btn" *ngIf="searchFormControl.value"
+              (click)="searchFormControl.setValue(null)">
+          <i class="ft-x"></i>
+        </span>
+        <input type="text" class="form-control" placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+               [formControl]="searchFormControl">
+      </div>
+    </div>
+  </div>
+  <div class="action-btns">
+    <button mat-mini-fab color="primary" (click)="chooseColumns(content)"
+            placement="left" tooltipClass="custom-tooltip"
+            ngbTooltip="{{'MOVEMENT_FORM.SELECT_COLUMNS'|translate}}"><i class="ft-clipboard"
+                                                                         style="font-size: 18px"></i>
+    </button>
+  </div>
+</div>
+
+<div class="card card-fullheight">
+  <div class="card-body">
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table table-sm table-hover table-responsive table-bordered">
+      <thead>
+      <tr>
+        <ng-container *ngFor="let c of columns; let i= index">
+          <th *ngIf="this.colsFormArray.controls[i]?.value" scope="col"
+              style="padding: 1rem 0.7rem !important;">{{c | translate}}</th>
+        </ng-container>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let stock of rows; let i = index" (click)="openDetails(stock)">
+        <td *ngIf="this.colsFormArray.controls[0].value">{{stock.createdAt | date: 'dd/MM/yyyy'}}</td>
+        <td *ngIf="this.colsFormArray.controls[1].value">{{stock.prodCode}}</td>
+        <td *ngIf="this.colsFormArray.controls[2].value">{{stock.description}}</td>
+        <td *ngIf="this.colsFormArray.controls[3]?.value">{{stock.commercialDescription}}</td>
+        <td style="font-size: larger;"
+            *ngIf="this.colsFormArray.controls[4].value">
+          <span class="badge badge-success" *ngIf="stock.active"> {{'MOVEMENT_FORM.YES' | translate}}</span>
+          <span class="badge badge-warning" *ngIf="!stock.active"> {{'MOVEMENT_FORM.NO' | translate}}</span>
+        </td>
+        <td *ngIf="this.colsFormArray.controls[5].value">{{stock.category}}</td>
+        <td *ngIf="this.colsFormArray.controls[6].value">{{stock.subCategory}}</td>
+        <td *ngIf="this.colsFormArray.controls[7].value">{{stock.subSubCategory}}</td>
+        <td *ngIf="this.colsFormArray.controls[8].value">
+          {{stock.stock | number: '1.2-2'}}
+        </td>
+        <td *ngIf="this.colsFormArray.controls[9].value">{{stock.availability | number: '1.2-2'}}</td>
+        <td *ngIf="this.colsFormArray.controls[10].value">{{stock.minStock | number: '1.2-2'}}</td>
+        <td *ngIf="this.colsFormArray.controls[11].value">{{stock.measureUnit}}</td>
+        <td
+          *ngIf="this.colsFormArray.controls[12].value">{{stock?.purchasePrice ? ((stock?.purchasePrice  | number: '1.2-2') + ' €') : ''}}</td>
+        <td
+          *ngIf="this.colsFormArray.controls[13].value">{{stock?.price ? ((stock.price  | number: '1.2-2') + ' €') : ''}}</td>
+        <td *ngIf="this.colsFormArray.controls[14].value">{{stock.iva}}</td>
+        <td *ngIf="this.colsFormArray.controls[15]?.value">{{stock.brand}}</td>
+      </tr>
+      <tr *ngIf="rows.length===0 && !loading" class="text-center">
+        <td colspan="10">{{'MOVEMENT_FORM.NO_MOVEMENT_FOUND' | translate}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center" *ngIf="totalRecords!==0  && totalRecords > this.pageSize"
+                    [collectionSize]="totalRecords" size="sm" [pageSize]="pageSize" [ellipses]="true" [maxSize]="5"
+                    [page]="page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>
+<ng-template #stockHistoryTemplate>
+  <app-stock-history [data]="selectedStock">
+  </app-stock-history>
+</ng-template>
+
+
+<ng-template #content>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'MOVEMENT_FORM.SELECT_COLUMNS' | translate}}</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div class="row">
+      <div class="col-md-6" *ngFor="let c of colsFormArray.controls; let i = index">
+        <mat-checkbox [value]="columns[i]?.value" [formControl]="c">
+        </mat-checkbox>
+        {{columns[i] | translate}}
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button mat-button color="primary" class="ml-2"
+            (click)="editModal.close()"> {{'BUTTONS.CLOSE' | translate}}</button>
+  </div>
+</ng-template>

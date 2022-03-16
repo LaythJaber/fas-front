@@ -1,0 +1,69 @@
+<div class="col-lg-12 col-md-12 col-12 p-3">
+  <div class="custom-section">
+
+    <form [formGroup]="catTriForm">
+      <div class="container-fluid nmp">
+        <div class="row nmp" style="margin-bottom: 5px !important;">
+          <div class="form-group col-lg-6 col-md-6 nmp">
+            <span>{{'CATEGORY_FORM.TRI_TYPE' | translate}} </span>
+            <ng-select [items]="[
+            {label:'CATEGORY_FORM.TRI_ALPHA_ASC'|translate,value:1},
+            {label:'CATEGORY_FORM.TRI_ALPHA_DES'|translate,value:2}
+            ]"
+                       formControlName="type"
+                       class="ng-select"
+                       style="display: inline-block !important; width: 100%;"
+                       bindValue="value"
+                       bindLabel="label"
+                       placeholder="{{'CATEGORY_FORM.TRI_CHOOSE' | translate}}"
+                       [clearable]="false"
+                       (change)="applyTri()"
+            >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div style="max-height: 500px; overflow-y: auto" cdkScrollable #scrollContainer>
+      <table cdkDropList cdkDropListOrientation="vertical" class="table-sm table-hover table-bordered"
+             style="width: 100%; background: white"
+             (cdkDropListDropped)="dropTable($event)" [cdkDropListData]="categoryList" aria-describedby="">
+        <thead>
+        <tr>
+          <th style="font-size: 12px !important;padding:5px !important;" *ngFor="let c of catTriColumns" scope="col">{{c | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr cdkDrag class="row-box"  *ngFor="let c of categoryList" [cdkDragData]="c"
+            [cdkDropListScrollContainer]="scrollContainer"
+            cdkDragBoundary=".modal-body" cdkDragLockAxis="y">
+          <div *cdkDragPreview> {{c.id}}: {{c.name}} </div>
+          <td style="padding:5px !important;">
+            {{c.id}}
+          </td>
+          <td style="padding:5px !important;">
+            {{c.name}}
+          </td>
+          <td style="padding:5px !important;">
+            {{c.description?.substring(0, 20)}}
+            <span *ngIf="c.description?.length >= 20">
+                  [...]
+                </span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="form-row mt-3">
+      <div class="form-group col-12 text-right">
+        <button class="btn btn-primary" (click)="setPriorities2()">
+          <em class="fas fa-save"></em>
+          {{'BUTTONS.SAVE' | translate}}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

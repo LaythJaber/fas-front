@@ -1,0 +1,86 @@
+.subheader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table-container table .table-row:hover {
+  background: #f4f4f4;
+  color: white !important;
+  user-select: none;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 970px) {
+  .subheader {
+    flex-direction: column;
+
+    .action-btns {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+  .table-container {
+    margin-top: 20px;
+    max-width: 100vw;
+    overflow-x: scroll;
+
+    .mat-table {
+      overflow: auto;
+      width: 1123px;
+    }
+  }
+}
+
+.task-actions {
+  position: absolute;
+  right: 0;
+}
+
+.faq-categories-nav {
+  .nav-link.active {
+    color: #2949EF;
+    font-weight: 500;
+  }
+}
+
+::ng-deep .faq-list {
+  .card {
+    box-shadow: none;
+    padding: 0.55rem 0;
+
+    .card-header {
+      display: block;
+      height: auto;
+      min-height: auto;
+      padding: 0;
+      border-bottom: 0;
+
+      button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 0;
+        color: inherit;
+        box-shadow: none !important;
+
+        &[aria-expanded=true] {
+          color: #2949EF;
+
+          mat-icon {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+  }
+}
+
+
+

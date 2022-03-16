@@ -1,0 +1,83 @@
+<div class="row">
+  <ngb-tabset #t="ngbTabset" style="width: 100%;" >
+    <ngb-tab  id="tab-selectbyid1">
+      <ng-template ngbTabTitle>{{'PRODUCT_FORM.CATEGORY' | translate}}</ng-template>
+      <ng-template ngbTabContent>
+        <div class="container" style="padding-top: 10px !important; margin-top: 0 !important;" #main >
+          <div class="row">
+            <div class="form-group col-lg-6 col-md-6 justify-content-end">
+              <input matInput class="form-control"
+                     (input)="filterChanged($event.target.value)"
+                     placeholder="{{'SUBHEADER.SEARCH' | translate}}">
+            </div>
+           </div>
+
+          <div class="form-row">
+            <div class="form-group col-lg-12 col-md-12"
+                 style="max-height:  600px!important; overflow-y: auto !important;">
+              <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                <mat-tree-node  *matTreeNodeDef="let node" matTreeNodePadding matTreeNodeToggle>
+                  <button  mat-icon-button ></button>
+                  <mat-checkbox  [checked]="checklistSelection.isSelected(node)" disabled
+                                   class="checklist-leaf-node">{{node.item}}</mat-checkbox>
+                </mat-tree-node>
+
+                <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding >
+                  {{'CATEGORY_FORM.NO_CATEGORY' | translate}}
+                </mat-tree-node>
+
+                <mat-tree-node  *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+                  <button  [attr.aria-label]="'Toggle ' + node.item" mat-icon-button
+                          matTreeNodeToggle>
+                    <mat-icon  class="mat-icon-rtl-mirror">
+                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                    </mat-icon>
+                  </button>
+                  <mat-checkbox  [checked]="descendantsAllSelected(node)" disabled
+                                 [indeterminate]="descendantsPartiallySelected(node)">{{node.item}}</mat-checkbox>
+                </mat-tree-node>
+              </mat-tree>
+            </div>
+          </div>
+
+
+          <!-- Infinite Scroll -->
+          <div infiniteScroll
+               [infiniteScrollContainer]="main"
+               [infiniteScrollDistance]="2"
+               [infiniteScrollThrottle]="1000"
+               (scrolled)="onScroll()">
+          </div>
+          <div class="product-infinitescroll" >
+            <div class="theme-paggination-block">
+              <div class="container-fluid p-0">
+                <div class="row">
+                  <div class="text-center col-sm-12">
+                    <div class="infinite-scrolling mt-3 mb-3 d-inline-block">
+                      <i class="fa fa-spin fa-spinner" ></i>
+                      <div class="loading-more active" >
+                        No More Products
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div mat-dialog-actions align="end">
+          <button mat-flat-button color="warn" [matDialogClose]="" class="ml-2"><i  aria-hidden="true"
+                                                                                    class="ft-x"></i> {{'BUTTONS.CLOSE' | translate}}</button>
+        </div>
+
+
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+
+</div>
+
+
+

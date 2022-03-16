@@ -1,0 +1,9 @@
+$card-margin-bottom: 1.8rem;
+:host {
+    .card {
+    	margin-bottom: $card-margin-bottom;
+		&.card-fullheight {
+			height: calc(100% - #{$card-margin-bottom});
+		}
+    }
+}

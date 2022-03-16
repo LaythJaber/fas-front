@@ -1,0 +1,703 @@
+<div class="card">
+  <div  class="title">
+    <em class="fa fa-arrow-left mr-2" (click)="goBack()"></em>
+    DETTAGLIO DELL'RESO
+  </div>
+
+  <div class="card-body" *ngIf="returnPurchase">
+    <div class="row" style="font-size: 12px;">
+
+      <div class="col-3" style="border-right: 1px solid gainsboro;">
+        <div class="form-group">
+          <label><strong>Codice reso: </strong></label>
+          <span style="float: right">
+            {{returnPurchase.code}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label><strong>Data reso: </strong></label>
+          <span style="float: right">
+            {{returnPurchase.createdAt | date: 'dd/MM/yyyy \'alle\' HH:mm'}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label><strong>Codice ordine: </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.code}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label><strong>Data ordine: </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.createdAt | date: 'dd/MM/yyyy \'alle\' HH:mm'}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label><strong>Data consegnato: </strong></label>
+          <span style="float: right">
+            {{getDeliveredDate(returnPurchase.purchase) | date: 'dd/MM/yyyy \'alle\' HH:mm'}}
+          </span>
+        </div>
+      </div>
+
+      <div class="col-3" style="border-right: 1px solid gainsboro;">
+        <div class="form-group">
+          <label><strong>Codice cliente: </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.client.code}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label><strong>Nome Cognome: </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.client.firstName + ' ' + returnPurchase.purchase.client.lastName}}
+          </span>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-block" type="button" (click)="openModal(modalClient)">
+            Info Cliente
+          </button>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-block" type="button" (click)="openModal(modalAddress)">
+            Info Indirizzo
+          </button>
+        </div>
+      </div>
+
+      <div class="col-3" style="border-right: 1px solid gainsboro;">
+        <div class="form-group">
+          <label><strong>Fattura: </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.billing ? 'Si' : 'No'}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label><strong>Nota Cliente: </strong></label>
+          <span style="float: right; font-weight: bold; cursor: pointer;" (click)="openModal(modalClientNote)">
+            Vedi Nota
+          </span>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-block" type="button" (click)="openModal(modalPayment)">
+            Info Pagamento
+          </button>
+        </div>
+      </div>
+
+      <div class="col-3">
+        <div class="form-group">
+          <label><strong>Stato attuale: </strong></label>
+          <span style="float: right">
+            {{'STATE.RETURN_PURCHASE.' + returnPurchase.state | translate}}
+          </span>
+        </div>
+        <div class="form-group" *ngIf="returnPurchase.state === 'OPEN'">
+          <button class="btn btn-block" type="button" *ngIf="!returnPurchase.stateInChange"
+                  (click)="closeReturnPurchase(returnPurchase)">
+            Chiudi questo file
+          </button>
+          <button class="btn btn-block" type="button" disabled *ngIf="returnPurchase.stateInChange">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-12">
+        <table class="table table-sm table-bordered">
+          <tr>
+            <th>Row id</th>
+            <th>Codice prodotto</th>
+            <th>Descrizione</th>
+            <th>Prezzo</th>
+            <th>Qte. Reso</th>
+            <th>Totale reso</th>
+            <th>Qte. Rim</th>
+            <th>Totale rimborso</th>
+            <th>Motivo</th>
+            <th>Allegati</th>
+            <th>Stato</th>
+            <th>Azioni</th>
+          </tr>
+          <tbody>
+          <tr *ngIf="returnPurchase.returnProducts && !returnPurchase.returnProducts.length">
+            <td colspan="10" class="text-center">
+              Nessun row trovato
+            </td>
+          </tr>
+          <tr *ngFor="let row of returnPurchase.returnProducts; let i=index">
+            <td>
+              {{row.rowId}}
+            </td>
+            <td>
+              {{row.product.code}}
+            </td>
+            <td>
+              {{row.product | localTranslate: 'commercialDescription'}}
+              <div *ngIf="row?.colorValue" class="variation">
+                <strong>{{'common.color' | translate}}:</strong> {{row?.colorValue}}
+              </div>
+              <div *ngIf="row?.sizeValue" class="variation">
+                <strong>{{'common.size' | translate}}:</strong> {{row?.sizeValue}}
+              </div>
+            </td>
+            <td>
+              {{(row.totalReturn / row.quantity) | number: "1.2-2"
+              | numberCommaseparator}}€/{{priceService.getUnit(row.product)}}
+            </td>
+            <td>
+              <div *ngIf="!row.product?.weighted">
+                {{row.quantity}}
+              </div>
+              <div *ngIf="row.product?.weighted">
+                {{priceService.getQuantityInKgLtr(row.quantity, row.product?.weight, row.product?.weightUm, row.product?.measureUnit?.description)}}
+              </div>
+            </td>
+            <td>
+              {{row.totalReturn | number: "1.2-2" | numberCommaseparator}}€
+            </td>
+            <td>
+              <div *ngIf="!row.product?.weighted">
+                {{row.quantityRefunded}}
+              </div>
+              <div *ngIf="row.product?.weighted">
+                {{priceService.getQuantityInKgLtr(row.quantityRefunded, row.product?.weight, row.product?.weightUm, row.product?.measureUnit?.description)}}
+              </div>
+            </td>
+            <td>
+              {{row.totalRefunded | number: "1.2-2" | numberCommaseparator }}€
+            </td>
+            <td>
+              <span *ngIf="row.reason?.length >= 30">
+                {{row.reason?.substring(0, 30) + '...'}}
+                <span style="float: right; cursor: pointer; font-size: 10px; text-decoration: underline"
+                      (click)="selectedMessage = row.reason; openModal(modalReturnReason)">
+                  Vedi motivo completo
+                </span>
+              </span>
+              <span *ngIf="row.reason?.length < 30">
+                {{row.reason}}
+              </span>
+            </td>
+            <td>
+              <ul>
+                <li *ngFor="let attachment of row.attachments">
+                  <a href="{{attachment.attachment}}" target="_blank">
+                    {{attachment.name}}
+                  </a>
+                  <em class="mr-2 fa fa-download" (click)="downloadAttachment(attachment)"></em>
+                </li>
+              </ul>
+            </td>
+            <td>
+              {{'STATE.RETURN_PRODUCT.' + row.state | translate}}
+              <br/>
+              <span class="btn"
+                    style="font-size: 10px;text-decoration: underline"
+                    (click)="selectedReturnProduct= row; openModal(modalStateHistory)">
+                Vedi Storico
+              </span>
+            </td>
+            <td>
+              <div class="form-group"
+                   *ngIf="returnPurchase.state === 'OPEN' && canChangeState(row)">
+                <button class="btn btn-block" type="button" *ngIf="!row.stateInChange"
+                        (click)="openModalState(modalState, row)">
+                  Cambia Stato
+                </button>
+                <button class="btn btn-block" type="button" disabled *ngIf="row.stateInChange">
+                  <em class="fa fa-spin fa-spinner"></em>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-6"></div>
+      <div class="col-6 text-right">
+        <table class="table table-sm">
+          <tbody>
+          <tr class="text-right">
+            <td>Totale prodotti</td>
+            <td>
+              {{returnPurchase.purchase.finalProductTotal | number: "1.2-2" | numberCommaseparator }}€
+            </td>
+          </tr>
+          <tr class="text-right">
+            <td>Totale ordine</td>
+            <td>
+              {{returnPurchase.purchase.finalTotal | number: "1.2-2" | numberCommaseparator }}€
+            </td>
+          </tr>
+<!--          <tr class="text-right">-->
+<!--            <td>Totale quantità</td>-->
+<!--            <td>-->
+<!--              {{returnPurchase.totalQuantity}}-->
+<!--            </td>-->
+<!--          </tr>-->
+          <tr class="text-right">
+            <td>Totale reso</td>
+            <td>
+              {{returnPurchase.totalReturn | number: "1.2-2" | numberCommaseparator }}€
+            </td>
+          </tr>
+<!--          <tr class="text-right">-->
+<!--            <td>Totale quantità rimborso</td>-->
+<!--            <td>-->
+<!--              {{returnPurchase.totalQuantityRefunded}}-->
+<!--            </td>-->
+<!--          </tr>-->
+          <tr class="text-right">
+            <td>Totale rimborso</td>
+            <td>
+              {{returnPurchase.totalRefunded | number: "1.2-2" | numberCommaseparator }}€
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalState>
+  <div class="modal-header">
+    <h4 mat-dialog-title>Cambio Stato</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="stateForm">
+      <div class="form-row">
+        <div class="form-group col-lg-12 col-md-12">
+          <label>Nuovo Stato</label>
+          <ng-select class="ng-select-sm ng-select-required"
+                     [items]="stateList"
+                     [bindLabel]="'label'"
+                     [bindValue]="'id'"
+                     formControlName="state"
+                     placeholder="Seleziona nuovo stato">
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{'STATE.RETURN_PRODUCT.' + item.label | translate}}</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+              <span>{{'STATE.RETURN_PRODUCT.' + item.label | translate}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-12 col-md-12" *ngIf="selectedReturnProduct.state === 'PENDING_REIMBURSEMENT'
+             && stateForm.get('state').value === 'REFUNDED'">
+          <label>Quantità rimborsata (max: {{getMaxQteToReturn()}})</label>
+          <input type="number" formControlName="quantityRefunded"
+                 [min]="0" placeholder="Quantità in {{getUnit()}}"
+                 class="form-control form-control-sm"/>
+          <div class="d-block invalid-feedback"
+               *ngIf="stateForm.get('quantityRefunded').touched && stateForm.get('quantityRefunded').value < 0">
+            quantità rimborsata invalido
+          </div>
+        </div>
+        <div class="form-group col-lg-12 col-md-12" *ngIf="selectedReturnProduct.state === 'PENDING_REIMBURSEMENT'
+             && stateForm.get('state').value === 'REFUNDED'">
+          <label>Totale rimborsato</label>
+          <input type="number" formControlName="totalRefunded" class="form-control form-control-sm"/>
+          <div class="d-block invalid-feedback"
+               *ngIf="stateForm.get('totalRefunded').touched
+               && stateForm.get('state').value === 'REFUNDED'
+               && !stateForm.get('totalRefunded').value">
+            totale rimborsato è richista
+          </div>
+        </div>
+
+        <div class="form-group col-lg-12 col-md-12">
+          <label>Nota</label>
+          <textarea rows="5" placeholder="nota" class="form-control form-control-sm" formControlName="note">
+          </textarea>
+        </div>
+
+        <div class="form-group col-12">
+          <h5>Allegati</h5>
+          <label for="files" class="btn btn-light">
+            <em class="fa fa-upload"></em> Caricare files
+          </label>
+          <span>
+              {{fileInput.files.length}} file caricati
+          </span>
+          <input type="file" id="files" (change)="fileChange($event)"
+                 #fileInput multiple style="visibility: hidden"/>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <div mat-dialog-actions>
+      <button mat-flat-button class="mr-3" (click)="modal.close(false)">
+        {{'BUTTONS.CLOSE' | translate}}
+      </button>
+      <button mat-flat-button color="primary"
+              [disabled]="stateForm.invalid || !isValidStateData()"
+              (click)="modal.close(true)">
+        {{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalStateHistory>
+  <div class="modal-header">
+    <h4 mat-dialog-title>Storia dello stato</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <table class="table table-sm table-bordered">
+      <thead>
+      <tr>
+        <th><strong>Operatore</strong></th>
+        <th><strong>Stato</strong></th>
+        <th><strong>Data</strong></th>
+        <th><strong>Nota</strong></th>
+        <th><strong>Allegati</strong></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngIf="selectedReturnProduct?.stateHistoryList && !selectedReturnProduct?.stateHistoryList.length">
+        <td colspan="4" class="text-center">
+          No record trovato
+        </td>
+      </tr>
+      <tr *ngFor="let stateHistory of selectedReturnProduct?.stateHistoryList">
+        <td>
+          <span *ngIf="stateHistory.operator">
+            {{stateHistory.operator?.firstName}} {{stateHistory.operator?.lastName}}
+          </span>
+          <span *ngIf="!stateHistory.operator">
+            Cliente
+          </span>
+        </td>
+        <td>
+          {{'STATE.RETURN_PRODUCT.' + stateHistory.state | translate}}
+        </td>
+        <td>
+          {{stateHistory.createdAt | date: 'dd/MM/yyyy \'alle\' HH:mm'}}
+        </td>
+        <td>
+          {{stateHistory.note}}
+        </td>
+        <td>
+          <ul>
+            <li *ngFor="let attachment of stateHistory.attachments">
+              <a href="{{attachment.attachment}}" target="_blank">
+                {{attachment.name}}
+              </a>
+              <em class="mr-2 fa fa-download" (click)="downloadAttachment(attachment)"></em>
+            </li>
+          </ul>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>
+
+<ng-template #modalClient>
+  <div class="modal-header">
+    <h4 mat-dialog-title>Dettaglio del cliente</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="container">
+      <div class="form-row">
+        <div class="form-group col-12">
+          <label><strong>Codice cliente : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.client?.code}}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label><strong>Nome Cognome : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.client?.firstName + ' ' + returnPurchase.purchase.client?.lastName}}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label><strong>Sesso : </strong></label>
+          <span style="float: right">
+            <i  aria-hidden="true" class="fas fa-mars" style="color: #06B5B6" *ngIf="returnPurchase.purchase.client?.gender?.toString() === 'MALE'"></i>
+            <i  aria-hidden="true" class="fas fa-venus" style="color: #E50054" *ngIf="returnPurchase.purchase.client?.gender?.toString() === 'FEMALE'"></i>
+            <i  aria-hidden="true" class="fas fa-transgender"  *ngIf="returnPurchase.purchase.client?.gender?.toString() === 'OTHER'"></i>
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label><strong>Data di nascita : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.client?.dateOfBirth | date: 'dd/MM/yyyy'}}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label><strong>Telefono : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.client?.mobilePrefix + ' ' + returnPurchase.purchase.client?.mobile}}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label><strong>Email : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.client?.email}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalAddress>
+  <div class="modal-header">
+    <h4 mat-dialog-title>Dettaglio del indirizzo</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="container">
+      <div class="form-row">
+
+        <div class="form-group col-6" style="border-right: 1px solid gainsboro">
+          <label><strong>Nome Cognome : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.surname + ' ' + returnPurchase.purchase.address?.name}}
+          </span>
+        </div>
+        <div class="form-group col-6">
+          <label><strong>Telefono : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.mobilePrefix + ' ' + returnPurchase.purchase.address?.mobile}}
+          </span>
+        </div>
+
+        <div class="form-group col-6" style="border-right: 1px solid gainsboro">
+          <label><strong>Indirizzo di spedizione : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.shippingAddress}}
+          </span>
+        </div>
+        <div class="form-group col-6">
+          <label><strong>Civico : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.streetNumber}}
+          </span>
+        </div>
+
+        <div class="form-group col-6" style="border-right: 1px solid gainsboro">
+          <label><strong>Destinario </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.zipCode.city}},
+            {{returnPurchase.purchase.address?.zipCode.province}},
+            {{returnPurchase.purchase.address?.zipCode.cap}},
+            {{returnPurchase.purchase.address?.zipCode.country}}
+          </span>
+        </div>
+        <div class="form-group col-6">
+          <label><strong>Piano : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.floor}}
+          </span>
+        </div>
+
+        <div class="form-group col-6" style="border-right: 1px solid gainsboro">
+          <label><strong>Appartamento :  </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.apartment}}
+          </span>
+        </div>
+        <div class="form-group col-6">
+          <label><strong>Citofono : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.intercom}}
+          </span>
+        </div>
+        <div class="form-group col-6">
+          <label><strong>Ascensore : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.elevator ? 'Si' : 'No'}}
+          </span>
+        </div>
+
+        <div class="form-group col-12">
+          <label><strong>Nota </strong></label>
+          <p style="border: 0.5px solid gainsboro; width: 100%; height: 100px; overflow-y: auto">
+            {{returnPurchase.purchase.address?.notes}}
+          </p>
+        </div>
+
+        <div class="form-group col-12" style="border-bottom: 1px solid gainsboro">
+          <h5>Dati di fatturazione</h5>
+        </div>
+
+
+        <div class="form-group col-6" style="border-right: 1px solid gainsboro">
+          <label><strong>Indirizzo : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.address}}
+          </span>
+        </div>
+        <div class="form-group col-6">
+          <label><strong>Codice Fiscale : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.fiscalCode}}
+          </span>
+        </div>
+
+        <div class="form-group col-6" style="border-right: 1px solid gainsboro">
+          <label><strong>IVA : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.iva}}
+          </span>
+        </div>
+        <div class="form-group col-6">
+          <label><strong>PEC : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.fiscalCode}}
+          </span>
+        </div>
+        <div class="form-group col-6">
+          <label><strong>Codice di destinazione : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.address?.codeDestination}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalClientNote>
+  <div class="modal-header">
+    <h4 mat-dialog-title>Nota del cliente</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="form-row">
+        <div class="form-group col-12">
+          <p style="border: 1px solid black; padding: 5px; width: 100%;
+          min-height: 100px; overflow-y: auto;
+          max-height: 500px">
+            {{returnPurchase.purchase.noteClient ? returnPurchase.purchase.noteClient : 'Nessun nota'}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalReturnReason>
+  <div class="modal-header">
+    <h4 mat-dialog-title>Motiva del cliente</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="form-row">
+        <div class="form-group col-12">
+          <p style="border: 1px solid black; padding: 5px; width: 100%;
+          min-height: 100px; overflow-y: auto;
+          max-height: 500px">
+            {{selectedMessage}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalPayment>
+  <div class="modal-header">
+    <h4 mat-dialog-title>Dettaglio del pagamento</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="container">
+      <div class="form-row">
+        <div class="form-group col-12">
+          <label><strong>Modàlita di pagamento : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.payment.description}}
+          </span>
+        </div>
+        <div class="form-group col-12">
+          <label><strong>Date e ora ordine : </strong></label>
+          <span style="float: right">
+            {{returnPurchase.purchase.createdAt | date: 'dd/MM/yyyy - HH:mm'}}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-row" style="border-top: 1px solid gainsboro;" *ngIf="onlineTransaction">
+        <div class="form-group col-md-6 col-6">
+          <label>Totale Pre-autorizzato : </label>
+          <span style="float: right">
+            {{onlineTransaction.initialAmount | number: "1.2-2" | numberCommaseparator }}€
+          </span>
+        </div>
+        <div class="form-group col-md-6 col-6">
+          <label>Id : </label>
+          <span style="float: right">
+            {{onlineTransaction.id}}
+          </span>
+        </div>
+        <div class="form-group col-md-6 col-6">
+          <label>Codice : </label>
+          <span style="float: right">
+            {{onlineTransaction.code}}
+          </span>
+        </div>
+        <div class="form-group col-md-6 col-6"></div>
+        <div class="form-group col-md-6 col-6">
+          <label>Stato : </label>
+          <span style="float: right">
+            {{onlineTransaction.status}}
+          </span>
+        </div>
+        <div class="form-group col-md-6 col-6">
+          <label>Data di aggiornamento : </label>
+          <span style="float: right" *ngIf="onlineTransaction.updatedAt">
+            {{onlineTransaction.updatedAt | date: 'dd/MM/yyyy - HH:mm'}}
+          </span>
+          <span style="float: right" *ngIf="!onlineTransaction.updatedAt">
+            -
+          </span>
+        </div>
+        <div class="form-group col-md-6 col-6">
+          <label>Totale importo : </label>
+          <span style="float: right">
+            {{onlineTransaction.finalAmount | number: "1.2-2" | numberCommaseparator }}€
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-template>

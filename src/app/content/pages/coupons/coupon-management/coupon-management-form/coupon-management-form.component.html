@@ -1,0 +1,242 @@
+ <div class="form-content " >
+<form [formGroup]="couponForm" class="form p-3" id="couponForm" >
+
+    <div class="card"  >
+      <div class="card-body">
+
+         <div class="d-flex justify-content-between mb-3 mt-1">
+          <h5 class="box-title mb-0">
+
+            <div *ngIf="editMode" class="hide">
+              <h3>{{coupon.description}}</h3>
+            </div>
+            <div *ngIf="!editMode">{{'COUPON.FORM.ADD_COUPON' | translate}}</div>
+          </h5>
+          <a class="text-muted">
+            <div class="d-flex align-items-center">
+
+              <button  color="primary" placement="right" mat-button (click)="deactivateform()"
+                       ngbTooltip="{{'BUTTONS.CANCEL'|translate}}" placement="right"
+                       tooltipClass="custom-tooltip">
+                <mat-icon>clear</mat-icon>
+                {{'BUTTONS.CANCEL' | translate}}
+              </button>
+
+              <button (click)="activateEdit()" *ngIf="editMode && !editClicked" color="primary" mat-button>
+                <mat-icon>edit</mat-icon>
+                {{'BUTTONS.EDIT' | translate}}
+              </button>
+              <button (click)="save()" *ngIf="!editMode || editClicked" [disabled]="couponForm.invalid || !isValid() " color="primary"
+                      form="couponForm"   mat-button ngbTooltip="{{'BUTTONS.SAVE'|translate}}" placement="left"
+                      tooltipClass="custom-tooltip">
+                <mat-icon>save</mat-icon>
+                {{'BUTTONS.SAVE' | translate}}
+              </button>
+            </div>
+          </a>
+        </div>
+
+        <div class="row">
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'DATA_TABLE.CODE' | translate}} </label>
+            <input class="form-control form-control-sm"  formControlName="code"
+                   placeholder="{{'DATA_TABLE.CODE' | translate}}" type="text">
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'DATA_TABLE.DESCRIPTION' | translate}} </label>
+            <input class="form-control form-control-sm"  formControlName="description"
+                   placeholder="{{'DATA_TABLE.DESCRIPTION' | translate}}" type="text">
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'COUPON.START_DATE' | translate}} </label>
+            <input class="form-control form-control-sm"  formControlName="dateFrom"  [min]="todayDate|date:'yyyy-MM-dd'"
+                   placeholder="dd/mm/yyyy" type="date">
+          </div>
+
+           <div class="form-group col-lg-3 col-md-3">
+            <label>{{'COUPON.END_DATE' | translate}} </label>
+            <input class="form-control form-control-sm" formControlName="dateTo" placeholder="dd/mm/yyyy"
+                   [min]="todayDate|date:'yyyy-MM-dd'" type="date">
+            <div *ngIf=" !compareTwoDates() && couponForm.get('dateFrom').touched && couponForm.get('dateTo').touched" class="d-block invalid-feedback">
+              {{'COUPON.FORM.IS_INVALID_DATE' | translate}}
+            </div>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'COUPON.TYPE' | translate}} </label>
+            <div style="display: flex">
+              <ng-select  [items]="types" [virtualScroll]="true"  [clearable]="false"
+                          bindLabel="label" (change)="client = $event.value ; selectedClients = [];"
+                          bindValue="value" class="ng-select-sm ng-select-required"
+                          formControlName="couponType" placeholder="{{'COUPON.TYPE' | translate}}"
+                          style="width: 90%">
+              </ng-select>
+
+            </div>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'COUPON.MAX_NUMBER_USE' | translate}} </label>
+            <input class="form-control form-control-sm"  formControlName="maxNumberUse"
+                   placeholder="{{'COUPON.MAX_NUMBER_USE' | translate}}" type="number">
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'COUPON.DISCOUNTTYPE' | translate}} </label>
+            <div style="display: flex">
+              <ng-select [appendTo]="'body'" [items]="discountTypes" [virtualScroll]="true"
+                          bindLabel="label" (change)="discountControl = $event.value"
+                          bindValue="value" class="ng-select-sm ng-select-required"
+                          formControlName="discountType" placeholder="{{'COUPON.DISCOUNTTYPE' | translate}}"
+                          style="width: 90%">
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3" *ngIf="discountControl === 'PERCENT'">
+            <label style="margin-right: 3px" >{{'COUPON.DISCOUNT' | translate}} % </label>
+               <input  class="form-control form-control-sm"  formControlName="discount"
+                    placeholder="{{'COUPON.DISCOUNT' | translate}}"
+                    type="number" >
+          </div>
+
+
+          <div class="form-group col-lg-3 col-md-3" *ngIf="discountControl === 'VALUE'">
+            <label style="margin-right: 3px" >{{'COUPON.DISCOUNT' | translate}} € </label>
+            <input  type="tel" class="form-control form-control-sm"  formControlName="discount"
+                    placeholder="{{'COUPON.DISCOUNT' | translate}}" currencyMask>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'COUPON.PROMOTIONTYPE' | translate}} </label>
+            <div style="display: flex">
+              <ng-select [appendTo]="'body'" [items]="promotionTypes"  [virtualScroll]="true" (change)="promotionControl=$event.value"
+                          bindLabel="label"
+                          bindValue="value" class="ng-select-sm ng-select-required"
+                          formControlName="promotionType" placeholder="{{'COUPON.PROMOTIONTYPE' | translate}}"
+                          style="width: 90%">
+              </ng-select>
+            </div>
+          </div>
+
+          <div *ngIf="promotionControl === 'SCONTONUMMINARTICOLI' || promotionControl === 'SCONTOMINARTICOLIMINORDINE'" class="form-group col-lg-3 col-md-3">
+               <label>{{'COUPON.SCONTONUMMINARTICOLI' | translate}} </label>
+              <input  class="form-control form-control-sm"  formControlName="minProductQuantity"
+                      placeholder="{{'COUPON.SCONTONUMMINARTICOLI' | translate}}"
+                      type="text">
+           </div>
+          <div *ngIf="promotionControl ===  'SCONTOMINORDINE' || promotionControl === 'SCONTOMINARTICOLIMINORDINE'" class="form-group col-lg-3 col-md-3">
+               <label>{{'COUPON.SCONTOMINORDINE' | translate}} (€)</label>
+              <input  class="form-control form-control-sm"  formControlName="minAmountOrder"
+                      placeholder="{{'COUPON.SCONTOMINORDINE' | translate}}"
+                      type="tel" currencyMask>
+           </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'COUPON.CONDITIONTYPE' | translate}} </label>
+            <div style="display: flex">
+              <ng-select [appendTo]="'body'" [items]="conditionTypes" [virtualScroll]="true"
+                         [clearable]="false" (change)="categoryPdt= $event.value; selectedProducts = []; checklistSelection.clear()   "
+                          bindLabel="label"
+                          bindValue="value" class="ng-select-sm ng-select-required"
+                          formControlName="couponConditionType" placeholder="{{'COUPON.CONDITIONTYPE' | translate}}"
+                          style="width: 90%">
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3 my-auto">
+            <div class="form-group">
+              <div class="form-check">
+                <input formControlName="promo" class="form-check-input" id="promo"
+                       type="checkbox">
+                <label class="form-check-label" for="promo">
+                  {{'COUPON.PROMO' | translate}}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          </div>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="displayTabs()" >
+      <div class="card-body">
+        <div class="row">
+          <ngb-tabset #t="ngbTabset" style="width: 100%;">
+            <ngb-tab *ngIf="categoryPdt === 'CATEGORY'" id="tab-selectbyid1">
+              <ng-template ngbTabTitle>{{'PRODUCT_FORM.CATEGORY' | translate}}</ng-template>
+              <ng-template ngbTabContent>
+                <div class="container" style="padding-top: 10px !important; margin-top: 0 !important;" >
+                  <div class="row">
+                  <div class="form-group col-lg-6 col-md-6 justify-content-end">
+                    <input matInput class="form-control"
+                           (input)="filterChanged($event.target.value)"
+                           placeholder="{{'SUBHEADER.SEARCH' | translate}}">
+                  </div>
+
+
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group col-lg-12 col-md-12"
+                         style="max-height:  600px!important; overflow-y: auto !important;">
+                      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding matTreeNodeToggle>
+                          <button  mat-icon-button></button>
+                          <mat-checkbox (change)="todoLeafItemSelectionToggle(node)"
+                                        [checked]="checklistSelection.isSelected(node)"
+                                        [disabled]="editMode && !editClicked"
+                                        class="checklist-leaf-node">{{node.item}}</mat-checkbox>
+                        </mat-tree-node>
+
+                        <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
+                          {{'CATEGORY_FORM.NO_CATEGORY' | translate}}
+                        </mat-tree-node>
+
+                        <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+                          <button [attr.aria-label]="'Toggle ' + node.item" mat-icon-button
+                                  matTreeNodeToggle>
+                            <mat-icon class="mat-icon-rtl-mirror">
+                              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                            </mat-icon>
+                          </button>
+                          <mat-checkbox
+                            [disabled]="editMode && !editClicked"
+                            (change)="todoItemSelectionToggle(node)"
+                            [checked]="descendantsAllSelected(node)"
+                            [indeterminate]="descendantsPartiallySelected(node)">{{node.item}}</mat-checkbox>
+
+                        </mat-tree-node>
+                      </mat-tree>
+                    </div>
+                  </div>
+                </div>
+
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab *ngIf="categoryPdt === 'PRODUCT'" id="tab-selectbyid2">
+              <ng-template ngbTabTitle>{{'PRODUCT_FORM.PRODUCT' | translate}}</ng-template>
+              <ng-template ngbTabContent>
+                <app-coupon-management-product  [editMode]="editMode" [editClicked]="editClicked" [selectedProducts]="selectedProducts"
+                                                (newItemEventPdt) ="checkPdt($event)"></app-coupon-management-product>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab  *ngIf="client === 'BYPERSON' " id="tab-selectbyid3" >
+              <ng-template ngbTabTitle>{{'DATA_TABLE.CLIENT' | translate}}</ng-template>
+              <ng-template ngbTabContent>
+                 <app-coupon-management-client [editMode]="editMode" [editClicked]="editClicked" (newItemEventClient)="check($event)"
+                                                [selectedClients]="selectedClients"></app-coupon-management-client>
+               </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+        </div>
+      </div>
+    </div>
+
+ </form>
+</div>

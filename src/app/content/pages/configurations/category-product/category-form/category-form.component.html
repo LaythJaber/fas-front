@@ -1,0 +1,213 @@
+<h1 mat-dialog-title *ngIf="!data.editMode">
+  {{'CONFIGURATION.NEW_CATEGORY' | translate}}
+</h1>
+<h1 mat-dialog-title *ngIf="data.editMode">
+  {{'CONFIGURATION.EDIT_CATEGORY' | translate}}
+</h1>
+<hr>
+
+
+<div mat-dialog-content>
+  <form [formGroup]="categoryForm" id="addForm">
+
+    <div class="form-row" *ngIf="data.editMode">
+      <div class="col-lg-6 col-md-6">
+        <div class="img-container">
+          <div>Menu Image</div>
+          <img src="{{menuImage || '/assets/img/products/product-default.jpg'}}"
+               alt="img.jpg"
+               style="width: 100% !important; max-height: 100px;">
+
+          <div class="row">
+            <div class="col-12 d-flex align-items-center justify-content-center">
+              <mat-icon (click)="openChangeImageModal(0)" style="cursor: pointer">image</mat-icon>
+              <mat-icon (click)="deleteImage(data.category, 'MENU')"
+                        *ngIf="data.category.menuImage"
+                        style="cursor: pointer">delete</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6">
+        <div class="img-container">
+          <div>Banner Image</div>
+          <img src="{{bannerImage || '/assets/img/products/product-default.jpg'}}"
+               alt="img.jpg"
+               style="width: 90% !important; max-height: 100px;">
+          <div class="row">
+            <div class="col-12 d-flex align-items-center justify-content-center">
+              <mat-icon (click)="openChangeImageModal(1)" style="cursor: pointer">image</mat-icon>
+              <mat-icon (click)="deleteImage(data.category, 'BANNER')"
+                        *ngIf="data.category.bannerImage"
+                        style="cursor: pointer">delete</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-lg-2 col-md-2" *ngIf="data.editMode">
+        <label>{{'DATA_TABLE.CODE' | translate}}</label>
+        <input type="text" class="form-control form-control-sm" formControlName="code" readonly>
+      </div>
+      <div class="form-group col-lg-4 col-md-4" *ngIf="data.editMode">
+        <label>{{'CATEGORY_FORM.NAME' | translate}}</label>
+        <input type="text" class="form-control form-control-sm" formControlName="name" #nameInput
+               [ngClass]="{'is-invalid': submitted && categoryForm.get('name').invalid}">
+        <div *ngIf="submitted && categoryForm.get('name').invalid;" class="d-block invalid-feedback">
+          {{'CONFIGURATION.EMPTY_NAME' | translate}}
+        </div>
+      </div>
+      <div class="form-group col-lg-6 col-md-6" *ngIf="!data.editMode">
+        <label>{{'CATEGORY_FORM.NAME' | translate}}</label>
+        <input type="text" class="form-control form-control-sm" formControlName="name" #nameInput
+               [ngClass]="{'is-invalid': submitted && categoryForm.get('name').invalid}">
+        <div *ngIf="submitted && categoryForm.get('name').invalid;" class="d-block invalid-feedback">
+          {{'CONFIGURATION.EMPTY_NAME' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group col-lg-6 col-md-6">
+        <label>{{'CATEGORY_FORM.PARENT' | translate}}</label>
+        <ng-select [items]="categoryList"
+                   class="ng-select-sm ng-select-required"
+                   bindValue="id"
+                   bindLabel="name"
+                   placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                   [formControlName]="'parentId'">
+          <ng-template ng-label-tmp let-item="item">
+            <span>{{item | localTranslate: 'name'}}</span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+            <span>{{item | localTranslate: 'name'}}</span>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-lg-6 col-md-12">
+        <label>{{'CATEGORY_FORM.STATUS' | translate}}</label>
+        <div class="input-group-icon input-group-icon-left">
+          <mat-checkbox formControlName="status"></mat-checkbox>
+        </div>
+      </div>
+      <div class="form-group col-lg-6 col-md-12">
+        <label>Order Priority</label>
+        <input type="number" class="form-control form-control-sm" formControlName="priority" min="1"/>
+        <div *ngIf="submitted && categoryForm.get('priority').invalid;" class="d-block invalid-feedback">
+          priority error
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-lg-12 col-md-12">
+        <label>{{'CATEGORY_FORM.DESCRIPTION' | translate}}</label>
+        <textarea class="form-control" formControlName="description" rows="8"></textarea>
+      </div>
+    </div>
+    <hr>
+
+    <div class="form-row">
+      <div class="form-group col-lg-8 col-md-10">
+        <label>{{'CATEGORY_FORM.IN_OTHER_LANGUAGE' | translate}}</label>
+        <ng-select [items]="languageList"
+                   dropdownPosition="top"
+                   [clearable]="false"
+                   style="margin-left: 5px !important; width: 40% !important; display: inline-block !important;"
+                   bindValue="id"
+                   bindLabel="code"
+                   placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                   formControlName="langId"
+                   class="ng-select-sm ng-select-required">
+        </ng-select>
+        <em *ngIf="isNewTranslation() === true" class="fa fa-plus" (click)="openCategoryTranslationForm(content)"
+           style="margin: 7px;" placement="left"
+           tooltipClass="custom-tooltip" ngbTooltip="{{'BUTTONS.ADD'|translate}}">
+        </em>
+        <em *ngIf="isNewTranslation() === false" class="fa fa-edit" (click)="openCategoryTranslationForm(content)"
+           style="margin: 7px; margin-right: 0 !important;" placement="left"
+           tooltipClass="custom-tooltip" ngbTooltip="{{'BUTTONS.EDIT'|translate}}">
+        </em>
+        <em *ngIf="isNewTranslation() === false" class="fa fa-trash" (click)="removeCategoryTranslation()"
+           style="margin: 7px;" placement="left"
+           tooltipClass="custom-tooltip" ngbTooltip="{{'BUTTONS.DELETE'|translate}}">
+        </em>
+      </div>
+    </div>
+
+  </form>
+</div>
+<hr>
+
+
+<div mat-dialog-actions class="d-flex justify-content-between"
+     [ngClass]="{'justify-content-between': !data.editMode&&!data.fromProduct,
+           'justify-content-end': data.editMode||data.fromProduct}">
+  <label class="checkbox checkbox-success" *ngIf="!data.editMode&&!data.fromProduct">
+    <input [formControl]="addMultipleCheckbox" type="checkbox"><span
+    style="font-size: 10px">{{'CONFIGURATION.ADD_NEW_ELEMENT' | translate}}</span>
+  </label>
+  <div style="margin-left: auto;">
+    <button mat-button color="secondary" class="ml-2"
+            (click)="dialogRef.close(addedElement)">{{'BUTTONS.CLOSE' | translate}}</button>
+    <button mat-flat-button color="primary"
+            [disabled]="categoryForm.get('name').disabled"
+            form="addForm"
+            (click)="save()">{{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+</div>
+
+<ng-template #content>
+  <div class="modal-header">
+    <h4 *ngIf="isNewTranslation() === true" mat-dialog-title>{{'CATEGORY_FORM.ADD_TRANSLATION' | translate}}</h4>
+    <h4 *ngIf="!isNewTranslation() === true" mat-dialog-title>{{'CATEGORY_FORM.EDIT_TRANSLATION' | translate}}</h4>
+    <button type="button" mat-button (click)="modalRef?.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="categoryTranslationForm" id="addTrans">
+      <div class="form-row">
+        <div class="form-group col-lg-6 col-md-6">
+          <label>{{'CATEGORY_FORM.NAME' | translate}}</label>
+          <input type="text" class="form-control form-control-sm" formControlName="name"
+                 [ngClass]="{'is-invalid': submitted && categoryTranslationForm.get('name').invalid}">
+          <div *ngIf="submitted && categoryTranslationForm.get('name').invalid;" class="d-block invalid-feedback">
+            {{'CONFIGURATION.EMPTY_NAME' | translate}}
+          </div>
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>Language</label>
+          <input type="text" class="form-control form-control-sm" formControlName="langCode" readonly>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-lg-12 col-md-12">
+          <label>{{'CATEGORY_FORM.DESCRIPTION' | translate}}</label>
+          <textarea class="form-control" formControlName="description" rows="8">
+        </textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <div style="margin-left: auto;">
+      <button mat-button color="secondary" class="ml-2"
+              (click)="modalRef?.close()">
+        {{'BUTTONS.CLOSE' | translate}}
+      </button>
+      <button mat-flat-button color="primary" form="addTrans"
+              [disabled]="categoryTranslationForm.invalid"
+              (click)="addCategoryTranslation()">
+        {{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>
+

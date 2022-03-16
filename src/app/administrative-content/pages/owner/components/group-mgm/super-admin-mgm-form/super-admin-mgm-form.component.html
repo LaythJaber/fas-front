@@ -1,0 +1,45 @@
+<div mat-dialog-title>
+  {{title}}
+</div>
+
+<div mat-dialog-content>
+  <form [formGroup]="adminForm" (ngSubmit)="submit()" id="form">
+    <div class="form-row">
+      <div class="form-group col-6">
+        <input class="form-control" placeholder="{{'OPERATOR_FORM.FIRST_NAME' | translate}}" type="text" formControlName="firstName">
+      </div>
+      <div class="form-group col-6">
+        <input class="form-control" placeholder="{{'OPERATOR_FORM.LAST_NAME' | translate}}" type="test" formControlName="lastName">
+      </div>
+      <div class="form-group col-12">
+        <input class="form-control" placeholder="{{'OPERATOR_FORM.EMAIL' | translate}}" type="email" formControlName="email">
+      </div>
+      <div class="form-group col-12">
+        <input class="form-control" placeholder="{{'OPERATOR_FORM.USERNAME' | translate}}" type="text" formControlName="username" autocomplete="new-username">
+      </div>
+      <div class="form-group col-12">
+        <div class="input-group-icon input-group-icon-right">
+          <input class="form-control" placeholder="{{'OPERATOR_FORM.PASSWORD' | translate}}" [type]="pwdVisible ? 'password' : 'text'" formControlName="password"  autocomplete="new-password">
+          <span class="input-icon input-icon-right" (click)="pwdVisible = !pwdVisible" style="cursor:pointer;">
+            <mat-icon *ngIf="pwdVisible">visibility</mat-icon>
+            <mat-icon *ngIf="!pwdVisible">visibility_off</mat-icon>
+          </span>
+        </div>
+      </div>
+      <div class="form-group col-12">
+        <div class="input-group">
+
+          <input type="tel" class="form-control" placeholder="{{'OPERATOR_FORM.MOBILE' | translate}}" formControlName="mobile">
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-flat-button color="secondary"  class="mr-2" matDialogClose  [disabled]="loading | async">
+    <mat-icon>close</mat-icon> {{'BUTTONS.CLOSE' | translate}}
+  </button>
+  <button mat-flat-button color="primary" form="form" type="submit" [disabled]="loading | async">
+    <mat-icon>save</mat-icon> {{'BUTTONS.SAVE' | translate}} <i class="fas fa-spinner fa-spin fa-fw" *ngIf="loading | async"></i>
+  </button>
+</div>

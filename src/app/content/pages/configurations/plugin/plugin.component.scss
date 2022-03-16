@@ -1,0 +1,13 @@
+.custom-section {
+  background: whitesmoke;
+  border: 1px solid gainsboro;
+  padding: 15px;
+  min-height: 275px;
+  position: relative !important;
+
+  .btns {
+    position: absolute;
+    bottom: 0 !important;
+    right: 15px;
+  }
+}

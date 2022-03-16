@@ -1,0 +1,81 @@
+<div class="container-grid">
+  <div class="main-content">
+    <div class="card">
+      <div class="card-body">
+        <ng-container *ngIf="coverImage">
+          <img [src]="coverImage.result" alt="cover image" class="cover-image">
+          <mat-divider class="my-4"></mat-divider>
+        </ng-container>
+        <form [formGroup]="postFrom">
+          <mat-tab-group formArrayName="blogPostTrans" [selectedIndex]="selectedTab">
+            <mat-tab label="{{langs[i]?.description || post.get('langCode').value}}"
+                     *ngFor="let post of postTrans.controls; let i = index"
+                     [formGroupName]="i">
+              <div class="py-3">
+                <div class="form-group">
+                  <input type="text" autocomplete="off" id="title" class="form-control-sm form-control"
+                         placeholder="Title" formControlName="postTitle">
+                </div>
+                <angular-editor formControlName="post" [config]="editorConfig"></angular-editor>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="side-menu">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-end align-items-center mb-3">
+          <mat-progress-spinner color="primary" class="mr-3"
+                                diameter="25" [value]="saveSpinnerValue" mode="determinate">
+          </mat-progress-spinner>
+          <button class="btn btn-primary" (click)="save()" [disabled]="saveSpinnerValue > 0">
+            <em class="fas fa-save"></em>
+            {{'BUTTONS.SAVE' | translate}}
+          </button>
+          <!--<div class="btn-group">
+            <button class="btn btn-primary" (click)="save()">
+              <em class="fas fa-save"></em>
+              {{'BUTTONS.SAVE' | translate}}
+            </button>
+            <div ngbDropdown placement="bottom-right">
+              <button class="btn btn-primary"
+                      style="border-top-left-radius: 0; border-bottom-left-radius: 0"
+                      ngbDropdownToggle>
+              </button>
+              <div ngbDropdownMenu>
+                <button ngbDropdownItem><em class="fas fa-eye"></em> Preview</button>
+              </div>
+            </div>
+          </div>-->
+        </div>
+
+        <section class="mb-4">
+          <mat-divider class="py-1"></mat-divider>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="font-weight-bold">Cover image</span>
+            <button mat-icon-button color="primary" (click)="openImageInput()">
+              <mat-icon>image</mat-icon>
+            </button>
+          </div>
+          <div class="img-placeholder" (click)="openImageInput()" *ngIf="!coverImage">
+            <em class="fas fa-image">
+            </em>
+            <div>{{'BLOG.RECOMMENDED_SIZE' | translate}} 1370x385</div>
+          </div>
+          <img *ngIf="coverImage" [src]="coverImage.result" alt="cover image">
+        </section>
+        <section class="mb-4" *ngIf="blogPost">
+          <mat-divider class="py-1"></mat-divider>
+          <span class="font-weight-bold">Updated at <em class="fas fa-clock fa-fw"></em></span>
+          <div class="text-muted">
+            {{blogPost.updatedAt | date: 'MMM d, y, HH:mm'}}
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+

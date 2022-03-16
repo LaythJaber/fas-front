@@ -1,0 +1,22 @@
+<div class="container pt-3">
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template matTabLabel>Product Config</ng-template>
+      <ng-template matTabContent>
+        <app-product-config-form></app-product-config-form>
+      </ng-template>
+    </mat-tab>
+    <mat-tab>
+      <ng-template matTabLabel>Email SMTP</ng-template>
+      <ng-template matTabContent>
+        <app-smtp-config-form></app-smtp-config-form>
+      </ng-template>
+    </mat-tab>
+    <mat-tab>
+      <ng-template matTabLabel>SMS Config</ng-template>
+      <ng-template matTabContent>
+        <app-sms-config-form></app-sms-config-form>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

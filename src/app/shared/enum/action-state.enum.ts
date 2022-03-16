@@ -1,0 +1,8 @@
+export enum ActionState {
+  ADD= 'ADD',
+  SAVE= 'SAVE',
+  ENABLE_EDIT= 'ENABLE_EDIT',
+  DISABLE_EDIT= 'DISABLE_EDIT',
+  SAVED= 'SAVED',
+  UPDATED= 'UPDATED'
+}

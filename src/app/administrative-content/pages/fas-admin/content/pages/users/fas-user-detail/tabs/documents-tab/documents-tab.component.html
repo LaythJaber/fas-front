@@ -1,0 +1,67 @@
+<div class=" text-center">
+  <h1 class="display-4">User documents</h1>
+</div>
+
+<div class="documents">
+              <mat-vertical-stepper >
+                <mat-step  [completed]="false" >
+                  <ng-template matStepLabel>Baccalaureate</ng-template>
+
+                  <app-showcase-files [userId]="userId" [fileType]="'BAC'"> </app-showcase-files>
+
+                  <div class="d-flex justify-content-end">
+                    <button mat-raised-button matStepperNext>Next</button>
+                  </div>
+                </mat-step>
+                <mat-step [completed]="false"  >
+                  <ng-template  matStepLabel>Transcripts</ng-template>
+
+                  <app-showcase-files [userId]="userId" [fileType]="'TRANSCRIPTS'"> </app-showcase-files>
+
+                  <div class="d-flex justify-content-end">
+                    <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+                    <button mat-raised-button matStepperNext>Next</button>
+                  </div>
+                </mat-step>
+                <mat-step  [completed]="false" >
+                  <ng-template matStepLabel>Certificates</ng-template>
+
+
+                  <app-showcase-files [userId]="userId" [fileType]="'CERTIFICATES'"> </app-showcase-files>
+
+                  <div class="d-flex justify-content-end">
+                    <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+                    <button mat-raised-button matStepperNext>Next</button>
+                  </div>
+                </mat-step>
+                <mat-step [completed]="false" >
+                  <ng-template matStepLabel>Passport</ng-template>
+
+                  <app-showcase-files [userId]="userId" [fileType]="'PASSPORT'"> </app-showcase-files>
+
+                  <div class="d-flex justify-content-end">
+                    <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+                    <button mat-raised-button matStepperNext>Next</button>
+                  </div>
+                </mat-step>
+                <mat-step [completed]="false" >
+                  <ng-template matStepLabel>Internships</ng-template>
+
+                  <app-showcase-files [userId]="userId" [fileType]="'INTERNSHIPS'"> </app-showcase-files>
+                  <div class="d-flex justify-content-end">
+                    <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+                    <button mat-raised-button matStepperNext>Next</button>
+                  </div>
+                </mat-step>
+                <mat-step [completed]="false" >
+                  <ng-template matStepLabel>Recommendations</ng-template>
+
+                  <app-showcase-files [userId]="userId" [fileType]="'RECOMMENDATIONS'"> </app-showcase-files>
+
+                  <div class="d-flex justify-content-end">
+                    <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+                  </div>
+                </mat-step>
+
+              </mat-vertical-stepper>
+</div>

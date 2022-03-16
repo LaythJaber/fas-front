@@ -1,0 +1,48 @@
+<div class="container mt-5">
+  <div class="d-flex align-items-center justify-content-end mb-3">
+    <button mat-mini-fab color="primary" (click)="openDialog()"><i class="ti-plus"></i></button>
+  </div>
+  <div class="card card-fullheight">
+    <div class="card-body">
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">{{'DATA_TABLE.NAME' | translate}}</th>
+          <th scope="col">{{'DATA_TABLE.MAX_OPERATORS' | translate}}</th>
+          <th scope="col" style="width: 30%">{{'DATA_TABLE.DESCRIPTION' | translate}}</th>
+          <th scope="col">{{'DATA_TABLE.DATE' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let l of licensesConfigs">
+          <th scope="row">{{l.id.toString().padStart(4, '0')}}</th>
+          <td>{{l.name}}</td>
+          <td>{{l.maxOperators}}</td>
+          <td>
+            {{l.description}}
+          </td>
+          <td>{{l.createdAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+          <td>
+            <em
+              [ngClass]="l.used? 'ft-x danger font-medium-1':'ft-check  success font-medium-1'"
+              [style.color]="l.used ?'red':'green' ">
+            </em>
+          </td>
+          <td>
+            <button mat-icon-button color="primary" (click)="openDialog(l)"><i class="ft-edit-1"></i></button>
+            <button mat-icon-button color="warn" (click)="delete(l)"
+                    *ngIf="l.name.trim().replace(' ', '').toUpperCase() !== 'DEMO'
+                && l.name.trim().replace(' ', '').toUpperCase() !== 'STOCKCLOUDFREE'">
+              <em class="ft-trash-2"></em>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="licensesConfigs?.length === 0">
+          <td colspan="7" class="text-center">No data</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

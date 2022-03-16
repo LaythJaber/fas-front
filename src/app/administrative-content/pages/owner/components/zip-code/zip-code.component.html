@@ -1,0 +1,243 @@
+<div class="subheader">
+  <div class="container-fluid">
+    <form [formGroup]="filterForm">
+      <div class="row">
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'SUBHEADER.SEARCH' | translate}}</label>
+          <div class="search-input">
+            <div class="form-group">
+              <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn"
+                      (click)="filterForm.controls.textSearch.setValue(null)">
+                  <em class="ft-x"></em>
+                </span>
+                <input type="text" class="form-control form-control-sm"
+                       placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                       formControlName="textSearch"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'DATA_TABLE.COUNTRY' | translate}}</label>
+            <ng-select [items]="[{label:'Italia',value:'IT'}]"
+                       formControlName="country"
+                       bindValue="value"
+                       bindLabel="label"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       class="ng-select-sm"
+                       [clearable]="false"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'DATA_TABLE.PROVINCE' | translate}}</label>
+            <ng-select [items]="provinceList"
+                       formControlName="province"
+                       bindValue="value"
+                       bindLabel="label"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       class="ng-select-sm"
+                       [clearable]="true"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'CATEGORY_FORM.STATUS' | translate}}</label>
+            <ng-select [items]="[{label:'COMMON.ALL' | translate,value:-1},{label:'COMMON.ACTIVE' | translate,value:1},{label:'COMMON.BLOCKED' | translate,value:0}]"
+                       formControlName="status"
+                       bindValue="value"
+                       bindLabel="label"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       class="ng-select-sm"
+                       [clearable]="false"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <div class="action-btns">
+    <button mat-mini-fab color="primary"
+            (click)="resetFilter()"
+            placement="left" tooltipClass="custom-tooltip"
+            ngbTooltip="{{'PRODUCT_FORM.RESET_FILTER'|translate}}">
+      <em class="ft-refresh-ccw" style="font-size: 20px;"></em>
+    </button>
+    <button mat-mini-fab color="primary" (click)="addZipCode()"
+            *ngIf="false"
+            placement="left"
+            tooltipClass="custom-tooltip"
+            ngbTooltip="{{'SHIPMENT_FORM.NEW_SHIPMENT' | translate}}">
+      <em class="ft-plus" ></em>
+    </button>
+  </div>
+</div>
+
+<div class="card card-fullheight">
+  <div class="card-body table-responsive">
+
+    <div class="container-fluid mb-2">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-12 p-0">
+          <button mat-flat-button color="primary" class="mr-2" *ngIf="!zipCodeSelectedInLoading"
+                  [disabled]="!isThereZipCodesSelected()"
+                  (click)="enableAllSelected(true)">
+            {{'OWNER.ZIP_CODE_FORM.ACTIVE_SELECTED_CAPS' | translate}} ({{getSelectedNbr()}})
+          </button>
+          <button mat-flat-button color="primary" class="mr-2" *ngIf="zipCodeSelectedInLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+
+          <button mat-flat-button color="warn" class="mr-2" *ngIf="!zipCodeSelectedInLoading"
+                  [disabled]="!isThereZipCodesSelected()"
+                  (click)="enableAllSelected(false)">
+            {{'OWNER.ZIP_CODE_FORM.BLOCK_SELECTED_CAPS' | translate}} ({{getSelectedNbr()}})
+          </button>
+          <button mat-flat-button color="primary" class="mr-2" *ngIf="zipCodeSelectedInLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+
+          |
+
+          <button mat-flat-button color="primary" class="mr-2"
+                  *ngIf="!zipCodeFilteredInLoading"
+                  [disabled]="zipCodeResponse?.data?.length <= 0"
+                  (click)="enableAllFiltered(true)">
+            {{'OWNER.ZIP_CODE_FORM.ACTIVE_FILTERED_CAPS' | translate}} ({{zipCodeResponse?.totalRecords}})
+          </button>
+          <button mat-flat-button color="warn" class="mr-2" *ngIf="zipCodeFilteredInLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+
+          <button mat-flat-button color="warn" class="mr-2"
+                  *ngIf="!zipCodeFilteredInLoading"
+                  [disabled]="zipCodeResponse?.data?.length <= 0"
+                  (click)="enableAllFiltered(false)">
+            {{'OWNER.ZIP_CODE_FORM.BLOCK_FILTERED_CAPS' | translate}} ({{zipCodeResponse?.totalRecords}})
+          </button>
+          <button mat-flat-button color="warn" class="mr-2" *ngIf="zipCodeFilteredInLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+
+    <table class="table table-sm table-hover">
+      <thead>
+      <tr>
+        <th scope="col" class="text-center">
+          <mat-checkbox [(ngModel)]="allZipCodesSelected" (change)="selectPageZipCodes($event)"></mat-checkbox>
+        </th>
+        <th *ngFor="let c of columns" scope="col" class="text-center">
+          {{c | translate}}
+        </th>
+        <th scope="col">&nbsp;</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let zipCode of zipCodeResponse?.data, let i = index">
+        <td class="text-center">
+          <mat-checkbox [(ngModel)]="zipCodesSelectedList[i]"></mat-checkbox>
+        </td>
+        <td class="text-center">
+          <ngb-highlight [result]="zipCode.id.toString()"
+                         [term]="filterForm.controls.textSearch.value?.trim()"></ngb-highlight>
+        </td>
+        <td class="text-center">
+          <ngb-highlight [result]="zipCode.cap"
+                         [term]="filterForm.controls.textSearch.value?.trim()">
+          </ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <ngb-highlight [result]="zipCode.city"
+                         [term]="filterForm.controls.textSearch.value?.trim()">
+          </ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <ngb-highlight [result]="zipCode.province"
+                         [term]="filterForm.controls.textSearch.value?.trim()">
+          </ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <ngb-highlight [result]="zipCode.country"
+                         [term]="filterForm.controls.textSearch.value?.trim()">
+          </ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <em (click)="enableOne(zipCode)"
+             [ngStyle]="{'color': zipCode.enabled ? '#06B5B6':'#E50054'}"
+             class="ft-power" placement="top" tooltipClass="custom-tooltip"
+             ngbTooltip="{{'PROVIDER_FORM.ACTIVE'|translate}} / {{'PROVIDER_FORM.DEACTIVATED'|translate}}">
+          </em>
+        </td>
+
+        <td class="text-center">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-link" id="dropdownBasic1" ngbDropdownToggle>
+              <em class="ft-more-vertical"></em>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem (click)="editZipCode(zipCode)" *ngIf="false">
+                <em class="ft-edit-1"></em> {{'BUTTONS.EDIT' | translate}}</button>
+              <button ngbDropdownItem (click)="deleteZipCode(zipCode)">
+                <em class="ft-trash-2"></em> {{'BUTTONS.CANCEL2' | translate}}</button>
+            </div>
+          </div>
+        </td>
+      </tr>
+
+      <tr *ngIf="zipCodeResponse?.totalRecords === 0" class="text-center">
+        <td colspan="8">{{'OWNER.ZIP_CODE_FORM.NO_CAPS' | translate}}</td>
+      </tr>
+
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center"
+                    *ngIf="zipCodeResponse?.totalRecords > 0"
+                    [collectionSize]="zipCodeResponse?.totalRecords"
+                    size="sm"
+                    [pageSize]="request.pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="request.page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+
+    <div class="form-row">
+      <div class="form-group col-lg-12 text-center">
+        <label>{{'GOOGLE_MERCHANT_FORM.SHOW_ROWS' | translate}}</label>
+        <label>
+          <select class="ml-2 mr-2" [(ngModel)]="request.pageSize" (change)="showRows()">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
+            <option value="150">150</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+  </div>
+</div>

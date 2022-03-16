@@ -1,0 +1,7 @@
+.ng-select.custom-ng-select ::ng-deep .ng-select-container  {
+  height: 50px !important;
+  border-radius: 0 !important;
+}
+.ng-select.custom-ng-select ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items {
+  height: 200px;
+}

@@ -1,0 +1,14 @@
+.separator-text {
+  font-weight: 500;
+  margin-bottom: 1em;
+  padding: .5rem 0;
+  font-size: 1rem;
+  color: #747274;
+  border-bottom: 1px solid #d0d0d0;
+}
+/deep/ .dropdown {
+  z-index: 1200 !important;
+}
+/deep/.prefix-ng-select .ng-dropdown-panel {
+  width: 250px;
+}

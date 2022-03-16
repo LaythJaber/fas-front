@@ -1,0 +1,282 @@
+<div mat-dialog-title class="d-flex justify-content-between">
+  <div *ngIf="!data.editMode">{{'OPERATOR_FORM.ADD_NEW_OPERATOR' | translate}}</div>
+  <div *ngIf="data.editMode">{{'OPERATOR_FORM.EDIT_OPERATOR' | translate}}</div>
+  <mat-spinner class="d-inline-block ml-2" diameter="30" color="primary"
+               *ngIf="loading || zipCodeLoading"></mat-spinner>
+</div>
+<div mat-dialog-content class="pb-5" #dialogContent>
+  <form class="form p-3" [formGroup]="operatorForm" (ngSubmit)="save()" id="operatorForm" focusInvalidInput>
+    <div class="form-row">
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.USERNAME' | translate}} :</label>
+        <input type="text" placeholder="{{'OPERATOR_FORM.USERNAME' | translate}}"
+               class="form-control form-control-sm" formControlName="username"
+               [ngClass]="{ 'is-invalid': submitted && operatorForm.get('username').invalid }">
+        <div *ngIf="submitted && operatorForm.get('username').invalid;" class="invalid-feedback">
+          {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.PASSWORD' | translate}} :</label>
+        <div class="input-group-icon input-group-icon-right">
+          <input [type]="type" placeholder="{{'OPERATOR_FORM.PASSWORD' | translate}}"
+                 class="form-control form-control-sm" formControlName="password" autocomplete="new-password"
+                 [ngClass]="{ 'is-invalid': submitted && operatorForm.get('password').errors?.required }">
+          <span class="input-icon input-icon-right" *ngIf="showPass"
+                (click)="showPassword()"> <i class="fa fa-eye"></i>
+                </span>
+          <span class="input-icon input-icon-right" *ngIf="!showPass"
+                (click)="showPassword()"> <i class="fa fa-eye-slash"></i>
+                </span>
+        </div>
+        <div *ngIf="submitted && operatorForm.get('password').errors?.required;" class="invalid-feedback">
+          {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.CONFIRM_PASSWORD' | translate}} :</label>
+        <input type="password" placeholder="{{'OPERATOR_FORM.CONFIRM_PASSWORD' | translate}}"
+               class="form-control form-control-sm" formControlName="confirmPassword"
+               [ngClass]="{ 'is-invalid': submitted && operatorForm.get('confirmPassword').invalid }">
+        <div *ngIf="submitted && operatorForm.get('confirmPassword').errors?.required;" class="invalid-feedback">
+          {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+        </div>
+        <div class="d-block invalid-feedback" *ngIf="operatorForm.get('confirmPassword').errors?.mustMatch">
+          {{'OPERATOR_FORM.MUST_MATCH' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.EMAIL' | translate}} :</label>
+        <input type="email" class="form-control form-control-sm" placeholder="example@email.it"
+               formControlName="email"
+               [ngClass]="{ 'is-invalid': submitted && operatorForm.get('email').invalid }"
+        >
+        <div *ngIf="submitted && operatorForm.get('email').invalid;" class="invalid-feedback">
+          {{'OPERATOR_FORM.IS_INVALID_MAIL' | translate}}
+        </div>
+      </div>
+    </div>
+
+
+    <div class="form-row">
+
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.BAR_CODE' | translate}} :</label>
+        <div class="input-group-icon input-group-icon-right">
+          <input type="text" placeholder="{{'OPERATOR_FORM.BAR_CODE' | translate}}"
+                 class="form-control form-control-sm" formControlName="barCode" readonly>
+          <span class="input-icon input-icon-right"
+                (click)="generateBarCode()"> <i class="fa fa-barcode"></i>
+              </span>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.FIRST_NAME' | translate}} :</label>
+        <input type="text" placeholder="{{'OPERATOR_FORM.FIRST_NAME' | translate}}"
+               class="form-control form-control-sm" formControlName="firstName"
+               [ngClass]="{ 'is-invalid': submitted && operatorForm.get('firstName').invalid }"
+        >
+        <div *ngIf="submitted && operatorForm.get('firstName').invalid;" class="invalid-feedback">
+          {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.LAST_NAME' | translate}} :</label>
+        <input type="text" placeholder="{{'OPERATOR_FORM.LAST_NAME' | translate}}"
+               class="form-control form-control-sm" formControlName="lastName"
+               [ngClass]="{ 'is-invalid': submitted && operatorForm.get('lastName').invalid }"
+        >
+        <div *ngIf="submitted && operatorForm.get('lastName').invalid;" class="invalid-feedback">
+          {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+        </div>
+      </div>
+
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.FISCAL_CODE' | translate}} :</label>
+        <input type="text" placeholder="{{'OPERATOR_FORM.FISCAL_CODE' | translate}}"
+               class="form-control form-control-sm" formControlName="fiscalCode"
+               [ngClass]="{ 'is-invalid': submitted && operatorForm.get('fiscalCode').invalid }"
+        >
+        <div *ngIf="submitted && operatorForm.get('fiscalCode').invalid;" class="invalid-feedback">
+          {{'OPERATOR_FORM.IS_INVALID_FISCAL' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.BIRTH_DATE' | translate}} :</label>
+        <div class="input-group-icon input-group-icon-right">
+          <input type="text" placeholder="dd/mm/yyyy" [matDatepicker]="birthPicker"
+                 class="form-control form-control-sm"
+                 formControlName="dateOfBirth" #dateOfBirthElm>
+          <span
+            class="input-icon input-icon-right"
+            (click)="birthPicker.opened ? birthPicker.close() : birthPicker.open()">
+                  <i class="fas fa-calendar"></i>
+                </span>
+        </div>
+        <mat-datepicker #birthPicker></mat-datepicker>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.MOBILE' | translate}}:</label>
+        <div class="input-group input-group-sm">
+
+          <div class="input-group-prepend" ngbDropdown #myDrop="ngbDropdown">
+            <button class="btn btn-outline-secondary" type="button" (click)="mobileNgSelect.open()"
+                    ngbDropdownToggle>{{operatorForm.get('mobilePrefix').value ||  'BUTTONS.CHOOSE' | translate}}
+            </button>
+            <div class="dropdown-menu py-0" tabindex="1" ngbDropdownMenu>
+              <ng-select [items]="prefixList" [bindLabel]="'label'"
+                         [tabIndex]="1"
+                         autofocus
+                         [bindValue]="'prefix'" formControlName="mobilePrefix" placeholder="search"
+                         (change)="myDrop.close()" #mobileNgSelect>
+              </ng-select>
+            </div>
+          </div>
+
+          <input type="tel" class="form-control form-control-sm" formControlName="mobile"
+                 [ngClass]="{ 'is-invalid': submitted && operatorForm.get('mobile').invalid }"
+          >
+          <div *ngIf="submitted && operatorForm.get('mobile').hasError('required');" class="invalid-feedback">
+            {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.CITY' | translate}} :</label>
+        <input type="text" class="form-control form-control-sm" formControlName="address">
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.STREET' | translate}} :</label>
+        <input type="text" class="form-control form-control-sm" formControlName="street">
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.COUNTRY' | translate}}:</label>
+        <ng-select class="ng-select-sm" [formControl]="countryFormControl" [items]="[{country: 'IT'}]"
+                   bindLabel="country"
+                   bindValue="country">
+        </ng-select>
+      </div>
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.ZIP' | translate}}:</label>
+        <ng-select class="ng-select-sm" [virtualScroll]="true"
+                   [searchFn]="capSearch"
+                   [loading]="zipCodeLoading"
+                   formControlName="zipCodeId" [items]="zipCodeList" bindLabel="cap"
+                   bindValue="id">
+          <ng-template ng-option-tmp let-item="item">
+            <span class="font-11"><b>{{item.city}}</b> : {{item.cap}}</span>
+          </ng-template>
+        </ng-select>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.PROVINCE' | translate}}:</label>
+        <input type="text" class="form-control form-control-sm" [formControl]="provinceFormControl">
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.ADDRESS' | translate}}:</label>
+        <input type="text" class="form-control form-control-sm" [formControl]="cityFormControl">
+      </div>
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.ROLE' | translate}} :</label>
+        <ng-select class="ng-select-sm" formControlName="roleId"
+                   [items]="roles" bindValue="id" bindLabel="name"
+                   [ngClass]="{ 'is-invalid': submitted && operatorForm.get('roleId').invalid }">
+        </ng-select>
+        <p *ngIf="submitted && operatorForm.get('roleId').invalid;" class="invalid-feedback d-block">
+          {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+        </p>
+      </div>
+
+     <!-- <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.PLANING_POSITION' | translate}} :</label>
+        <input type="number" class="form-control form-control-sm" formControlName="planningPosition"
+               [ngClass]="{ 'is-invalid': submitted && operatorForm.get('planningPosition').invalid }"
+        >
+        <div *ngIf="submitted && operatorForm.get('planningPosition').invalid;" class="invalid-feedback">
+          {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'OPERATOR_FORM.PLANING_COLOR' | translate}} :</label>
+        <input class="form-control form-control-sm" formControlName="planningColor"
+               [(colorPicker)]="planningColor"
+               [style.background]="planningColor"
+               [value]="planningColor"
+               [cpPosition]="'top'"/>
+      </div>-->
+    </div>
+
+    <div class="font-18 text-black-50 font-weight-strong">{{'OPERATOR_FORM.SELL_POINT' | translate}}</div>
+    <hr>
+    <div class="form-group">
+      <ng-select [items]="sellPointsList" [groupBy]="'enterpriseName'" [dropdownPosition]="'top'"
+                 [hideSelected]="true"
+                 [formControl]="sellPointsFormControl"
+                 class="font-18"
+                 [multiple]="true" [bindLabel]="'name'"
+                 [ngClass]="{ 'is-invalid': submitted && sellPointsFormControl.invalid }">
+      </ng-select>
+      <p *ngIf="submitted && sellPointsFormControl.invalid" class="invalid-feedback d-block">
+        {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+      </p>
+    </div>
+
+    <!--<div class="row" *ngIf="sellPointsFormControl.value?.length > 0">
+      <div class="col-4">
+        <table class="table table-sm">
+          <thead>
+          <tr>
+            <th>{{'OPERATOR_FORM.SELL_POINT' | translate}}</th>
+            <th>{{'OPERATOR_FORM.PLANNING' | translate}}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let p of sellPointsFormControl.value; let i = index">
+            <td>{{p.name}}</td>
+            <td>
+              <div class="input-group input-group-sm">
+                <select class="form-control form-control-sm">
+                  <option>Template A</option>
+                  <option>Template B</option>
+                  <option>Template C</option>
+                </select>
+                <div class="input-group-append">
+                  <button class="btn btn-dark" (click)="removeSellPoint(i)"><i class="ft-x"></i></button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>-->
+  </form>
+</div>
+
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button mat-raised-button color="secondary" [matDialogClose]="null"  [disabled]="loading">
+    <mat-icon>close</mat-icon>
+    {{'BUTTONS.CLOSE' | translate}}
+  </button>
+  <button mat-raised-button color="primary" form="operatorForm" [disabled]="loading">
+    <mat-icon>add</mat-icon>
+    {{'BUTTONS.SAVE' | translate}}
+  </button>
+</div>

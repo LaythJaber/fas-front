@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="d-flex justify-content-between">
+    <div class="form-group" style="width: 250px">
+      <div class="input-group-icon input-group-icon-right">
+        <span class="input-icon input-icon-right reset-search-btn" (click)="searchFormControl.setValue(null)">
+          <i class="ft-x"></i>
+        </span>
+        <input type="text" class="form-control" placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+               [formControl]="searchFormControl">
+      </div>
+    </div>
+    <div class="form-group" style="width: 100px">
+      <select class="form-control form-control-sm" [formControl]="langsFilter">
+        <option *ngFor="let l of langs" [ngValue]="l.id">{{l.code}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="post-container" *ngFor="let p of blogPosts | filterPostsByLang: langsFilter.value">
+        <div class="post-image">
+          <img [src]="p?.coverImageUrl">
+        </div>
+        <div class="post-details">
+          <div class="post-header">
+            <div class="post-title" [ngClass]="{'text-muted': !p?.info?.postTitle}">
+              <span>{{p?.info?.postTitle || '(Untitled)'}}</span>
+            </div>
+            <div class="action-buttons">
+              <button mat-icon-button (click)="deleteBlogPost(p.postId)"><mat-icon>delete_forever</mat-icon></button>
+              <a mat-icon-button class="ml-2" [routerLink]="['/posts/edit', p.postId]"><mat-icon>edit</mat-icon></a>
+            </div>
+          </div>
+          <div class="post-date text-muted"><em class="fas fa-clock fa-fw mr-2"></em>{{p.updatedAt | date: 'MMM d, y, HH:mm'}}</div>
+        </div>
+      </div>
+      <p class="text-center" *ngIf="blogPosts?.length === 0">
+        {{'BLOG.NO_POSTS' | translate}}
+      </p>
+    </div>
+  </div>
+</div>
+

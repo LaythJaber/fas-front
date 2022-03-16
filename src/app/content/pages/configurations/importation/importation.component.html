@@ -1,0 +1,173 @@
+<div class="row search-input w-250" style="display: flex;" [formGroup]="searchFormControl">
+  <div class="form-group col-lg-4 col-6">
+    <div class="input-group-icon input-group-icon-right">
+      <input type="text" [matDatepicker]="date" placeholder="{{'data' | translate}}"
+             class="form-control "
+             formControlName="date">
+      <span
+        class="input-icon input-icon-right"
+        (click)="date.opened ? date.close() : date.open()">
+                  <i aria-hidden="true" class="fas fa-calendar"></i>
+                </span>
+    </div>
+    <mat-datepicker #date></mat-datepicker>
+  </div>
+  <div class="form-group pull-right col-lg-3 col-md-3 col-sm-6 col-6">
+    <div class="input-group-icon input-group-icon-right">
+      <ng-select class="ng-select" [items]="types" [bindLabel]="'description'" [bindValue]="'id'"
+                 (open)="translateTypes()"
+                 formControlName="type" [virtualScroll]="true" placeholder="{{'MOVEMENT_FORM.TYPE' | translate}}">
+      </ng-select>
+    </div>
+  </div>
+  <div class="form-group col-lg-3 col-md-3 col-sm-6 pull-right">
+    <button mat-button color="primary" class="ml-2" (click)="resetSearchForm()"
+            placement="bottom" tooltipClass="custom-tooltip"
+            ngbTooltip="{{'BUTTONS.RESET_FILTER'|translate}}">
+      <i aria-hidden="true" class="ft-refresh-ccw" style="font-size: 18px"></i>
+    </button>
+    <button mat-button color="accent" class="ml-2" (click)="filter()"
+            placement="bottom" tooltipClass="custom-tooltip"
+            ngbTooltip="{{'BUTTONS.SEARCH'|translate}}">
+      <i aria-hidden="true" class="ft-search" style="font-size: 18px"></i>
+    </button>
+  </div>
+</div>
+
+<div class="modal-header d-flex justify-content-end">
+
+  <div ngbDropdown class="d-inline-block" style="margin-right: 20px">
+    <button class="btn btn-outline-primary" id="dropdownLog" ngbDropdownToggle><i class="ft-download"></i> Log
+    </button>
+    <div ngbDropdownMenu aria-labelledby="dropdownLog">
+      <button ngbDropdownItem (click)="downloadFile('PRODUCT')">{{'IMPORT_FORM.PRODUCT' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="downloadFile('CAT')">{{'IMPORT_FORM.CAT' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="downloadFile('DEPT')">{{'IMPORT_FORM.DEPT' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="downloadFile('BRAND')">{{'IMPORT_FORM.BRAND' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="downloadFile('COLOR')">{{'IMPORT_FORM.COLOR' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="downloadFile('SIZE')">{{'IMPORT_FORM.SIZE' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="downloadFile('TAX')">{{'IMPORT_FORM.TAX' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="downloadFile('PRODUCER')">{{'IMPORT_FORM.PRODUCER' | translate}}
+      </button>
+    </div>
+  </div>
+
+  <div ngbDropdown class="d-inline-block">
+    <button class="btn btn-outline-primary" id="dropdownImport" ngbDropdownToggle><i class="ft-upload"></i> Import
+    </button>
+    <div ngbDropdownMenu aria-labelledby="dropdownImport">
+      <button ngbDropdownItem (click)="openProductCodeContent(content)">{{'One product' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="importProducts()">{{'IMPORT_FORM.PRODUCT' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="importCats()">{{'IMPORT_FORM.CAT' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="importDepts()">{{'IMPORT_FORM.DEPT' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="importBrands()">{{'IMPORT_FORM.BRAND' | translate}}
+      </button>
+      <button *ngIf="model=='SELL_POINT'" ngbDropdownItem (click)="importColors()">{{'IMPORT_FORM.COLOR' | translate}}
+      </button>
+      <button *ngIf="model=='SELL_POINT'" ngbDropdownItem (click)="importSizes()">{{'IMPORT_FORM.SIZE' | translate}}
+      </button>
+      <button *ngIf="model=='SELL_POINT'" ngbDropdownItem (click)="importStores()">{{'IMPORT_FORM.STORE' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="importTax()">{{'IMPORT_FORM.TAX' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="importProducers()">{{'IMPORT_FORM.PRODUCER' | translate}}
+      </button>
+      <button *ngIf="model=='SELL_POINT'" ngbDropdownItem (click)="importPriceList()">{{'IMPORT_FORM.PRICE_LIST' | translate}}
+      </button>
+      <button ngbDropdownItem (click)="importAll()">{{'Tuuti' | translate}}
+      </button>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="card card-fullheight">
+
+
+  <div class="card-body table-responsive">
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table table-sm table-hover table-bordered">
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns" scope="col">{{c | translate}}
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let import of rows; let i = index">
+        <td>{{import.id}}</td>
+        <td>{{('IMPORT_FORM.' + import.importType) | translate}} {{'ONE_PRODUCT' == import.importType && import.productCode ? '(' + import.productCode + ')' : ''}}</td>
+        <td>{{import.startedAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+        <td>{{import.endedAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+        <td>{{import.importedCount}}</td>
+        <td [ngStyle]="{'color':import.finished? '#06B5B6':'#E50054'}">{{import.finished ? 'Si' : 'No'}}</td>
+        <td>{{import.errorMsg == 'PRODUCT_NOT_FOUND' ? ('IMPORT_FORM.PRODUCT_NOT_FOUND' | translate) : import.errorMsg}}</td>
+        <td>{{import.automaticImport ? 'Si' : 'No'}}</td>
+        <td>{{import.importUrl}}</td>
+        <td>{{import.version}}</td>
+      </tr>
+      <tr *ngIf="rows.length===0 && !loading" class="text-center">
+        <td colspan="10" class="no-object-found">{{'PRODUCT_FORM.NO_PRODUCT_FOUND' | translate}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+
+    <ngb-pagination class="d-flex justify-content-center" *ngIf="totalRecords!==0  && totalRecords > this.pageSize"
+                    [collectionSize]="totalRecords" size="sm" [pageSize]="pageSize" [ellipses]="true" [maxSize]="5"
+                    [page]="page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #content>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'Import by product code' | translate}}</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <div class="input-group-icon input-group-icon-right">
+        <span class="input-icon input-icon-right reset-search-btn" (click)="productCode=null">
+          <i aria-hidden="true" class="ft-x"></i>
+        </span>
+        <input type="text" class="form-control" placeholder="{{'Bare code' | translate}}"
+               [(ngModel)]="productCode">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div mat-dialog-actions>
+      <button mat-raised-button color="secondary" class="mr-3"
+              (click)="matDialog.closeAll()">{{'BUTTONS.CLOSE' | translate}}
+      </button>
+      <button mat-raised-button color="primary" [disabled]="!productCode"
+              (click)="matDialog.closeAll();importProductByCode()">{{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>

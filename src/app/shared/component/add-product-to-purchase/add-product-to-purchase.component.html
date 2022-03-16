@@ -1,0 +1,30 @@
+<div class="modal-header">
+  <h4 mat-dialog-title *ngIf="!row">{{'Agguingi Prodotto' | translate}}</h4>
+  <h4 mat-dialog-title *ngIf="row">{{'Sostituisci Prodotto' | translate}}</h4>
+  <button type="button" mat-button (click)="dialogRef.close(false)">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="addProductForm">
+    <div class="form-row">
+      <div class="form-group col-12">
+        <label for="qte">Quantità ({{addProductForm.get('unit').value}})</label>
+        <input id="qte" type="number" min="1" formControlName="quantity" class="form-control form-control-sm" />
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <div mat-dialog-actions>
+    <button mat-flat-button class="mr-3" (click)="dialogRef.close(false)">
+      {{'BUTTONS.CLOSE' | translate}}
+    </button>
+    <button mat-flat-button color="primary" [disabled]="addProductForm.invalid"
+            (click)="addProduct()">
+      {{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+</div>

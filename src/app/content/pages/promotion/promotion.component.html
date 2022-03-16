@@ -1,0 +1,180 @@
+<div class="row" *ngIf="generalConfigurations && generalConfigurations.marketingPageIndex">
+  <div class="col-lg-10 col-md-10 col-sm-9 col-8">
+    <div class="form-group col-4">
+      <div class="input-group-icon input-group-icon-right">
+        <span class="input-icon input-icon-right reset-search-btn" (click)="searchFormControl.setValue(null)">
+          <i class="ft-x"></i>
+        </span>
+        <input type="text" class="form-control" placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+               [formControl]="searchFormControl">
+      </div>
+    </div>
+  </div>
+
+  <div class="action-btns col-lg-2 col-md-2 col-sm-2 col-4 d-flex justify-content-end">
+    <button mat-mini-fab color="primary" (click)="addNew()" placement="left" tooltipClass="custom-tooltip"
+            ngbTooltip="{{'PROMO_FORM.ADD_PROMO'|translate}}">
+      <i class="ft-plus" style="font-size: 20px;"></i>
+    </button>
+  </div>
+</div>
+
+
+<div class="card card-fullheight" *ngIf="generalConfigurations && generalConfigurations.marketingPageIndex">
+
+  <div class="card-body table-responsive">
+
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table table-sm table-hover table-bordered">
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns" scope="col">{{c | translate}}  </th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let promo of rows; let i = index">
+        <td>{{promo.id}}</td>
+        <td>{{promo.createdAt | date: 'dd/MM/yyyyy HH:mm'}}</td>
+        <td>{{promo.object}}</td>
+<!--        <td>{{'PROMO_FORM.' + promo.type | translate}}{{promo.shareFacebook ? ', Facebook' : ''}}{{promo.shareInstagram ? ', Instagram' : ''}}</td>-->
+        <td>{{promo.sendAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+        <td style="color: #00BCD4; text-align: center !important;"
+            (click)="openReceiversContent($event, content, promo)">
+          <strong>{{promo.clientsId?.length}}</strong>
+        </td>
+        <td>{{ promo?.status ? (('PROMO_FORM.' + promo.status) | translate) : ''}}</td>
+        <td>
+          <i aria-hidden="true" (click)="annulReactivePromo($event, promo)"
+             *ngIf="promo?.status=='SCHEDULED'||promo?.status=='ANNULLED'"
+             class="ft-power" [ngStyle]="{'color':promo.status == 'SCHEDULED'? '#06B5B6':'#E50054'}"
+             placement="top" tooltipClass="custom-tooltip"
+             ngbTooltip="{{'PROMO_FORM.ANNUL'|translate}} / {{'PROMO_FORM.REACTIVE'|translate}}"></i>
+          <button mat-icon-button color="primary" (click)="editPromo(promo)" placement="top"
+                  tooltipClass="custom-tooltip" ngbTooltip="{{'BUTTONS.EDIT'|translate}}">
+            <em class="ft-edit-1"></em>
+          </button>
+
+        </td>
+      </tr>
+
+      <tr *ngIf="rows.length===0 && !loading" class="text-center">
+        <td colspan="10" class="no-object-found">{{'PRODUCT_FORM.NO_PRODUCT_FOUND' | translate}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+
+    <ngb-pagination class="d-flex justify-content-center" *ngIf="totalRecords!==0  && totalRecords > this.pageSize"
+                    [collectionSize]="totalRecords" size="sm" [pageSize]="pageSize" [ellipses]="true" [maxSize]="5"
+                    [page]="page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>
+
+<div class="card card-fullheight mt-2" *ngIf="generalConfigurations && !generalConfigurations.marketingPageIndex">
+  <div class="card-body table-responsive text-center">
+    <h4>
+      Per utilizzare il modulo di marketing occorre configurare la pagina di marketing al modulo. Per favore vai su Configurazioni
+      Configurazioni > Generali > Pagine Legali
+    </h4>
+  </div>
+</div>
+
+<div class="card" *ngIf="false">
+  <div class="card-body text-center">
+    <h6>
+      <em class="fa fa-info-circle fa-2x"></em><br/>
+      {{'PAGE_FORM.PAGE3_INFO' | translate}}
+    </h6>
+  </div>
+</div>
+
+
+
+<ng-template #content>
+  <div class="modal-body">
+    <div class="form-group">
+      <div class="input-group-icon input-group-icon-right">
+        <span class="input-icon input-icon-right reset-search-btn">
+          <i aria-hidden="true" class="ft-x"></i>
+        </span>
+        <input type="text" class="form-control" placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+               [formControl]="dialogSearchFormControl">
+      </div>
+    </div>
+    <div class="form-row  pt-5 table-responsive" style="max-height: 450px">
+      <table class="table  table-sm  table-hover table-sub ">
+        <caption></caption>
+        <thead>
+        <tr>
+          <th *ngFor="let c of dialog_columns" scope="col">{{c | translate}}</th>
+          <ng-container *ngIf="type != 'MAIL'">
+            <th *ngFor="let c of sms_columns" scope="col">Sms {{c | translate}}
+            </th>
+          </ng-container>
+          <ng-container *ngIf="type != 'SMS'">
+            <th *ngFor="let c of sms_columns" scope="col">Mail {{c | translate}}
+            </th>
+          </ng-container>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let c of receivs; let i= index">
+          <td>
+            {{c.firstName}} {{c.lastName}}
+          </td>
+          <td>
+            {{c.email}}
+          </td>
+          <td>
+            {{c.mobilePrefix}} {{c.mobile}}
+          </td>
+
+
+          <td *ngIf="type != 'SMS'">
+            <div class="badge badge-sm badge-success" *ngIf="c.mailStatus === 'SEND'">
+              {{'SMS.INSERTED' | translate}}</div>
+            <div class="badge badge-sm badge-success" *ngIf="c.mailStatus === 'NOT_INSERTED'">
+              {{'SMS.NOT_INSERTED' | translate}}</div>
+            <div class="badge badge-sm badge-danger mr-2" *ngIf="c.mailStatus === 'FAILED'">
+              {{'SMS.FAILED' | translate}}
+            </div>
+            <i aria-hidden="true" class="fas fa-question-circle" *ngIf="c.mailStatus === 'FAILED'"
+               ngbPopover="{{'SMS.'+c.mailError | translate}}" triggers="mouseenter:mouseleave"
+               popoverTitle="Error"></i>
+            <div class="badge badge-sm badge-info" *ngIf="c.mailStatus === 'PREPARED'">
+              {{'SMS.SCHEDULED' | translate}}
+            </div>
+          </td>
+          <td *ngIf="type != 'SMS'">
+            {{c.mailSendAt| date : 'dd/MM/yyyy HH:mm'}}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div mat-dialog-actions>
+      <button mat-flat-button mat-dialog-close>
+        {{'BUTTONS.CLOSE' | translate}}
+      </button>
+    </div>
+  </div>
+
+</ng-template>

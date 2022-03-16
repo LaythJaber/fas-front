@@ -1,0 +1,293 @@
+<div class="container-fluid pt-3 pb-5">
+  <div class="row">
+
+    <!-- Amazon   -->
+    <div class="col-lg-12 col-md-12 col-12 p-3">
+      <div>
+        <h4>Module Amazon</h4>
+      </div>
+      <div class="custom-section">
+        <form [formGroup]="amazonForm">
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <h5>{{'SALE_APP_TAB.GMM.G_INFO' | translate}}</h5>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="amzuuid">Uuid</label>
+              <input id="amzuuid" type="text" formControlName="uuid" class="form-control form-control-sm"
+                     placeholder="uuid" style="width: 100%" readonly/>
+            </div>
+            <div class="form-group col-6">
+              <label for="amzsid">sellerId</label>
+              <input id="amzsid" type="text" formControlName="sellerId" class="form-control form-control-sm"
+                     placeholder="sellerId" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="amzcid">clientId</label>
+              <input id="amzcid" type="text" formControlName="clientId" class="form-control form-control-sm"
+                     placeholder="clientId" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="amzcsc">clientSecret</label>
+              <input id="amzcsc" type="text" formControlName="clientSecret" class="form-control form-control-sm"
+                     placeholder="clientSecret" style="width: 100%"/>
+            </div>
+            <div class="form-group col-12">
+              <label for="amzrft">refreshToken</label>
+              <input id="amzrft" type="text" formControlName="refreshToken" class="form-control form-control-sm"
+                     placeholder="refreshToken" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="amzakid">accessKeyId</label>
+              <input id="amzakid" type="text" formControlName="accessKeyId" class="form-control form-control-sm"
+                     placeholder="accessKeyId" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="amzsk">secretKey</label>
+              <input id="amzsk" type="text" formControlName="secretKey" class="form-control form-control-sm"
+                     placeholder="secretKey" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="amzrg">region</label>
+              <input id="amzrg" type="text" formControlName="region" class="form-control form-control-sm"
+                     placeholder="region" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="amzrar">roleArn</label>
+              <input id="amzrar" type="text" formControlName="roleArn" class="form-control form-control-sm"
+                     placeholder="roleArn" style="width: 100%"/>
+            </div>
+            <div class="form-group col-12">
+              <label for="amzen" class="mr-2">{{'SALE_APP_TAB.GMM.ENABLED' | translate}}</label>
+              <mat-checkbox id="amzen" color="primary" formControlName="enabled"></mat-checkbox>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 text-right">
+              <button class="btn btn-primary" *ngIf="!ebayLoading"
+                      [disabled]="amazonForm.invalid"
+                      (click)="updateAmazonConfig()">
+                <em class="fas fa-save"></em>
+                {{'BUTTONS.SAVE' | translate}}
+              </button>
+              <button class="btn btn-primary" *ngIf="ebayLoading">
+                <em class="fa fa-spin fa-spinner"></em>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!--  Ebay   -->
+    <div class="col-lg-12 col-md-12 col-12 p-3">
+      <div>
+        <h4>Module Ebay</h4>
+      </div>
+      <div class="custom-section">
+        <form [formGroup]="ebayForm">
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <h5>Ebay Info</h5>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="ebuuid">UUID</label>
+              <input id="ebuuid" type="text" formControlName="uuid" class="form-control form-control-sm"
+                     placeholder="UUID" style="width: 100%" readonly/>
+            </div>
+            <div class="form-group col-6">
+              <label for="ebcid">Client Id</label>
+              <input id="ebcid" type="text" formControlName="clientId" class="form-control form-control-sm"
+                     placeholder="Client Id" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="ebsid">Payment Policy Id</label>
+              <input id="ebsid" type="text" formControlName="paymentPolicyId" class="form-control form-control-sm"
+                     placeholder="Secret Id" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="ebcrid">Shipping Policy Id</label>
+              <input id="ebcrid" type="text" formControlName="shippingPolicyId" class="form-control form-control-sm"
+                     placeholder="Cert Id" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="ebru">Return Policy Id</label>
+              <input id="ebru" type="text" formControlName="returnPolicyId" class="form-control form-control-sm"
+                     placeholder="Redirect Uri" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="ebmlk">Merchant Location Key</label>
+              <input id="ebmlk" type="text" formControlName="merchantLocationKey" class="form-control form-control-sm"
+                     placeholder="Merchant Location Key" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="eba" class="mr-2">Enabled</label>
+              <mat-checkbox id="eba" color="primary" formControlName="enabled"></mat-checkbox>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <h5>Config Files </h5>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <input type="file" style="display: none"
+                     (change)="onFileSelected($event, 'EBAY_FILE')" #ebayFileUpload>
+              <label>
+                {{'SALE_APP_TAB.GMM.INFO_FILE' | translate}} :
+                <button mat-flat-button color="light-ouline" (click)="ebayFileUpload.click()">
+                  <mat-icon>file_upload</mat-icon>
+                </button>
+                {{ebayConfigFile.name || ('SALE_APP_TAB.GMM.NO_FILE' | translate)}}
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 text-right">
+              <button class="btn btn-primary" [disabled]="ebayForm.invalid"
+                      (click)="updateEbayConfig()">
+                <em class="fas fa-save"></em>
+                {{'BUTTONS.SAVE' | translate}}
+              </button>
+            </div>
+          </div>
+
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <h5>Generate refresh token </h5>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <label for="ebrt">Refresh Token</label>
+              <input id="ebrt" type="text" readonly
+                     formControlName="refreshToken"
+                     class="form-control form-control-sm"
+                     placeholder="Refresh Token" style="width: 100%"/>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <label for="ebac">Authorization Code</label>
+              <input id="ebac" type="text" formControlName="authCode" class="form-control form-control-sm"
+                     placeholder="Enter an Authorization Code" style="width: 100%"/>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 text-right">
+              <button class="btn btn-primary"
+                      [disabled]="!ebayConfig || !ebayConfig.uuid || !ebayConfig.configFile"
+                      (click)="generateEbayAuthCode(ebayConfig?.configFile)">
+                <em class="fas fa-save"></em>
+                Genera codice di autorizzazione
+              </button>
+              <button class="btn btn-primary ml-2"
+                      [disabled]="!ebayConfig || !ebayConfig.uuid || !ebayForm.get('authCode').value"
+                      (click)="generateEbayRefreshToken(ebayConfig?.uuid)">
+                <em class="fas fa-save"></em>
+                Genera RefreshToken
+              </button>
+            </div>
+          </div>
+
+
+        </form>
+      </div>
+    </div>
+
+    <!-- Google -->
+    <div class="col-lg-12 col-md-12 col-12 p-3">
+      <div>
+        <h4>{{'SALE_APP_TAB.GMM.TITLE' | translate}}</h4>
+      </div>
+      <div class="custom-section">
+        <form [formGroup]="moduleGoogleMerchantForm">
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <h5>{{'SALE_APP_TAB.GMM.G_INFO' | translate}}</h5>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="gmid">{{'SALE_APP_TAB.GMM.ID' | translate}}</label>
+              <input id="gmid" type="text" formControlName="googleMerchantUserId" class="form-control form-control-sm"
+                     placeholder="{{'SALE_APP_TAB.GMM.ID' | translate}}" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="gmd">{{'SALE_APP_TAB.GMM.DOMAIN' | translate}}</label>
+              <input id="gmd" type="text" formControlName="googleMerchantDomain" class="form-control form-control-sm"
+                     placeholder="{{'SALE_APP_TAB.GMM.DOMAIN' | translate}}" style="width: 100%"/>
+            </div>
+            <div class="form-group col-6">
+              <label for="gma" class="mr-2">{{'SALE_APP_TAB.GMM.ENABLED' | translate}}</label>
+              <mat-checkbox id="gma" color="primary" formControlName="googleMerchantEnabled"></mat-checkbox>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <h5>{{'SALE_APP_TAB.GMM.CONFIG_FILES' | translate}}</h5>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <input type="file" style="display: none"
+                     (change)="onFileSelected($event, 'INFO_FILE')" #infoFileUpload>
+              <label>
+                {{'SALE_APP_TAB.GMM.INFO_FILE' | translate}} :
+                <button mat-flat-button color="light-ouline" (click)="infoFileUpload.click()">
+                  <mat-icon>file_upload</mat-icon>
+                </button>
+                {{googleMerchantInfoFile.name || ('SALE_APP_TAB.GMM.NO_FILE' | translate)}}
+              </label>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-12">
+              <input type="file" style="display: none"
+                     (change)="onFileSelected($event, 'SERVICE_FILE')" #serviceFileUpload>
+              <label>
+                {{'SALE_APP_TAB.GMM.SERVICE_FILE' | translate}}:
+                <button mat-flat-button color="light" (click)="serviceFileUpload.click()">
+                  <mat-icon>file_upload</mat-icon>
+                </button>
+                {{googleMerchantServiceAccountFile.name || ('SALE_APP_TAB.GMM.NO_FILE' | translate)}}
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 text-right">
+              <button class="btn btn-primary" [disabled]="moduleGoogleMerchantForm.invalid"
+                      (click)="updateGoogleMerchant()">
+                <em class="fas fa-save"></em>
+                {{'BUTTONS.SAVE' | translate}}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

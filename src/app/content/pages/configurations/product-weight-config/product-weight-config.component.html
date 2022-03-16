@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <span class="font-14 font-weight-bold">{{'SIDENAV.WEIGHT_PRODUCT' | translate}}</span>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="productWeightConfigForm">
+        <div class="form-group">
+          <mat-checkbox color="primary" formControlName="displayWeightInAddButton">
+            {{'visualizza il peso nel pulsante aggiungi' | translate}}
+          </mat-checkbox>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+      <button mat-flat-button color="primary" (click)="update()">
+        {{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</div>

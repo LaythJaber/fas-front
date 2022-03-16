@@ -1,0 +1,18 @@
+.event-form-dialog {
+
+
+  .mat-dialog-container {
+    padding: 0;
+  }
+
+  .dialog-content-wrapper {
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .primary-color-input,
+  .secondary-color-input {
+    padding: 6px 8px;
+  }
+}

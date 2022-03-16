@@ -1,0 +1,243 @@
+<div class="modal-header">
+  <h5>
+    Prodotti
+  </h5>
+  <button type="button" mat-button mat-dialog-close (click)="close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<!--<div mat-dialog-content>-->
+<div class="subheader">
+  <div class="container-fluid">
+    <form [formGroup]="filterForm">
+      <div class="row mt-4">
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="search-input">
+            <div class="form-group">
+              <div class="input-group-icon input-group-icon-right">
+                    <span class="input-icon input-icon-right reset-search-btn"
+                          (click)="filterForm.controls.textSearch.setValue(null)">
+                      <em class="ft-x"></em>
+                    </span>
+                <input type="text" class="form-control form-control-sm"
+                       placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                       formControlName="textSearch"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2">
+          <ng-select (scrollToEnd)="getCategories()"
+                     [virtualScroll]="true"
+                     class="ng-select-sm"
+                     [items]="categories"
+                     [bindLabel]="'name'"
+                     [bindValue]="'id'"
+                     formControlName="cat1"
+                     placeholder="{{'PRODUCT_FORM.CATEGORY_LEVEL1' | translate}}">
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2">
+          <ng-select (scrollToEnd)="getSubCategories()" class="ng-select-sm"
+                     [items]="subCategories"
+                     [bindLabel]="'name'"
+                     [bindValue]="'id'"
+                     [clearable]="false"
+                     formControlName="cat2"
+                     placeholder="{{'PRODUCT_FORM.CATEGORY_LEVEL2' | translate}}">
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2">
+          <ng-select (scrollToEnd)="getSubSubCategories()"
+                     class="ng-select-sm"
+                     [items]="subSubCategories"
+                     [bindLabel]="'name'"
+                     [bindValue]="'id'"
+                     [clearable]="false"
+                     formControlName="cat3"
+                     placeholder="{{'PRODUCT_FORM.CATEGORY_LEVEL3' | translate}}">
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <ng-select (scrollToEnd)="getBrands()"
+                     class="ng-select-sm"
+                     [items]="brandList"
+                     [bindLabel]="'description'"
+                     [bindValue]="'id'"
+                     formControlName="brandId"
+                     placeholder="{{'PRODUCT_FORM.BRAND' | translate}}">
+          </ng-select>
+        </div>
+
+        <div class="action-btns col-lg-2 col-md-2 d-flex justify-content-end align-items-start">
+          <button mat-mini-fab color="primary"
+                  (click)="resetFilter()"
+                  placement="left" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'PRODUCT_FORM.RESET_FILTER'|translate}}">
+            <em class="ft-refresh-ccw" style="font-size: 20px;"></em>
+          </button>
+          <button mat-mini-fab color="primary" class="ml-2"
+                  (click)="showHideFilter()"
+                  placement="left" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'PRODUCT_FORM.MORE_FILTER'|translate}}">
+            <em class="ft-filter" style="font-size: 20px;"></em>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="row" *ngIf="showFilter">
+
+        <div class="form-group col-lg-2 col-md-2">
+          <ng-select (scrollToEnd)="getManufacturers()" class="ng-select" [items]="manufacturersList"
+                     [bindLabel]="'description'"
+                     [bindValue]="'id'"
+                     formControlName="manufacturer"
+                     placeholder="{{'PRODUCT_FORM.MANUFACTURER' | translate}}">
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label>
+            {{'DATA_TABLE.SPECIAL' | translate}}
+            <input type="checkbox" formControlName="inEvidenza">
+          </label>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label>
+            Disattivati
+            <input type="checkbox" formControlName="disabled">
+          </label>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label>
+            {{'PRODUCT_FORM.PRICE_ZERO'|translate}}
+            <input type="checkbox" formControlName="priceZero">
+          </label>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label>
+            {{'PRODUCT_FORM.STOCK_ZERO'|translate}}
+            <input type="checkbox" formControlName="stockZero">
+          </label>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label>
+            {{'PRODUCT_FORM.IN_PROMO'|translate}}
+            <input type="checkbox" formControlName="inPromo">
+          </label>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card-body table-responsive">
+  <table class="table table-sm table-hover table-bordered">
+    <thead>
+    <tr>
+      <th style="width: 40px !important;" scope="col">{{'PRODUCT_FORM.ID' | translate}}</th>
+      <th *ngFor="let c of columns_1" scope="col">{{c | translate}}</th>
+      <th *ngFor="let c of columns_2" scope="col">{{c | translate}}</th>
+      <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let product of rows; let i = index">
+      <td>{{product.id}}</td>
+      <td>
+        {{getDefaultProductCode(product)?.code}}
+        <em class="fa fa-barcode" (click)="showCodes($event, product, productCode)" style="margin: 7px;"></em>
+      </td>
+      <td>
+        {{product | localTranslate: "commercialDescription"}}
+      </td>
+      <td>
+        <div *ngIf="!product?.inOffer" class="d-inline-block" style="font-size: 14px;">
+          {{priceService.getPricePerUnit(product, 1, null, null)
+          | number: "1.2-2" | numberCommaseparator}}€
+        </div>
+        <div *ngIf="product?.inOffer" class="d-inline-block" style="color: darkred">
+          {{priceService.getPriceInOfferPerUnit(product, 1)
+          | number: "1.2-2" | numberCommaseparator}}€
+          <span  style="font-size: 12px">
+              {{priceService.getPricePerUnit(product, 1, null, null)
+            | number: "1.2-2" | numberCommaseparator}}€
+          </span>
+        </div>
+      </td>
+      <td>{{product.stock}}</td>
+      <td>
+        <button mat-stroked-button color="warn"
+                (click)="openModalAddProduct(product)"
+                style="margin-right: 12px">
+          <mat-icon>check</mat-icon>
+          Aggiungi
+        </button>
+      </td>
+    </tr>
+
+    <tr *ngIf="rows.length===0 && !loading" class="text-center">
+      <td colspan="8" class="no-object-found">{{'PRODUCT_FORM.NO_PRODUCT_FOUND' | translate}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+
+  <ngb-pagination class="d-flex justify-content-center" *ngIf="totalRecords!==0  && totalRecords > this.pageSize"
+                  [collectionSize]="totalRecords" size="sm" [pageSize]="pageSize" [ellipses]="true" [maxSize]="5"
+                  [page]="page"
+                  (pageChange)="pageChange($event)">
+  </ngb-pagination>
+
+</div>
+
+<ng-template #productCode>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'PRODUCT_FORM.CODE' | translate}}</h4>
+    <button type="button" mat-button (click)="closeTwo()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="flexbox mb-3" *ngFor="let pct of altProdCodes">
+      <div><span> {{pct.code }}</span>
+      </div>
+      <span class="mb-0 text-muted small-text">{{pct.codeType}}</span>
+    </div>
+  </div>
+</ng-template>
+

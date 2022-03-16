@@ -1,0 +1,174 @@
+<div class="subheader">
+  <div class="search-input w-250">
+    <div class="form-group">
+      <div class="input-group-icon input-group-icon-right">
+        <span class="input-icon input-icon-right reset-search-btn" (click)="searchFormControl.setValue(null)">
+          <em class="ft-x"></em>
+        </span>
+        <input type="text" class="form-control" placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+               [formControl]="searchFormControl">
+      </div>
+    </div>
+  </div>
+  <div class="action-btns">
+    <button mat-mini-fab color="primary" placement="left" tooltipClass="custom-tooltip" (click)="add()"
+            ngbTooltip="{{'PRODUCT_FORM.ADD_PRICE'|translate}}">
+      <i class="ft-plus" style="font-size: 20px;"></i>
+    </button>
+
+    <button mat-mini-fab color="primary" placement="left" class="ml-3" tooltipClass="custom-tooltip"
+            (click)="open(content)" ngbTooltip="{{'PRODUCT_FORM.GENERATE'|translate}}">
+      <i class="ft-settings" style="font-size: 20px;"></i>
+    </button>
+
+  </div>
+</div>
+
+
+<div class="card card-fullheight">
+  <div class="card-body table-responsive">
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table table-sm table-hover table-bordered">
+      <caption></caption><!--sonar-->
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns" scope="col">{{c | translate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let r of rows" (click)="edit($event, r)">
+        <td>{{getDefaultProductCode(r.product).code}}</td>
+        <td>{{r.product.description}}</td>
+        <td>{{r.priceList1Value | number: '.2-2'}}</td>
+        <td>{{r.priceList1FormulaField}}</td>
+        <td>{{r.priceList2Value | number: '.2-2'}}</td>
+        <td>{{r.priceList2FormulaField}}</td>
+        <td>{{r.priceList3Value | number: '.2-2'}}</td>
+        <td>{{r.priceList3FormulaField}}</td>
+        <td>{{r.priceList4Value | number: '.2-2'}}</td>
+        <td>{{r.priceList4FormulaField}}</td>
+        <!-- <td>
+           <button (click)="edit($event, r)" color="warn" mat-icon-button placement="top" tooltipClass="custom-tooltip"
+             ngbTooltip="{{'PRODUCT_FORM.EDIT'|translate}}">
+             <i class="ft-edit"></i>
+           </button>
+         </td>-->
+        <td class="btn-group">
+          <button mat-icon-button color="primary" (click)="edit($event, r)" placement="top"
+                  tooltipClass="custom-tooltip" ngbTooltip="{{'BUTTONS.EDIT'|translate}}">
+            <em class="ft-edit-1"></em>
+          </button>
+          <button (click)="delete($event, r)" color="warn" mat-icon-button placement="top"
+                  tooltipClass="custom-tooltip" ngbTooltip="{{'PRODUCT_FORM.CANCEL'|translate}}">
+            <em class="ft-trash-2"></em>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <ngb-pagination class="d-flex justify-content-center" *ngIf="totalRecords!==0  && totalRecords > this.pageSize"
+                    [collectionSize]="totalRecords"
+                    size="sm"
+                    [pageSize]="pageSize"
+                    [ellipses]="true"
+                    [maxSize]="10"
+                    [page]="page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #content>
+  <div mat-dialog-content>
+    <div class="modal-body" style="min-height: 40vh;">
+      <form class="form" [formGroup]="criteriaForm" id="criteriaForm">
+
+        <div class="row col-12">
+          <div class="form-group col-lg-6 col-md-6 col-sm-6">
+            <label>{{'PRODUCT_FORM.PRICE_CRITERIA' | translate}} :</label>
+            <ng-select class="ng-select-sm " [items]="priceCriterias" [bindLabel]="'description'" [bindValue]="'id'"
+                       (open)="translatePriceCriterias()" formControlName="priceCriteria"
+                       placeholder="{{'PRODUCT_FORM.PRICE_CRITERIA' | translate}}">
+            </ng-select>
+          </div>
+          <div class="form-group col-lg-6 col-md-6 col-sm-6">
+            <label>{{'PRODUCT_FORM.STARTING_PRICE_CRITERIA' | translate}} :</label>
+            <ng-select class="ng-select-sm " [items]="startingPriceCriterias" [bindLabel]="'description'"
+                       [bindValue]="'id'" (open)="translateStartingPriceCriterias()"
+                       formControlName="startingPriceCriteria"
+                       placeholder="{{'PRODUCT_FORM.STARTING_PRICE_CRITERIA' | translate}}">
+            </ng-select>
+          </div>
+          <div class="form-group col-lg-6 col-md-6 col-sm-6">
+            <label>{{'PRODUCT_FORM.RECHARGE_DISCHARGE_CRITERIA' | translate}} :</label>
+            <ng-select class="ng-select-sm " [items]="rechargeDischargeCriterias" [bindLabel]="'description'"
+                       [bindValue]="'id'" (open)="translateRechargeDischargeCriterias()"
+                       formControlName="rechargeDecargeCriteria"
+                       placeholder="{{'PRODUCT_FORM.RECHARGE_DISCHARGE_CRITERIA' | translate}}">
+            </ng-select>
+          </div>
+          <div class="form-group col-lg-6 col-md-6 col-sm-6">
+            <label>{{'PRODUCT_FORM.CUSTOM_CRITERIA' | translate}} :</label>
+            <input type="text" placeholder="{{'PRODUCT_FORM.CUSTOM_CRITERIA' | translate}}"
+                   class="form-control form-control-sm" formControlName="customCriteria">
+          </div>
+
+          <div class="form-group col-lg-6 col-md-6 col-sm-6"
+               *ngIf="criteriaForm.get('rechargeDecargeCriteria').value === 'CUSTOM_RECHARGE_PERCENTAGE' || criteriaForm.get('rechargeDecargeCriteria').value === 'CUSTOM_DESCHARGE_PERCENTALE' ">
+            <label>{{'PRODUCT_FORM.RECHARGE' | translate}} :</label>
+            <input type="number" placeholder="{{'PRODUCT_FORM.RECHARGE ' | translate}}"
+                   class="form-control form-control-sm"
+                   formControlName="recharge">
+          </div>
+
+          <div class="form-group col-lg-6 col-md-6 col-sm-6"
+               *ngIf="criteriaForm.get('rechargeDecargeCriteria').value === 'CUSTOM_RECHARGE_AMOUNT' || criteriaForm.get('rechargeDecargeCriteria').value === 'CUSTOM_DESCHARGE_AMOUNT' ">
+            <label>{{'PRODUCT_FORM.AMOUNT' | translate}} :</label>
+            <input type="number" placeholder="{{'PRODUCT_FORM.AMOUNT' | translate}}"
+                   class="form-control form-control-sm"
+                   formControlName="amount">
+          </div>
+
+          <div class="form-group col-lg-6 col-md-6 col-sm-6"
+               *ngIf="criteriaForm.get('rechargeDecargeCriteria').value === 'PROPOSE_DESCHARGE_FORMULA'">
+            <label>{{'PRODUCT_FORM.FORMULA' | translate}} :</label>
+            <input type="text" placeholder="{{'PRODUCT_FORM.FORMULA' | translate}}" class="form-control form-control-sm"
+                   formControlName="formula">
+            <div *ngIf="criteriaForm.get('formula').invalid" class="d-block invalid-feedback">
+              X + Y + Z
+            </div>
+
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div mat-dialog-actions>
+
+      <button mat-flat-button mat-dialog-close>
+        {{'BUTTONS.CLOSE' | translate}}
+      </button>
+
+      <button mat-raised-button color="primary" class="ml-2" (click)="generate()">
+        {{'BUTTONS.APPLY' | translate}}
+      </button>
+
+    </div>
+  </div>
+
+</ng-template>

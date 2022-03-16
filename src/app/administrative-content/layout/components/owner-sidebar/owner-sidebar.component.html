@@ -1,0 +1,17 @@
+<perfect-scrollbar class="pb-4">
+  <div class="sidebar-header ">
+    <a class="sidebar-brand" routerLink='/admin/owner'><img src="./../../../../../assets/img/logo/fav.png" alt="image"
+                                                      style="max-width:30px"/> FAS</a>
+    <a class="sidebar-brand-mini" routerLink='/admin/owner'><img src="./../../../../../assets/img/logo/fav.png" alt="image"
+                                                           width="25"/></a>
+    <!--<button mat-icon-button class="hamburger-menu text-white" (click)="toggleDrawerSidebar()">
+      <mat-icon>menu</mat-icon>
+    </button>-->
+    <span class="sidebar-points" (click)="toggleDrawerSidebar()">
+        <span class="badge badge-success badge-point mr-2"></span>
+        <span class="badge badge-danger badge-point mr-2"></span>
+        <span class="badge badge-warning badge-point"></span>
+    </span>
+  </div>
+  <app-owner-navigation></app-owner-navigation>
+</perfect-scrollbar>

@@ -1,0 +1,31 @@
+<div mat-dialog-title *ngIf="!data.editMode">
+  {{'ADMIN.ROLE.ADD_ROLE' | translate}}
+</div>
+<div mat-dialog-title *ngIf="data.editMode">
+  {{'ADMIN.ROLE.EDIT_ROLE' | translate}}
+</div>
+
+<div mat-dialog-content>
+
+  <form [formGroup]="roleForm" (ngSubmit)="saveRole()" id="roleForm">
+    <div class="form-group">
+      <label for="roleName">{{'ADMIN.ROLE.NAME' | translate}}:</label>
+      <input id="roleName" type="text" placeholder="role name" class="form-control" formControlName="name">
+      <div class="d-block invalid-feedback" *ngIf="submitted && this.roleForm.get('name').invalid">
+        Role name is required
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="roleDesc">{{'ADMIN.ROLE.DESCRIPTION' | translate}}:</label>
+      <textarea id="roleDesc" placeholder="role description" formControlName="description" class="form-control" rows="4"></textarea>
+      <div class="d-block invalid-feedback" *ngIf="submitted && this.roleForm.get('description').invalid">
+        Role description is required
+      </div>
+    </div>
+  </form>
+
+</div>
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button mat-flat-button color="primary" class="mr-2" form="roleForm" [disabled]="disableSaveBtn"><i class="ft-plus"></i> {{'BUTTONS.SAVE' | translate}}</button>
+  <button mat-flat-button color="secondary" [matDialogClose]="null" [disabled]="disableSaveBtn"><i class="ft-x"></i> {{'BUTTONS.CLOSE' | translate}}</button>
+</div>

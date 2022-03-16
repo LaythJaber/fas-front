@@ -1,0 +1,11 @@
+.subheader {
+  display: flex;
+  justify-content: space-between;
+  .action-btns {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+.mat-column-action {
+  text-align: right;
+}

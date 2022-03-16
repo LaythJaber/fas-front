@@ -1,0 +1,198 @@
+<div class="container" style="padding-top: 10px !important; margin-top: 0 !important;" >
+  <form [formGroup]="filterForm">
+    <div class="row">
+
+      <div class="form-group col-lg-3 col-md-3">
+        <label>{{'SUBHEADER.SEARCH' | translate}}</label>
+        <div class="search-input">
+          <div class="form-group">
+            <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn"
+                      (click)="filterForm.controls.textSearch.setValue(null)">
+                  <i class="ft-x"></i>
+                </span>
+              <input type="text" class="form-control form-control-sm"
+                     placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                     formControlName="textSearch"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-3">
+        <label>{{'OPERATOR_FORM.BIRTH_DATE' | translate}}</label>
+        <div class="input-group-icon input-group-icon-right">
+          <input type="text" placeholder="dd/mm/yyyy" [matDatepicker]="dateBirthPicker"
+                 class="form-control form-control-sm"
+                 formControlName="dateOfBirth" #dateBirthElem>
+          <span class="input-icon input-icon-right"
+                (click)="dateBirthPicker.opened ? dateBirthPicker.close() : dateBirthPicker.open()">
+              <i class="fas fa-calendar"></i>
+            </span>
+        </div>
+        <mat-datepicker #dateBirthPicker></mat-datepicker>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-3">
+        <label>{{'COUPON.FORM.DATE_FROM' | translate}}</label>
+        <div class="input-group-icon input-group-icon-right">
+          <input type="text" placeholder="dd/mm/yyyy" [matDatepicker]="dateFromPicker"
+                 class="form-control form-control-sm"
+                 formControlName="dateFrom" #dateFromElem>
+          <span class="input-icon input-icon-right"
+                (click)="dateFromPicker.opened ? dateFromPicker.close() : dateFromPicker.open()">
+              <i class="fas fa-calendar"></i>
+            </span>
+        </div>
+        <mat-datepicker #dateFromPicker></mat-datepicker>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-3">
+        <label>{{'COUPON.FORM.DATE_TO' | translate}}</label>
+        <div class="input-group-icon input-group-icon-right">
+          <input type="text" placeholder="dd/mm/yyyy" [matDatepicker]="dateToPicker"
+                 class="form-control form-control-sm"
+                 formControlName="dateTo" #dateToElem>
+          <span class="input-icon input-icon-right"
+                (click)="dateToPicker.opened ? dateToPicker.close() : dateToPicker.open()">
+              <i class="fas fa-calendar"></i>
+            </span>
+        </div>
+        <mat-datepicker #dateToPicker></mat-datepicker>
+      </div>
+
+      <div class="form-group ">
+        <button mat-flat-button color="primary" class="mr-2"
+                [disabled]="selectedClients.length===0" (click)="openFilterClients()">
+          {{'COUPON.FORM.SELECTED_CLIENTS' | translate}} ({{selectedClients.length}})
+        </button>
+      </div>
+
+      <div class="action-btns">
+        <button mat-mini-fab color="primary" (click)="resetFilter()" placement="left" tooltipClass="custom-tooltip"  class="mr-2"
+                ngbTooltip="{{'PRODUCT_FORM.RESET_FILTER'|translate}}">
+          <i class="ft-refresh-ccw" ></i>
+        </button>
+
+        <button mat-mini-fab color="primary" (click)="showHideFilter()" placement="left" tooltipClass="custom-tooltip"
+                ngbTooltip="{{'PRODUCT_FORM.MORE_FILTER'|translate}}">
+          <i class="ft-filter" ></i>
+        </button>
+      </div>
+
+
+
+    </div>
+
+
+    <div class="row" *ngIf="showFilter">
+
+      <div class="form-group col-lg-2 col-md-3">
+        <div class="input-group-icon input-group-icon-right">
+          <!--          <label>{{'DATA_TABLE.GENDER' | translate}}</label>-->
+          <ng-select [items]="[{label:'CLIENT_FORM.DETAILS.MALE'| translate,value:0},{label:'CLIENT_FORM.DETAILS.FEMALE'| translate,value:1}]"
+                     formControlName="gender"
+                     class="form-control"
+                     bindValue="value"
+                     bindLabel="label"
+                     placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                     class="ng-select-sm ng-select-required"
+                     [clearable]="false"
+          >
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-3"
+           style="display: flex; justify-content: left; align-items: center;">
+        <label style="position: relative !important;">
+          {{'COUPON.FORM.SENZA_ORDINE' | translate}} &nbsp;
+          <input type="checkbox" formControlName="senzaOrdine">
+        </label>
+      </div>
+
+    </div>
+  </form>
+
+</div>
+
+
+<div class="card card-fullheight">
+  <div class="card-body table-responsive">
+    <table class="table table-sm table-hover">
+      <thead>
+      <tr>
+        <th ></th>
+         <th *ngFor="let c of columns" scope="col" class="text-center">
+          {{c | translate}}
+        </th>
+       </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let client of clientResponse, let i = index" >
+
+        <td class="text-center">
+           <mat-checkbox   [disabled]="editMode && !editClicked" (change)="addToClient($event, client)"  [checked]="isChecked(client)"> </mat-checkbox>
+        </td>
+        <td class="text-center"> {{client?.clientId}}</td>
+        <td class="text-center">
+          <ngb-highlight [result]="client?.firstName + ' ' + client?.lastName"
+                         [term]="filterForm.controls.textSearch.value?.trim()">
+          </ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <i  aria-hidden="true" class="fas fa-mars" style="color: #06B5B6" *ngIf=" client?.gender?.toString() === 'MALE'"></i>
+          <i  aria-hidden="true" class="fas fa-venus" style="color: #E50054" *ngIf="client?.gender?.toString() === 'FEMALE'"></i>
+          <i  aria-hidden="true" class="fas fa-transgender" id="transgender" *ngIf="client?.gender?.toString() === 'OTHER'"></i>
+        </td>
+
+        <td class="text-center">
+          <ngb-highlight [result]="client?.email"
+                         [term]="filterForm.controls.textSearch.value?.trim()">
+          </ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <ngb-highlight [result]="client?.mobilePrefix + ' ' + client?.mobile"></ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <i  aria-hidden="true" class="fab fa-facebook" *ngIf="client.registerSource?.toString()==='FACEBOOK'"></i>
+          <i  aria-hidden="true" class="fas fa-envelope" style="color:#9ba2ce;" *ngIf="client.registerSource?.toString()==='MAIL'"></i>
+          <i  aria-hidden="true" class="fab fa-google" *ngIf="client.registerSource?.toString()==='GOOGLE'"></i>
+          <i  aria-hidden="true" class="fas fa-cog" style="color:#9ba2ce;" *ngIf="client.registerSource?.toString()==='WEB_APP'"></i>
+          <img src="../../../../../assets/img/logo/logo.png" width="14" style="border-radius: 20%" alt="" *ngIf="!client.registerSource"/>
+        </td>
+
+        <td class="text-center">
+          {{client.createdAt |date : 'dd-MM-yyyy HH:mm'}}
+        </td>
+
+        <td class="text-center">
+          <i  [ngStyle]="{'color': !client.blocked ? '#06B5B6':'#E50054'}"
+              [ngClass]="{'disabled': true}"
+             class="ft-power" placement="top" tooltipClass="custom-tooltip"
+             ngbTooltip="{{'PROVIDER_FORM.ACTIVE'|translate}} / {{'PROVIDER_FORM.DEACTIVATED'|translate}}">
+          </i>
+        </td>
+
+      </tr>
+      <tr *ngIf="totalRecords === 0" class="text-center">
+        <td colspan="8">{{'CLIENT_FORM.MGM.NO_CLIENT' | translate}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center"
+                    *ngIf="totalRecords > 0"
+                    [collectionSize]="totalRecords"
+                    size="sm"
+                    [pageSize]="request.pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="request.page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+  </div>
+</div>

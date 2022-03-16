@@ -1,0 +1,116 @@
+<div class="subheader">
+  <div class="container-fluid">
+    <form [formGroup]="filterForm">
+      <div class="row">
+
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'SUBHEADER.SEARCH' | translate}}</label>
+          <div class="search-input">
+            <div class="form-group">
+              <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn"
+                      (click)="filterForm.controls.textSearch.setValue(null)">
+                  <i class="ft-x"></i>
+                </span>
+                <input type="text" class="form-control form-control-sm"
+                       placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                       formControlName="textSearch"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'DATA_TABLE.CREATED' | translate}}</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/yyyy" [matDatepicker]="createdAtPicker"
+                   class="form-control form-control-sm"
+                   formControlName="createdAt" #createAtElem>
+            <span class="input-icon input-icon-right"
+                  (click)="createdAtPicker.opened ? createdAtPicker.close() : createdAtPicker.open()">
+              <i class="fas fa-calendar"></i>
+            </span>
+          </div>
+          <mat-datepicker #createdAtPicker></mat-datepicker>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+<div class="card card-fullheight">
+  <div class="card-body table-responsive">
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table table-sm table-hover">
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns" scope="col" class="text-center">
+          {{c | translate}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let cart of cartResponse?.data, let i = index" (click)="showRows(cart)">
+        <td class="text-center">
+          <ngb-highlight [result]="cart?.id"></ngb-highlight>
+        </td>
+        <td class="text-center">
+          <ngb-highlight [result]="cart?.clientCode"></ngb-highlight>
+        </td>
+        <td class="text-center">
+          <ngb-highlight [result]="cart?.clientFirstName + ' ' + cart?.clientLastName">
+          </ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          {{cart?.productsNumber}}
+        </td>
+        <td class="text-center">
+          {{cart?.productsTotal | number: "1.2-2" | numberCommaseparator }}€
+        </td>
+
+        <td class="text-center">
+          {{cart.createdAt |date : 'dd-MM-yyyy HH:mm'}}
+        </td>
+
+        <td class="text-center">
+          {{cart.updatedAt | date : 'dd-MM-yyyy HH:mm'}}
+        </td>
+        <td>
+          <button (click)="deleteCart(cart?.id, $event)" color="warn" mat-icon-button placement="top" title="Rimuovi">
+            <em class="ft-trash-2"></em>
+          </button>
+        </td>
+
+      </tr>
+      <tr *ngIf="cartResponse?.totalRecords === 0" class="text-center">
+        <td colspan="8">{{'CLIENT_FORM.MGM.NO_CLIENT' | translate}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center"
+                    *ngIf="cartResponse?.totalRecords > 0"
+                    [collectionSize]="cartResponse?.totalRecords"
+                    size="sm"
+                    [pageSize]="request.pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="request.page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>
+
+</div>

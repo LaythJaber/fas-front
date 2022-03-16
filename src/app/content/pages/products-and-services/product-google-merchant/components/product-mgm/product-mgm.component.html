@@ -1,0 +1,87 @@
+<div class="modal-header">
+  <h4 mat-dialog-title>Dettaglio del Prodotto</h4>
+  <button type="button" mat-button (click)="dialogRef.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div class="container">
+    <form [formGroup]="productForm">
+      <div class="form-row">
+        <div class="form-group col-6" style="border-right: 1px solid gainsboro">
+          <label><strong>Disponibilità : </strong></label>
+          <ng-select [items]="availabilityList"
+                     formControlName="availability"
+                     (change)="setAvailability()"
+                     [bindValue]="'id'"
+                     [bindLabel]="'label'"
+                     placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                     class="ng-select-sm"
+                     [clearable]="true"
+          >
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{'SALE_APP_FORM.AVAILABILITY.STATE.'+item.label | translate}}</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+              <span>{{'SALE_APP_FORM.AVAILABILITY.STATE.'+item.label | translate}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+
+        <div class="form-group col-3">
+          <label><strong>Stock : </strong></label>
+          <input type="number" class="form-control form-control-sm"
+                 [value]="product?.stock" readonly>
+        </div>
+
+        <div class="form-group col-3">
+          <label><strong>Vendi su quantità Google : </strong></label>
+          <input type="number" class="form-control form-control-sm"
+                 min="1"
+                 max="{{googleProduct?.sellOnGoogleQuantity}}"
+                 formControlName="sellOnGoogleQuantity">
+        </div>
+
+        <div class="form-group col-6" style="border-right: 1px solid gainsboro">
+          <label><strong>Data di disponibilità: </strong></label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/aaaa" [matDatepicker]="availabilityDatePicker"
+                   class="form-control form-control-sm"
+                   formControlName="availabilityDate" #availabilityDateElem>
+            <span class="input-icon input-icon-right"
+                  (click)="availabilityDatePicker.opened ? availabilityDatePicker.close() : availabilityDatePicker.open()">
+                <i class="fas fa-calendar"></i>
+              </span>
+          </div>
+          <mat-datepicker #availabilityDatePicker></mat-datepicker>
+        </div>
+
+        <div class="form-group col-6">
+          <label><strong>Data di scadenza : </strong></label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="gg/mm/aaaa" [matDatepicker]="expirationDatePicker"
+                   class="form-control form-control-sm"
+                   formControlName="expirationDate" #expirationDateElem>
+            <span class="input-icon input-icon-right"
+                  (click)="expirationDatePicker.opened ? expirationDatePicker.close() : expirationDatePicker.open()">
+                <i class="fas fa-calendar"></i>
+              </span>
+          </div>
+          <mat-datepicker #expirationDatePicker></mat-datepicker>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button mat-flat-button color="primary" *ngIf="!inLoading"
+          (click)="saveProduct(editMode ? googleProduct : product)">
+    {{'BUTTONS.SAVE' | translate}}
+  </button>
+  <button mat-flat-button color="light" *ngIf="inLoading">
+    <i class="fa fa-spin fa-spinner"></i>
+  </button>
+</div>

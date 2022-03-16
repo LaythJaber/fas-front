@@ -1,0 +1,284 @@
+<div class="form-container show-container">
+
+  <div class="form-header">
+    <div class="d-flex align-items-center">
+      <!--      <button mat-icon-button color="primary" (click)="destroyForm()">-->
+      <!--        <mat-icon>close</mat-icon>-->
+      <!--      </button>-->
+      <div *ngIf="editMode">{{'MOVEMENT_FORM.INVENTORY_DETAILS' | translate}}</div>
+      <div *ngIf="!editMode" class="hide">{{'MOVEMENT_FORM.CREATE_INVENTORY' | translate}}</div>
+    </div>
+    <div class="d-flex align-items-center">
+      <button mat-button color="primary" *ngIf="editMode&&inventory?.draft&&!editClicked"
+              (click)="activateEdit()">
+        <mat-icon>edit</mat-icon>
+        {{'BUTTONS.EDIT' | translate}}
+      </button>
+      <button mat-button color="primary" *ngIf="!editMode||editClicked"
+              [disabled]="disableSave" (click)="save(true)">
+        <mat-icon>save</mat-icon>
+        {{'BUTTONS.SAVE_DRAFT' | translate}}
+      </button>
+      <button mat-button color="primary" *ngIf="!editMode||editClicked"
+              [disabled]="disableSave"
+              (click)="save(false)">
+        <mat-icon>save</mat-icon>
+        {{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+
+  <div class="form-content">
+    <div class="card-body">
+      <form class="form p-3 movement-container" [formGroup]="inventoryForm" id="movementForm">
+        <div class="form-row">
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'MOVEMENT_FORM.DATE' | translate}}:</label>
+            <div class="input-group-icon input-group-icon-right">
+              <input type="text" [matDatepicker]="date" class="form-control form-control-sm" readonly
+                     formControlName="date">
+              <span class="input-icon input-icon-right">
+              <i aria-hidden="true" class="fas fa-calendar"></i>
+            </span>
+            </div>
+            <mat-datepicker #date></mat-datepicker>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'MOVEMENT_FORM.NUMBER' | translate}} :</label>
+            <input type="text" class="form-control form-control-sm" formControlName="number" readonly>
+          </div>
+
+          <div class="form-group  col-lg-6 col-md-10">
+            <label> {{'MOVEMENT_FORM.NOTE' | translate}} :</label>
+            <div class="input-group-icon input-group-icon-left input-group-sm">
+              <span class="input-icon input-icon-left">
+                 <i aria-hidden="true" class="ti-info"></i>
+               </span>
+              <input type="text" class="form-control form-control-sm" formControlName="note">
+            </div>
+          </div>
+
+        </div>
+
+      </form>
+
+      <div class="card">
+        <div class="card-header" style="padding: 0 0 0 0.9rem;">
+          <span class="card-title" style="margin: 0"><em class="ft-filter"></em>Filtri</span>
+          <div class="form-group" style="margin: 0">
+            <button mat-button color="primary" (click)="showFilters = !showFilters">
+              <i aria-hidden="true" class="ft-filter"
+                 placement="left" tooltipClass="custom-tooltip"
+                 ngbTooltip="{{'PRODUCT_FORM.MORE_FILTER'|translate}}"></i>
+            </button>
+            <button mat-button color="primary" (click)="initProductFilterForm()">
+              <i aria-hidden="true" class="ft-refresh-ccw"
+                 placement="left" tooltipClass="custom-tooltip"
+                 ngbTooltip="{{'BUTTONS.RESET_FILTER'|translate}}"></i>
+            </button>
+            <button mat-button color="accent" (click)="filterProducts()"
+                    placement="left" tooltipClass="custom-tooltip"
+                    ngbTooltip="{{'BUTTONS.SEARCH'|translate}}">
+              <i aria-hidden="true" class="ft-search"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0.9rem 0.2rem 0.2rem 0.2rem;">
+          <form [formGroup]="productFilterForm">
+            <div class="row">
+              <div class="col-lg-3 col-md-3 col-sm-4 col-6">
+                <div class="row">
+                  <div class="col-7">
+                    <div class="form-group">
+                      <div class="input-group-icon input-group-icon-right">
+                      <span class="input-icon input-icon-right reset-search-btn"
+                            (click)="searchFormControl.setValue(null)">
+                             <em class="ft-x"></em>
+                      </span>
+                        <input type="text" class="form-control" placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                               formControlName="textSearch">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-5">
+                    <ng-select class="ng-select-type" [items]="stockZero" [bindLabel]="'description'"
+                               [bindValue]="'value'" appendTo="body" [clearable]="true"
+                               (open)="translateStockZero()" formControlName="stockZeroCheck"
+                               placeholder="{{'stock Zero' | translate}}">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-lg-3 col-md-3 col-sm-4 col-6">
+                <ng-select (scrollToEnd)="getCategories()" class="ng-select" [items]="categories" [bindLabel]="'name'"
+                           [bindValue]="'id'" formControlName="categoryId"
+                           placeholder="{{'PRODUCT_FORM.CATEGORY_LEVEL1' | translate}}">
+                  <ng-template ng-label-tmp let-item="item">
+                    <span>{{item | localTranslate: 'name'}}</span>
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+                    <span>{{item | localTranslate: 'name'}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="form-group col-lg-3 col-md-3 col-sm-4 col-6">
+                <ng-select (scrollToEnd)="getSubCategories()" class="ng-select" [items]="subCategories"
+                           [bindLabel]="'name'"
+                           [bindValue]="'id'" formControlName="subCategoryId"
+                           placeholder="{{'PRODUCT_FORM.CATEGORY_LEVEL2' | translate}}">
+                  <ng-template ng-label-tmp let-item="item">
+                    <span>{{item | localTranslate: 'name'}}</span>
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+                    <span>{{item | localTranslate: 'name'}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+
+              <div class="form-group col-lg-3 col-md-3 col-sm-4 col-6">
+                <ng-select (scrollToEnd)="getSubSubCategories()" class="ng-select" [items]="subSubCategories"
+                           [bindLabel]="'name'"
+                           [bindValue]="'id'" formControlName="subSubCategoryId"
+                           placeholder="{{'PRODUCT_FORM.CATEGORY_LEVEL3' | translate}}">
+                  <ng-template ng-label-tmp let-item="item">
+                    <span>{{item | localTranslate: 'name'}}</span>
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+                    <span>{{item | localTranslate: 'name'}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+
+
+              <div class="form-group col-lg-3 col-md-3 col-sm-4 col-6" *ngIf="showFilters">
+                <ng-select (scrollToEnd)="getBrands()" class="ng-select" [items]="brandList"
+                           [bindLabel]="'description'"
+                           [bindValue]="'id'" formControlName="brandId"
+                           placeholder="{{'PRODUCT_FORM.BRAND' | translate}}">
+                </ng-select>
+              </div>
+
+              <div class="form-group col-lg-3 col-md-3 col-sm-4 col-6" *ngIf="showFilters">
+                <ng-select (scrollToEnd)="getManufacturers()" class="ng-select" [items]="manufacturersList"
+                           [bindLabel]="'description'"
+                           [bindValue]="'id'" formControlName="manufacturerId"
+                           placeholder="{{'PRODUCT_FORM.MANUFACTURER' | translate}}">
+                </ng-select>
+              </div>
+
+              <div class="form-group col-lg-3 col-md-3 col-sm-4 col-6" *ngIf="showFilters">
+                <ng-select class="ng-select-type" [items]="types" [bindLabel]="'description'"
+                           [bindValue]="'value'" appendTo="body" [clearable]="true"
+                           (open)="translateTypes()" formControlName="disabled"
+                           placeholder="{{'status' | translate}}">
+                </ng-select>
+              </div>
+
+              <div class="form-group col-lg-3 col-md-3 col-sm-4 col-6" *ngIf="showFilters">
+                <ng-select class="ng-select-type" [items]="inSales" [bindLabel]="'description'"
+                           [bindValue]="'value'" appendTo="body" [clearable]="true"
+                           (open)="translateInSAles()" formControlName="inSalesCheck"
+                           placeholder="{{'Evidenza' | translate}}">
+                </ng-select>
+              </div>
+
+              <div class="form-group col-lg-3 col-md-3 col-sm-4 col-6" *ngIf="showFilters">
+                <ng-select class="ng-select-type" [items]="priceZero" [bindLabel]="'description'"
+                           [bindValue]="'value'" appendTo="body" [clearable]="true"
+                           (open)="translatePriceZero()" formControlName="priceZeroCheck"
+                           placeholder="{{'price Zero' | translate}}">
+                </ng-select>
+              </div>
+
+              <div class="form-group col-lg-3 col-md-3 col-sm-4 col-6" *ngIf="showFilters">
+                <ng-select class="ng-select-type" [items]="inPromo" [bindLabel]="'description'"
+                           [bindValue]="'value'" appendTo="body" [clearable]="true"
+                           (open)="translateInPromo()" formControlName="inPromoCheck"
+                           placeholder="{{'Promo' | translate}}">
+                </ng-select>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <hr/>
+      <table class="table  table-hover ">
+        <caption></caption>
+        <thead>
+        <tr>
+          <th *ngFor="let c of columns" scope="col" style="min-width: 100px">{{c | translate}}</th>
+          <th scope="col"> {{'PRODUCT_FORM.ACTIVE' | translate}}
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let product of rows; let i = index">
+          <td>{{product.prodCode}}</td>
+          <td>{{product.description}}</td>
+          <td style="min-width: 100px !important;">{{product.minStock | number: '1.2-2'}}</td>
+
+          <td>
+        <span class="badge badge-success"
+              *ngIf="product.stock > product.minStock; else alertStock"
+              style="font-size: inherit">
+         {{product.stock | number: '1.2-2'}}
+        </span>
+            <ng-template #alertStock>
+                <span class="badge badge-warning" style="font-size: inherit"
+                      placement="top"
+                      tooltipClass="custom-tooltip"
+                      ngbTooltip="La qtà in stock è inferiore al sottoscorta"
+                      *ngIf="product.minStock >= product.stock && product.stock != 0; else
+                   zeroQuantity">
+                 {{product.stock | number: '1.2-2'}}
+                 </span>
+              <ng-template #zeroQuantity>
+                {{product.stock | number: '1.2-2'}}
+              </ng-template>
+            </ng-template>
+
+          </td>
+
+          <td>{{product.availability| number: '1.2-2'}}</td>
+
+          <td>
+            <input type="number" style="width: 70%; height: 26px;" [readOnly]="editMode&&!editClicked"
+                   class="form-control form-control-sm" [(ngModel)]="product.newStock"
+                   (ngModelChange)="changeStock(product)">
+          </td>
+          <td>{{product.stockType}}</td>
+          <!--          <td style="min-width: 130px !important;" *ngIf="!product.active">-->
+          <!--            <strong> {{'PRODUCT_FORM.PRODUCT_DISABLED' | translate}}</strong>-->
+          <!--          </td>-->
+          <td style="min-width: 70px !important;">
+            <span class="badge badge-success" *ngIf="product.active"> {{'MOVEMENT_FORM.YES' | translate}}</span>
+            <span class="badge badge-warning" *ngIf="!product.active"> {{'MOVEMENT_FORM.NO' | translate}}</span></td>
+          <!--          <td style="min-width: 100px !important;">{{product.category}}</td>-->
+          <!--          <td>{{product.subCategory}}</td>-->
+        </tr>
+        <tr *ngIf="rows.length===0 && !loading" class="text-center">
+          <td colspan="8" class="no-object-found">{{'PRODUCT_FORM.NO_PRODUCT_FOUND' | translate}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <ngb-pagination class="d-flex justify-content-center" *ngIf="totalRecords!==0  && totalRecords > this.pageSize"
+                      [collectionSize]="totalRecords"
+                      size="sm"
+                      [pageSize]="pageSize"
+                      [ellipses]="true"
+                      [maxSize]="5"
+                      [page]="page"
+                      (pageChange)="pageChange($event)">
+      </ngb-pagination>
+      <div class="col-12 d-flex justify-content-center">
+        <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                   [(ngModel)]="pageSize" [items]="pageSizesValues"
+                   (change)="changePageSize()">
+        </ng-select>
+      </div>
+    </div>
+  </div>
+
+</div>

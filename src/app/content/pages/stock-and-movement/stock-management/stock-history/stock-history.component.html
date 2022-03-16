@@ -1,0 +1,69 @@
+<div mat-dialog-title>
+  {{'STOCK_FORM.PRODUCT_HISTORY' | translate}}
+  <hr>
+</div>
+
+<div mat-dialog-content class="py-2">
+
+  <div class="row d-flex justify-content-center">
+    <div class="col-lg-3">
+      <div class="card">
+        <div class="card-body text-center card-mob">
+          <h5 class="mb-3">{{'DATA_TABLE.QUANTITY' | translate}}</h5>
+          <h4 class="badge badge-success" style="font-size: large"
+              *ngIf="data.stock > data.minStock">{{data.stock | number: '1.3-3'}}</h4>
+          <h4 class="badge badge-warning" style="font-size: large"
+              *ngIf="data.stock <= data.minStock && data.stock > 0">{{data.stock | number: '1.3-3'}}</h4>
+          <h4 class="badge badge-danger" style="font-size: large"
+              *ngIf="data.stock < 1">{{data.stock| number: '1.3-3'}}</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-1">
+    </div>
+  </div>
+
+  <table class="table table-bordered table-striped">
+    <caption></caption>
+    <thead>
+    <tr>
+      <th *ngFor="let c of columns" scope="col" style="padding: 1rem 0.7rem !important;">{{c | translate}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let c of rows">
+      <td> {{c.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+      <td>{{c.description}}</td>
+      <td>{{c.commercialDescription}}</td>
+      <td>{{c.stockType}}</td>
+<!--      <td>{{(c.purchasePrice  | number: '1.2-2') + ' €'}}</td>-->
+      <td>
+        <span class="badge badge-success"
+              *ngIf="c.causal==='RESO'||c.causal==='LOAD'; else discharge"
+              style="font-size: inherit">
+        + {{c.quantity| number: '1.3-3'}}
+        </span>
+        <ng-template #discharge>
+          <span class="badge badge-warning" style="font-size: inherit"
+                *ngIf="c.causal==='SALE'||c.causal==='UNLOAD'; else
+          zeroQuantity">
+          - {{c.quantity | number: '1.3-3'}}
+          </span>
+          <ng-template #zeroQuantity>
+            {{c.quantity | number: '1.3-3'}}
+          </ng-template>
+        </ng-template>
+
+      </td>
+      <td>{{c.price != null ? ((c.price   | number: '1.2-2') + ' €') : ''}}</td>
+      <td *ngIf="c.causal == 'RETURN'">{{(c.price  | number: '1.2-2') + ' €'}}</td>
+      <td *ngIf="c.causal != 'RETURN'">{{(c.quantity * c.price  | number: '1.2-2') + ' €'}}</td>
+      <td>{{'MOVEMENT_FORM.' + c.causal | translate}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button color="accent" [matDialogClose]=""><i aria-hidden="true"
+                                                           class="ft-x"></i> {{'BUTTONS.CLOSE' | translate}}</button>
+</div>

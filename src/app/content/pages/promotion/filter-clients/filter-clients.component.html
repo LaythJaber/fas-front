@@ -1,0 +1,106 @@
+<div mat-dialog-title>
+  {{'PROMO_FORM.FILTER_RECEIVERS' | translate}}
+</div>
+<hr>
+
+<div mat-dialog-content>
+
+  <form [formGroup]="filterForm">
+    <div class="row">
+      <div class="form-group col-lg-3 col-md-3">
+        <label>{{'SUBHEADER.SEARCH' | translate}}</label>
+        <div class="search-input">
+          <div class="form-group">
+            <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn"
+                      (click)="filterForm.controls.textSearch.setValue(null)">
+                  <i class="ft-x"></i>
+                </span>
+              <input type="text" class="form-control form-control-sm"
+                     placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                     formControlName="textSearch"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-3">
+        <div class="input-group-icon input-group-icon-right">
+          <label>{{'CATEGORY_FORM.STATUS' | translate}}</label>
+          <ng-select [items]="[{label:'Tutti',value:-1},{label:'Actif',value:0},{label:'Blocked',value:1}]"
+                     formControlName="status"
+                     class="form-control"
+                     bindValue="value"
+                     bindLabel="label"
+                     placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                     class="ng-select-sm ng-select-required"
+                     [clearable]="false"
+          >
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-3"
+           style="display: flex; justify-content: left; align-items: center;">
+        <label style="position: relative !important;">
+          {{'CLIENT_FORM.FILTER.NOT_CONFIRMED' | translate}} &nbsp;
+          <input type="checkbox" formControlName="confirmed">
+        </label>
+      </div>
+      <div class="form-group col-lg-3 col-md-6">
+        <button class="btn btn-outline-gray" type="button" style="width: 50%;bottom: -21px;float: right;"
+                (click)="filter()">
+          <i  aria-hidden="true" class="ft-filter">{{'filter'}}<span class="badge badge-info badge-circle">{{totalRecords}}</span></i>
+        </button>
+      </div>
+    </div>
+  </form>
+  <hr>
+  <div class="table-responsive mb-2" style="max-height: 450px;">
+    <table class="table table-bordered table-striped" aria-hidden="true" >
+      <caption></caption>
+      <thead>
+      <tr>
+        <td>
+          <label class="checkbox checkbox-primary" style="margin-left: 33%;">
+            <input type="checkbox" (change)="selectAll()" [checked]="selectedClients.length==totalRecords">
+            <span>{{' '}}</span>
+          </label>
+        </td>
+        <td>{{'DATA_TABLE.FULL_NAME' | translate}}</td>
+        <td>{{'DATA_TABLE.GENDER' | translate}}</td>
+        <td>{{'CLIENT_FORM.DETAILS.MOBILE' | translate}}</td>
+        <td>{{'CLIENT_FORM.DETAILS.EMAIL' | translate}}</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let c of rows">
+        <td>
+          <label class="checkbox checkbox-primary" style="margin-left: 33%;">
+            <input type="checkbox" [id]="c.clientId" (change)="updateClientList(c)" [checked]="isSelectedClient(c)">
+            <span>{{' '}}</span>
+          </label>
+        </td>
+        <td>{{c.firstName + ' ' + c.lastName}}</td>
+        <td>
+          <i  aria-hidden="true" class="fas fa-mars" style="color: #06B5B6" *ngIf=" c?.gender?.toString() === 'MALE'"></i>
+          <i  aria-hidden="true" class="fas fa-venus" style="color: #E50054" *ngIf="c?.gender?.toString() === 'FEMALE'"></i>
+          <i  aria-hidden="true" class="fas fa-transgender" id="transgender" *ngIf="c?.gender?.toString() === 'OTHER'"></i>
+        </td>
+        <td>{{c.mobilePrefix + ' ' + c.mobile}}</td>
+        <td>{{c.email}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-flat-button color="warn" [matDialogClose]="" class="ml-2"><i  aria-hidden="true"
+                                                                            class="ft-x"></i> {{'BUTTONS.CLOSE' | translate}}</button>
+  <button class="ml-2" mat-flat-button color="primary" [disabled]="!selectedClients.length"
+          (click)="matDialogRef.close(selectedClients)"> {{'BUTTONS.SAVE' | translate}}
+  </button>
+</div>

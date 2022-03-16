@@ -1,0 +1,99 @@
+<div class=" text-center p-5">
+  <h1 class="display-4">Get An Appointment</h1>
+  <p class="lead"><strong>Please choose a free date</strong> to schedule a meeting with us</p>
+</div>
+
+<mat-progress-spinner
+  *ngIf="!events"
+  color="primary"
+  mode="indeterminate"
+  class="mx-auto mt-5">
+</mat-progress-spinner>
+
+<div class="calendar-container" *ngIf="events">
+  <div class="row mt-4">
+    <div class="col-md-4 text-left">
+      <!--<button type="button" routerLink="add" class="btn btn-light m-1" *ngIf="isAdmin">
+          Aggiungi
+      </button>-->
+      <!--<div class="btn-group">
+          <button type="button" class="btn btn-primary"
+              (click)="changeView('month')"
+              [class.active]="view === 'month'">
+              Mese
+          </button>
+          <button type="button" class="btn btn-primary"
+              (click)="changeView('week')"
+              [class.active]="view === 'week'">
+              Settimana
+          </button>
+          <button type="button" class="btn btn-primary"
+              (click)="changeView('day')"
+              [class.active]="view === 'day'">
+              Giorno
+          </button>
+      </div>-->
+    </div>
+    <div class="col-md-4 text-center">
+      <h3 class="mt-0">{{ viewDate | calendarSchedulerDate:(view + 'ViewTitle'):locale:weekStartsOn:excludeDays:viewDays:startsWithToday }}</h3>
+    </div>
+    <div class="col-md-4 text-right">
+      <div class="btn-group m-1" role="group">
+
+        <button class="btn custom-no-bg"  mwlCalendarPreviousView
+                [view]="view"
+                [(viewDate)]="viewDate"
+                [daysInWeek]="viewDays"
+                [excludeDays]="excludeDays"
+                [disabled]="prevBtnDisabled"
+                (viewDateChange)="dateOrViewChanged()">
+          <span aria-hidden="true" class="gray"><i class="fas fa-chevron-left"></i></span>
+        </button>
+        <button type="button" class="btn btn-light"
+                mwlCalendarToday
+                [(viewDate)]="viewDate"
+                (viewDateChange)="dateOrViewChanged()">
+          <span aria-hidden="true" class="gray"><i class="far fa-calendar"></i></span>
+
+        </button>
+        <button class="btn custom-no-bg" mwlCalendarNextView
+                [view]="view"
+                [(viewDate)]="viewDate"
+                [daysInWeek]="viewDays"
+                [excludeDays]="excludeDays"
+                [disabled]="nextBtnDisabled"
+                (viewDateChange)="dateOrViewChanged()">
+          <span aria-hidden="true" class="gray"><i class="fas fa-chevron-right"></i></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div [ngSwitch]="view">
+    <calendar-scheduler-view *ngSwitchCase="CalendarView.Week"
+                             [viewDate]="viewDate"
+                             [events]="events"
+                             [locale]="locale"
+                             [viewDays]="viewDays"
+                             [weekStartsOn]="weekStartsOn"
+                             [excludeDays]="excludeDays"
+                             [startsWithToday]="startsWithToday"
+                             [hourSegments]="hourSegments"
+                             [dayStartHour]="dayStartHour"
+                             [dayEndHour]="dayEndHour"
+                             [dayModifier]="dayModifier"
+                             [hourModifier]="hourModifier"
+                             [segmentModifier]="segmentModifier"
+                             [eventModifier]="eventModifier"
+                             [showEventActions]="true"
+                             [showSegmentHour]="true"
+                             [zoomEventOnHover]="true"
+                             (dayHeaderClicked)="dayHeaderClicked($event.day)"
+                             (hourClicked)="hourClicked($event.hour)"
+                             (segmentClicked)="segmentClicked('Clicked', $event.segment)"
+                             (eventClicked)="eventClicked('Clicked', $event.event)"
+                             (eventTimesChanged)="eventTimesChanged($event)"
+                             [refresh]="refresh">
+    </calendar-scheduler-view>
+  </div>
+</div>

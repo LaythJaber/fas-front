@@ -1,0 +1,165 @@
+<h1 mat-dialog-title *ngIf="!data.editMode">
+  {{'CONFIGURATION.NEW_SIZE' | translate}}
+</h1>
+<h1 mat-dialog-title *ngIf="data.editMode">
+  {{'CONFIGURATION.EDIT_SIZE' | translate}}
+</h1>
+<hr>
+<div mat-dialog-content>
+  <form [formGroup]="sizeForm">
+    <div class="row">
+      <div class="form-group col-6" *ngIf="data.editMode">
+        <label> {{'DATA_TABLE.CODE' | translate}}:</label>
+        <div class="input-group-icon input-group-icon-left">
+                    <span class="input-icon input-icon-left">
+                        <em class="ti-info"></em>
+                    </span>
+          <input type="text" class="form-control" formControlName="code" readonly>
+        </div>
+      </div>
+      <div class="form-group col-6">
+        <label> {{'CONFIGURATION.DESCRIPTION' | translate}}:</label>
+        <div class="input-group-icon input-group-icon-left">
+                    <span class="input-icon input-icon-left">
+                        <em class="ti-info"></em>
+                    </span>
+          <input type="text" class="form-control" formControlName="description"
+                 [ngClass]="{'is-invalid': submitted && sizeForm.get('description').invalid}"
+                 #descInput>
+        </div>
+        <div *ngIf="submitted && sizeForm.get('description').invalid;" class="d-block invalid-feedback">
+          {{'CONFIGURATION.EMPTY_DESCRIPTION' | translate}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="enabled" class="mr-2">{{'PRODUCT_FORM.ACTIVE' | translate}}:</label>
+        <mat-checkbox id="enabled" color="primary" formControlName="enabled"></mat-checkbox>
+      </div>
+    </div>
+    <div class="card-body table-responsive">
+
+      <div class="d-flex justify-content-end">
+        <button mat-mini-fab color="primary" (click)="getSelectedSchema(null, $event, schemaContent)"
+                placement="left"
+                tooltipClass="custom-tooltip"
+                ngbTooltip="{{'CONFIGURATION.NEW_SIZE'|translate}}">
+          <i class="ft-plus" style="font-size: 18px"></i>
+        </button>
+      </div>
+      <table class="table  table-sm  table-hover table-bordered">
+        <thead>
+        <tr>
+          <th *ngFor="let c of columns" scope="col">{{c | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let schema of size?.schemas; let i = index">
+          <td>{{schema.code}}</td>
+          <td>{{schema.description}}</td>
+          <td>{{schema.step}}</td>
+          <td>{{schema.alias}}</td>
+          <td class="text-right">
+            <button mat-icon-button color="primary" (click)="getSelectedSchema(schema, $event, schemaContent)"
+                    placement="top" tooltipClass="custom-tooltip"
+                    ngbTooltip="{{'BUTTONS.EDIT'|translate}}">
+              <i class="ft-edit-1"></i>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteSchema(schema,  $event)"
+                    placement="top" tooltipClass="custom-tooltip"
+                    ngbTooltip="{{'BUTTONS.DELETE'|translate}}">
+              <i class="ft-trash-2"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </form>
+</div>
+<hr>
+<div mat-dialog-actions class="d-flex justify-content-between"
+     [ngClass]="{'justify-content-between': !data.editMode, 'justify-content-end': data.editMode}">
+  <label class="checkbox checkbox-success" *ngIf="!data.editMode">
+    <input [formControl]="addMultipleCheckbox" type="checkbox"><span
+    style="font-size: 10px">{{'CONFIGURATION.ADD_NEW_ELEMENT' | translate}}</span>
+  </label>
+  <div>
+    <button mat-button color="secondary" class="ml-2"
+            (click)="dialogRef.close(addedElement)">{{'BUTTONS.CLOSE' | translate}}</button>
+    <button mat-flat-button color="primary"
+            [disabled]="sizeForm.get('description').disabled"
+            (click)="save()">{{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+</div>
+
+
+<ng-template #schemaContent>
+  <h1 mat-dialog-title *ngIf="!selectedSchema?.id">
+    {{'CONFIGURATION.NEW_SIZE' | translate}}
+  </h1>
+  <h1 mat-dialog-title *ngIf="selectedSchema?.id">
+    {{'CONFIGURATION.EDIT_SIZE' | translate}}
+  </h1>
+  <hr>
+  <div mat-dialog-content>
+    <form [formGroup]="schemaForm">
+      <div class="row">
+        <div class="form-group col-6">
+          <label> {{'DATA_TABLE.CODE' | translate}}:</label>
+          <div class="input-group-icon input-group-icon-left">
+                    <span class="input-icon input-icon-left">
+                        <i class="ti-info"></i>
+                    </span>
+            <input type="text" class="form-control" formControlName="code">
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label> {{'CONFIGURATION.DESCRIPTION' | translate}}:</label>
+          <div class="input-group-icon input-group-icon-left">
+                    <span class="input-icon input-icon-left">
+                        <i class="ti-info"></i>
+                    </span>
+            <input type="text" class="form-control" formControlName="description"
+                   [ngClass]="{'is-invalid': submitted && sizeForm.get('description').invalid}"
+                   #descInput>
+          </div>
+          <div *ngIf="submitted && sizeForm.get('description').invalid;" class="d-block invalid-feedback">
+            {{'CONFIGURATION.EMPTY_DESCRIPTION' | translate}}
+          </div>
+        </div>
+
+        <div class="form-group col-6">
+          <label> {{'step' | translate}}:</label>
+          <div class="input-group-icon input-group-icon-left">
+                    <span class="input-icon input-icon-left">
+                        <i class="ti-info"></i>
+                    </span>
+            <input type="number" min="0" class="form-control" formControlName="step">
+          </div>
+        </div>
+
+        <div class="form-group col-6">
+          <label> {{'alias' | translate}}:</label>
+          <div class="input-group-icon input-group-icon-left">
+                    <span class="input-icon input-icon-left">
+                        <i class="ti-info"></i>
+                    </span>
+            <input type="text" class="form-control" formControlName="alias">
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <hr>
+  <div mat-dialog-actions class="d-flex justify-content-end">
+    <button mat-button color="secondary" class="ml-2"
+            (click)="dial.close()">{{'BUTTONS.CLOSE' | translate}}</button>
+    <button mat-flat-button color="primary"
+            [disabled]="sizeForm.get('description').disabled"
+            (click)="saveSchema()">{{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+</ng-template>

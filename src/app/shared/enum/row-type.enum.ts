@@ -1,0 +1,5 @@
+export enum RowType {
+  GOODS = 'GOODS',
+  SERVICE = 'SERVICE',
+  OUTSIDESTOCK = 'OUTSIDESTOCK'
+}

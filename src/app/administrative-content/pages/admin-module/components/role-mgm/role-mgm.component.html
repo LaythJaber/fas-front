@@ -1,0 +1,77 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-4">
+      <div class="d-flex align-items-center justify-content-between px-3 my-2">
+        <div class="font-18 font-weight-strong">{{'ADMIN.ROLE.ROLES' | translate}}</div>
+        <button mat-flat-button color="primary" (click)="openAddRoleForm()"><i
+          class="ft-plus"></i> {{'BUTTONS.ADD' | translate}}</button>
+      </div>
+      <div class="d-flex align-items-center flex-column" *ngIf="rolesLoading && roles.length === 0">
+        <mat-spinner></mat-spinner>
+        <div class="font-17 mt-3">{{'LOADING' | translate}}</div>
+      </div>
+      <div class="list-group">
+        <div class="list-group-item py-1" *ngIf="rolesLoading && roles.length > 0">
+          <div class="d-flex align-items-center flex-column">
+            <mat-spinner diameter="50"></mat-spinner>
+            <div class="font-17 mt-3">{{'LOADING' | translate}}</div>
+          </div>
+        </div>
+        <div class="list-group-item role-container py-1" *ngFor="let role of roles; let i = index"
+             (click)="loadRoleAuthorities(role, i)"
+             [ngClass]="{'active-role' : selectedRole?.id === role.id}">
+          <div class=" d-flex justify-content-between align-items-center">
+            <div class="role-title">{{role.name}}</div>
+            <div ngbDropdown display="dynamic">
+              <button mat-icon-button color="primary" (click)="stopPropagation($event)" ngbDropdownToggle><i
+                class="ft-more-vertical"></i></button>
+              <div ngbDropdownMenu>
+                <button ngbDropdownItem (click)="openEditRoleForm(role, $event)"><i
+                  class="ft-edit-1"></i> {{'BUTTONS.EDIT' | translate}}</button>
+                <button ngbDropdownItem (click)="deleteRole(role, i, $event)"><i
+                  class="ft-trash-2"></i> {{'BUTTONS.DELETE' | translate}}</button>
+              </div>
+            </div>
+          </div>
+          <p class="text-black-50" style="white-space: nowrap; width: 90%; overflow: hidden; text-overflow: ellipsis"
+             title="{{role.description}}">
+            {{role.description}}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!--Authorities-->
+    <div class="col-8" *ngIf="selectedRole && roles.length > 0">
+      <div class="d-flex align-items-center justify-content-between px-3 my-2">
+        <div class="font-18 font-weight-strong">{{'ADMIN.ROLE.AUTHORITIES' | translate}}</div>
+        <div class="d-flex align-items-center">
+          <mat-spinner diameter="20" class="mr-2" *ngIf="saveLoading"></mat-spinner>
+          <button mat-flat-button color="primary" (click)="saveAuthorities()" [disabled]="disableAuthoritySave"><i
+            class="ft-plus"></i> {{'BUTTONS.SAVE' | translate}}</button>
+        </div>
+      </div>
+      <div class="d-flex align-items-center flex-column" *ngIf="authoritiesLoading">
+        <mat-spinner></mat-spinner>
+        <div class="font-17 mt-3">{{'LOADING' | translate}}</div>
+      </div>
+      <div *ngFor="let m of modules; let i = index" class="modules">
+        <mat-checkbox [ngModelOptions]="{standalone: true}"
+                      [checked]="descendantsAllSelected(m)"
+                      [indeterminate]="descendantsPartiallySelected(m)"
+                      (change)="disableAuthoritySave = false; selectedAllDescendants(m)"
+                      [(ngModel)]="m.selected" [disabled]="m.disabled">
+          {{m.label.startsWith('SIDENAV.') ? (m.label | translate) : m.label}}
+        </mat-checkbox>
+        <ul *ngIf="m.children" class="modules-children">
+          <li *ngFor="let c of m.children">
+            <mat-checkbox [(ngModel)]="c.selected" [disabled]="c.disabled" [ngModelOptions]="{standalone: true}"
+                          (change)="disableAuthoritySave = false;">
+              {{c.label.startsWith('SIDENAV.') ? (c.label | translate) : c.label}}
+            </mat-checkbox>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

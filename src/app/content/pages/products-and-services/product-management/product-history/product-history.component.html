@@ -1,0 +1,56 @@
+<div class="modal-header">
+  <h4 mat-dialog-title>{{'PRODUCT_FORM.HISTORY' | translate}}</h4>
+  <button type="button" mat-button mat-dialog-close>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+ <!-- <div class="row" >
+    <div class="col-md-4 col-sm-4 col-lg-4">
+      <div class="row mb-2">
+        <div class="col-8 text-muted">date:</div>
+        <div class="col-4">{{c.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-lg-4">
+      <div class="row mb-2">
+        <div class="col-8 text-muted">qtaStock:</div>
+        <div class="col-4">{{c.qtaStock.toFixed(2).replace('.', ',')}} {{data.measureUnit?.code}}</div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-lg-4">
+      <div class="row mb-2">
+        <div class="col-8 text-muted">qtaAvailable:</div>
+        <div class="col-4">{{c.qtaAvailable.toFixed(2).replace('.', ',') }} {{data.measureUnit?.code}}</div>
+      </div>
+    </div>
+  </div>-->
+
+  <div class="card-body table-responsive">
+    <table class="table table-sm table-hover table-bordered">
+      <caption></caption><!--sonar-->
+      <thead>
+      <tr>
+       <th *ngFor="let c of columns" scope="col">{{c | translate}} </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let h of history; let i = index">
+        <td>{{h.createdAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+        <td>{{h.qtaStockPurch}}</td>
+        <td>{{h.valStockPurch}}</td>
+        <td>{{h.qtaStockSale}}</td>
+        <td>{{h.valStockSale}}</td>
+      </tr>
+
+      <tr *ngIf="history.length===0 && !loading" class="text-center">
+        <td colspan="8" class="no-object-found">{{'PRODUCT_FORM.NO_PRODUCT_FOUND' | translate}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+
+
+
+  </div>
+</div>

@@ -1,0 +1,246 @@
+<div mat-dialog-title style="border-bottom: 1px solid gainsboro; margin-bottom: 15px;">
+  <h1>
+    Offerte di articoli
+    <button mat-icon-button style="float: right;" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </h1>
+</div>
+
+<div class="card pb-5" >
+  <div class="card-header">
+    {{data.item.product.title}}
+    <button mat-icon-button color="primary" style="float: right"
+            *ngIf="!loading && !offersResponse && !addLoading"
+            (click)="openAddOfferFormModal(addOfferFormModal)"
+            placement="top" tooltipClass="custom-tooltip"
+            ngbTooltip="Aggiungi offerta">
+      <em class="ft-plus"></em>
+    </button>
+    <button mat-icon-button color="primary" style="float: right"
+            *ngIf="addLoading">
+      <em class="fa fa-spin fa-spinner"></em>
+    </button>
+  </div>
+  <div class="card-body full-height table-responsive">
+    <table class="table table-sm table-hover table-bordered">
+      <thead>
+      <tr>
+        <th scope="col" class="text-center">
+          OfferId
+        </th>
+        <th scope="col" class="text-center">
+          Available Qte
+        </th>
+        <th scope="col" class="text-center">
+          marketplaceId
+        </th>
+        <th scope="col" class="text-center">
+          price
+        </th>
+        <th scope="col" class="text-center">
+          status
+        </th>
+        <th scope="col" class="text-center">
+          Listing
+        </th>
+        <th scope="col" class="text-center">
+          Listing start date
+        </th>
+        <th scope="col" class="text-center">
+          Listing duration
+        </th>
+        <th scope="col" class="text-center">
+          Azioni
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngIf="loading">
+        <td class="text-center" colspan="10">
+          <em class="fa fa-spin fa-spinner"></em>
+        </td>
+      </tr>
+      <tr *ngIf="!loading && !offersResponse">
+        <td class="text-center" colspan="10">
+          Nessun offer trovato
+        </td>
+      </tr>
+      <tr *ngFor="let offer of offersResponse?.offers; let i = index">
+        <td class="text-center">
+          {{offer.offerId}}
+        </td>
+        <td class="text-center">
+          {{offer.availableQuantity}}
+        </td>
+        <td class="text-center">
+          {{offer.marketplaceId}}
+        </td>
+        <td class="text-center">
+          <div *ngIf="!offer.pricingSummary.originalRetailPrice">
+            {{offer.pricingSummary.price.value | number: "1.2-2" | numberCommaseparator}}€
+          </div>
+          <div *ngIf="offer.pricingSummary.originalRetailPrice">
+            {{offer.pricingSummary.price.value | number: "1.2-2" | numberCommaseparator}}€
+            <del class="ml-2">{{offer.pricingSummary.originalRetailPrice.value | number: "1.2-2" | numberCommaseparator}}€</del>
+          </div>
+        </td>
+        <td class="text-center">
+          {{offer.status}}
+        </td>
+        <td class="text-center">
+          <div *ngIf="offer.status === 'PUBLISHED'">
+            id : {{offer.listing.listingId}}<br/>
+            status : {{offer.listing.listingStatus}}
+          </div>
+        </td>
+        <td class="text-center">
+          {{offer.listingStartDate}}
+        </td>
+        <td class="text-center">
+          {{offer.listingDuration}}
+        </td>
+        <td class="text-center">
+          <button mat-icon-button color="primary"
+                  *ngIf="!actionLoading && offer.status === 'UNPUBLISHED'"
+                  (click)="publishOffer(offer.offerId)"
+                  placement="top" tooltipClass="custom-tooltip"
+                  ngbTooltip="Pubblica offerta">
+            <em class="ft-activity"></em>
+          </button>
+          <button mat-icon-button color="primary"
+                  *ngIf="!actionLoading"
+                  (click)="openUpdateOfferFormModal(updateOfferFormModal, offer)"
+                  placement="top" tooltipClass="custom-tooltip"
+                  ngbTooltip="Aggiorna offerta">
+            <em class="ft-edit-1"></em>
+          </button>
+          <button mat-icon-button color="primary"
+                  *ngIf="!actionLoading"
+                  (click)="deleteOffer(offer.offerId)"
+                  placement="top" tooltipClass="custom-tooltip"
+                  ngbTooltip="Elimina offerta">
+            <em class="ft-trash"></em>
+          </button>
+          <button mat-icon-button color="light" *ngIf="actionLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #addOfferFormModal>
+  <div class="modal-header">
+    <h4 mat-dialog-title>Dettaglio del Offerta</h4>
+    <button type="button" mat-button (click)="modalRef.close(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="container">
+      <form [formGroup]="addOfferForm">
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label><strong>Giacenza : </strong></label>
+            <input type="number" class="form-control form-control-sm"
+                   [value]="product?.stock" readonly>
+          </div>
+
+          <div class="form-group col-6">
+            <label><strong>Vendi su Ebay : </strong></label>
+            <input type="number" class="form-control form-control-sm"
+                   min="1"
+                   max="{{product.stock}}"
+                   formControlName="quantity">
+          </div>
+
+          <div class="form-group col-12" style="border-right: 1px solid gainsboro">
+            <label><strong>Data di inizio dell'inserzione : </strong></label>
+            <div class="input-group-icon input-group-icon-right">
+              <input type="text" placeholder="dd/mm/aaaa" [matDatepicker]="availabilityDatePicker"
+                     class="form-control form-control-sm"
+                     formControlName="availabilityDate">
+              <span class="input-icon input-icon-right"
+                    (click)="availabilityDatePicker.opened ? availabilityDatePicker.close() : availabilityDatePicker.open()">
+                <em class="fas fa-calendar"></em>
+              </span>
+            </div>
+            <mat-datepicker #availabilityDatePicker></mat-datepicker>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button mat-flat-button color="primary"
+            [disabled]="addOfferForm.invalid"
+            (click)="modalRef.close(true)">
+      {{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+</ng-template>
+
+
+<ng-template #updateOfferFormModal>
+  <div class="modal-header">
+    <h4 mat-dialog-title>Dettaglio del Offerta</h4>
+    <button type="button" mat-button (click)="modalRef.close(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="container">
+      <form [formGroup]="updateOfferForm">
+        <div class="form-row">
+          <div class="form-group col-12">
+            <label><strong>Giacenza : </strong></label>
+            <input type="number" class="form-control form-control-sm"
+                   [value]="product?.stock" readonly>
+          </div>
+
+          <div class="form-group col-6">
+            <label><strong>Quantità effettiva </strong></label>
+            <input type="number" class="form-control form-control-sm"
+                   [value]="selectedOffer.availableQuantity" readonly>
+          </div>
+
+          <div class="form-group col-6">
+            <label><strong>Vendi su Ebay : </strong></label>
+            <input type="number" class="form-control form-control-sm"
+                   min="1"
+                   max="{{product?.stock}}"
+                   formControlName="quantity">
+          </div>
+
+          <div class="form-group col-6">
+            <label><strong>Prezzo attuale : </strong></label>
+            <input type="number" class="form-control form-control-sm"
+                   [value]="selectedOffer.pricingSummary.price.value" readonly>
+          </div>
+
+          <div class="form-group col-6">
+            <label><strong>Nuovo prezzo : </strong></label>
+            <input type="number" class="form-control form-control-sm"
+                   min="1" formControlName="price">
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button mat-flat-button color="primary"
+            [disabled]="updateOfferForm.invalid"
+            (click)="modalRef.close(true)">
+      {{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+</ng-template>

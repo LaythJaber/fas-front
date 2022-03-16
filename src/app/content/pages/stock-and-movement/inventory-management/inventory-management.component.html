@@ -1,0 +1,105 @@
+<div class="subheader">
+  <div class="row search-input w-250" style="display: flex;" [formGroup]="searchFormControl">
+    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-6">
+      <div class="input-group-icon input-group-icon-right" style="width: 100%">
+        <input type="text" [matDatepicker]="date" placeholder="{{'MOVEMENT_FORM.DATE_FROM' | translate}}"
+               class="form-control "
+               formControlName="dateFrom">
+        <span
+          class="input-icon input-icon-right"
+          (click)="date.opened ? date.close() : date.open()">
+                  <i aria-hidden="true" class="fas fa-calendar"></i>
+                </span>
+      </div>
+      <mat-datepicker #date></mat-datepicker>
+    </div>
+    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-6" style="width: 100%">
+      <div class="input-group-icon input-group-icon-right">
+        <input type="text" [matDatepicker]="dateTo" placeholder="{{'MOVEMENT_FORM.DATE_TO' | translate}}"
+               class="form-control "
+               formControlName="dateTo">
+        <span
+          class="input-icon input-icon-right"
+          (click)="dateTo.opened ? dateTo.close() : dateTo.open()">
+                  <i aria-hidden="true" class="fas fa-calendar"></i>
+                </span>
+      </div>
+      <mat-datepicker #dateTo></mat-datepicker>
+    </div>
+    <div class="form-group pull-right col-lg-4 col-md-4 col-sm-12 col-12" style="width: 100%">
+      <button mat-button color="primary" class="ml-2" (click)="resetSearchForm()"
+              placement="bottom" tooltipClass="custom-tooltip"
+              ngbTooltip="{{'BUTTONS.RESET_FILTER'|translate}}">
+        <i aria-hidden="true" class="ft-refresh-ccw" style="font-size: 18px"></i>
+      </button>
+      <button mat-button color="accent" class="ml-2" (click)="filter()"
+              placement="bottom" tooltipClass="custom-tooltip"
+              ngbTooltip="{{'BUTTONS.SEARCH'|translate}}">
+        <i aria-hidden="true" class="ft-search" style="font-size: 18px"></i>
+      </button>
+    </div>
+  </div>
+  <div class="action-btns">
+    <button mat-mini-fab color="primary" (click)="addNew()" placement="left" tooltipClass="custom-tooltip"
+            ngbTooltip="{{'MOVEMENT_FORM.CREATE_INVENTORY'|translate}}">
+      <i aria-hidden="true" class="ft-plus" style="font-size: 18px"></i>
+    </button>
+  </div>
+</div>
+
+<div class="card card-fullheight">
+  <div class="card-body table-responsive">
+
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table table-sm table-hover">
+      <caption></caption>
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns" scope="col">{{c | translate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let inventory of rows; let i = index" (click)="edit(inventory, i)">
+        <td>{{inventory.creatAt | date: 'dd/MM/yyyy'}}</td>
+        <td>
+          {{("0000" + inventory?.number).slice(-4)}}</td>
+        <td>{{inventory.note}}</td>
+        <td>{{(inventory.draft ? 'MOVEMENT_FORM.YES' : 'MOVEMENT_FORM.NO') | translate}}</td>
+
+        <td>
+          <button (click)="delete($event, inventory)" color="warn" mat-icon-button
+                  *ngIf="inventory.draft || inventory?.id == lastInvId"
+                  placement="top" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'BUTTONS.DELETE'|translate}}">
+            <i aria-hidden="true" class="ft-trash-2"></i>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="rows.length===0 && !loading" class="text-center">
+        <td colspan="10">{{'MOVEMENT_FORM.NO_MOVEMENT_FOUND' | translate}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center" *ngIf="totalRecords!==0  && totalRecords > this.pageSize"
+                    [collectionSize]="totalRecords"
+                    size="sm"
+                    [pageSize]="pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>

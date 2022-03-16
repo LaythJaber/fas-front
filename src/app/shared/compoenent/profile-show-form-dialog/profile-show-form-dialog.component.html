@@ -1,0 +1,122 @@
+<div mat-dialog-title class="d-flex justify-content-between">
+  <div>{{'HEADER.OPERATOR_INFORMATIONS' | translate}}</div>
+</div>
+<div mat-dialog-content class="pb-5" #dialogContent>
+  <form class="form p-3" [formGroup]="profileForm" (ngSubmit)="save()" id="profileForm" focusInvalidInput>
+
+    <div class="form-row">
+      <div class="form-group col-sm-12">
+        <label>{{'OPERATOR_FORM.USERNAME' | translate}} :</label>
+        <input type="text" class="form-control form-control-sm" formControlName="username">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-sm-12">
+        <label>{{'OPERATOR_FORM.FIRST_NAME' | translate}} :</label>
+        <input type="text" class="form-control form-control-sm" formControlName="firstName">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-sm-12">
+        <label>{{'OPERATOR_FORM.LAST_NAME' | translate}} :</label>
+        <input type="text" class="form-control form-control-sm" formControlName="lastName">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-sm-12">
+        <label>{{'OPERATOR_FORM.EMAIL' | translate}} :</label>
+        <input type="email" class="form-control form-control-sm" formControlName="email">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-sm-12">
+        <label>{{'OPERATOR_FORM.ROLE' | translate}} :</label>
+        <input type="text" class="form-control form-control-sm" formControlName="profile">
+      </div>
+    </div>
+
+    <div class="form-row mt-2" *ngIf="!password">
+      <button class="col-sm-12" mat-raised-button color="primary" (click)="changePassword()">
+
+        {{'BUTTONS.EDIT_PASSWORD' | translate}}
+      </button>
+    </div>
+
+    <div class="form-row mt-2" *ngIf="password">
+      <button class="col-sm-12"  mat-raised-button color="secondary" (click)="changePassword()">
+        {{'BUTTONS.CLOSE' | translate}}
+      </button>
+    </div>
+
+    <div *ngIf="password" class="mt-2">
+      <div class="form-row">
+        <div class="form-group col-sm-12">
+          <label>{{'OPERATOR_FORM.OLD_PASSWORD' | translate}} :</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input [type]="oldPwdType" placeholder="{{'OPERATOR_FORM.OLD_PASSWORD' | translate}}"
+                   class="form-control form-control-sm" formControlName="oldPassword"
+                   [ngClass]="{ 'is-invalid': f.oldPassword.touched && f.oldPassword.errors?.required }">
+            <span class="input-icon input-icon-right" *ngIf="showOldPass"
+                  (click)="showOldPassword()"> <em class="fa fa-eye"></em>
+                </span>
+            <span class="input-icon input-icon-right" *ngIf="!showOldPass"
+                  (click)="showOldPassword()"> <em class="fa fa-eye-slash"></em>
+                </span>
+          </div>
+          <div *ngIf="f.oldPassword.touched && f.oldPassword.errors?.required" class="invalid-feedback">
+            {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-sm-12">
+          <label>{{'OPERATOR_FORM.NEW_PASSWORD' | translate}} :</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input [type]="newPwdType" placeholder="{{'OPERATOR_FORM.NEW_PASSWORD' | translate}}"
+                   class="form-control form-control-sm" formControlName="passwordPlainText"
+                   [ngClass]="{ 'is-invalid': f.passwordPlainText.touched && f.passwordPlainText.errors?.required }">
+            <span class="input-icon input-icon-right" *ngIf="showNewPass"
+                  (click)="showNewPassword()"> <em class="fa fa-eye"></em>
+                </span>
+            <span class="input-icon input-icon-right" *ngIf="!showNewPass"
+                  (click)="showNewPassword()"> <em class="fa fa-eye-slash"></em>
+                </span>
+          </div>
+          <div *ngIf="f.passwordPlainText.touched && f.passwordPlainText.errors?.required" class="invalid-feedback">
+            {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-12">
+          <label>{{'OPERATOR_FORM.CONFIRM_PASSWORD' | translate}} :</label>
+          <input type="password" placeholder="{{'OPERATOR_FORM.CONFIRM_PASSWORD' | translate}}"
+                 class="form-control form-control-sm" formControlName="confirmPassword"
+                 [ngClass]="{ 'is-invalid':  f.confirmPassword.touched && f.confirmPassword.errors?.required }">
+          <div *ngIf="f.confirmPassword.touched && f.confirmPassword.errors?.required" class="invalid-feedback">
+            {{'OPERATOR_FORM.IS_REQUIRED' | translate}}
+          </div>
+          <div class="d-block invalid-feedback" *ngIf="f.confirmPassword.errors?.mustMatch">
+            {{'OPERATOR_FORM.MUST_MATCH' | translate}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button mat-raised-button color="secondary" [matDialogClose]="null">
+    <mat-icon>close</mat-icon>
+    {{'BUTTONS.CLOSE' | translate}}
+  </button>
+  <button mat-raised-button color="primary" form="profileForm" [disabled]="!profileForm.valid">
+    <mat-icon>add</mat-icon>
+    {{'BUTTONS.SAVE' | translate}}
+  </button>
+</div>

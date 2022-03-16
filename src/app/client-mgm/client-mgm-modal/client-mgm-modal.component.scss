@@ -1,0 +1,162 @@
+.form-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100% - 66px);
+  width: 80%;
+  background: #FFFFFF;
+  box-shadow: -4px 0 2px rgba(0, 0, 0, 0.15);
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  position: fixed;
+}
+
+::ng-deep .ng-dropdown-panel {
+  width: auto !important;
+  min-width: 250px;
+}
+.form-header {
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  background-color: #F2F3FA;
+  justify-content: space-between;
+  div {
+    font-weight: bold;
+    color: #454545;
+    margin-left: 20px;
+  }
+}
+
+.show-container{
+  animation: showForm .3s ease-in;
+}
+
+
+.img-container {
+  position: relative;
+  height: fit-content;
+  width: fit-content;
+  .img-overlay {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(44, 47, 72, 0.28);
+    opacity: 0;
+    transition: all .25s ease-in-out ;
+    cursor: pointer;
+    mat-icon {
+    }
+  }
+}
+.img-container .img-overlay:hover {
+  opacity: 1;
+}
+
+.calendar-btn.mat-button.mat-small {
+  min-width: 1%;
+}
+.client-image {
+  width: 100%;
+}
+
+@media screen and (max-width: 700px){
+  .form-container{
+    width: 100%;
+    bottom: 0 !important;
+  }
+  ::ng-deep .ng-dropdown-panel {
+    width: 100% !important;
+  }
+}
+@media screen and (max-width: 990px){
+  .client-image {
+    width: 200px;
+  }
+
+}
+
+
+
+label {
+  font-size: 11px;
+}
+.section-title {
+  font-weight: bold;
+  font-size: 13px;
+}
+
+@keyframes showForm {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/*
+.mat-tab-body-wrapper {
+  background: #0ba360 !important;
+  width: 987px !important;
+}
+.mat-tab-body {
+  width: 987px;
+}
+
+.mat-tab-group {
+  display: contents !important;
+}
+
+.mat-tab-label {
+background-color: #fafaff !important;
+}*/
+
+
+.example-tab-icon {
+  margin-left: 8px;
+}
+
+.close-btn-container {
+  position: absolute;
+  left: 10px;
+  z-index: 30;
+  top: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  div {
+    font-weight: bold;
+    color: #454545;
+    margin-left: 5px;
+  }
+}
+
+/deep/.client-tabs {
+  .mat-tab-labels{
+    background-color: #F2F3FA !important;
+  }
+  .mat-tab-header {
+    margin-left: 50px;
+  }
+}
+
+
+.btn-badge {
+  border-radius: 100%;
+  background-color: #fa3e3e;
+  color: white;
+  font-size: 9.5px;
+  line-height: 20px;
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  margin: 0 !important;
+}

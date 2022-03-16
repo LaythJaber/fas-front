@@ -1,0 +1,88 @@
+<h1 mat-dialog-title *ngIf="!data.editMode">
+ <!-- {{'ADMIN.GROUP.ADD_GROUP' | translate}}--> New Administrator
+</h1>
+<h1 mat-dialog-title *ngIf="data.editMode">
+  {{'ADMIN.GROUP.EDIT_GROUP' | translate}}
+</h1>
+<div mat-dialog-content>
+  <form [formGroup]="groupForm" id="groupForm" (ngSubmit)="saveGroup()">
+    <h5 class="separator-text">
+      {{'ADMIN.GROUP.GROUP_INFO' | translate}}
+    </h5>
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="Name" formControlName="name">
+      <div *ngIf="submitted && groupForm.get('name').invalid;" class="d-block invalid-feedback">
+        {{'Group name can\'t be empty' | translate}}
+      </div>
+    </div>
+    <div class="form-group">
+      <ng-select [items]="licensesConfigurations" bindValue="id" bindLabel="name" placeholder="license" formControlName="licenseConfigurationId"></ng-select>
+    </div>
+    <div class="form-group">
+      <textarea class="form-control" placeholder="Description" formControlName="description" rows="6"></textarea>
+    </div>
+
+
+    <h5 class="separator-text" *ngIf="!data.editMode">
+      {{'ADMIN.GROUP.SUPER_ADMIN_INFO' | translate}}
+    </h5>
+    <div class="form-row" formGroupName="superAdmin" *ngIf="!data.editMode">
+      <div class="form-group col-6">
+        <input class="form-control" placeholder="{{'OPERATOR_FORM.FIRST_NAME' | translate}}" type="text"
+               formControlName="firstName">
+      </div>
+      <div class="form-group col-6">
+        <input class="form-control" placeholder="{{'OPERATOR_FORM.LAST_NAME' | translate}}" type="test"
+               formControlName="lastName">
+      </div>
+      <div class="form-group col-12">
+        <input class="form-control" placeholder="{{'OPERATOR_FORM.EMAIL' | translate}}" type="email"
+               formControlName="email">
+      </div>
+      <div class="form-group col-12">
+        <input class="form-control" placeholder="{{'OPERATOR_FORM.USERNAME' | translate}}" type="text"
+               formControlName="username" autocomplete="new-username">
+      </div>
+      <div class="form-group col-12">
+        <div class="input-group-icon input-group-icon-right">
+          <input class="form-control" placeholder="{{'OPERATOR_FORM.PASSWORD' | translate}}"
+                 [type]="!pwdVisible ? 'password' : 'text'" formControlName="password" autocomplete="new-password">
+          <span class="input-icon input-icon-right" (click)="pwdVisible = !pwdVisible" style="cursor:pointer;">
+            <mat-icon *ngIf="!pwdVisible">visibility</mat-icon>
+            <mat-icon *ngIf="pwdVisible">visibility_off</mat-icon>
+          </span>
+        </div>
+      </div>
+      <div class="form-group col-12">
+        <div class="input-group">
+
+          <div class="input-group-prepend" ngbDropdown #myDrop="ngbDropdown" [container]="'body'">
+            <button class="btn btn-outline-secondary" type="button" (click)="mobileNgSelect.open()"
+                    ngbDropdownToggle>{{ superAdmin.get('mobilePrefix').value || 'BUTTONS.CHOOSE' | translate}}
+            </button>
+            <div class="dropdown-menu py-0" tabindex="1" ngbDropdownMenu>
+              <ng-select [items]="prefixList" [bindLabel]="'label'"
+                         class="prefix-ng-select"
+                         [tabIndex]="1"
+                         autofocus
+                         [clearable]="false"
+                         [bindValue]="'prefix'" formControlName="mobilePrefix" placeholder="search"
+                         (change)="myDrop.close()" #mobileNgSelect>
+              </ng-select>
+            </div>
+          </div>
+          <input type="tel" class="form-control" placeholder="{{'OPERATOR_FORM.MOBILE' | translate}}"
+                 formControlName="mobile">
+        </div>
+      </div>
+    </div>
+  </form>
+
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-flat-button color="secondary" matDialogClose><mat-icon>clear</mat-icon>  {{'BUTTONS.CLOSE' | translate}}
+  </button>
+  <button mat-flat-button class="ml-2" color="primary" form="groupForm"><mat-icon>save</mat-icon> {{'BUTTONS.SAVE' | translate}}
+  </button>
+</div>

@@ -1,0 +1,80 @@
+<div class="container-fluid mt-2">
+  <div class="menu d-flex justify-content-end align-items-center">
+    <div class="font-weight-bold mr-2" *ngIf="maxOperators">
+      ({{countOperators}}/{{maxOperators}})
+    </div>
+    <button mat-flat-button color="primary" (click)="addNewOperator()" [disabled]="countOperators === maxOperators || !maxOperators"><i
+      class="ft-user-plus"></i> {{'BUTTONS.ADD' | translate}}</button>
+  </div>
+  <div class="d-flex justify-content-center" *ngIf="loading">
+    <mat-spinner color="primary"></mat-spinner>
+  </div>
+  <table class="table table-sm table-hover table-responsive-sm font-14" *ngIf="!loading">
+    <thead>
+    <tr>
+      <th *ngFor="let c of columns" scope="col">{{c | translate}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngIf="operatorList.length === 0">
+      <td colspan="7" class="text-center">No account found</td>
+    </tr>
+    <tr *ngFor="let op of operatorList">
+      <td>{{op.account.seq}}</td>
+      <td>{{op.account.username}}</td>
+      <td>{{op.account.firstName}}</td>
+      <td>{{op.account.lastName}}</td>
+      <td>({{op.account.mobilePrefix}}) {{op.account.mobile}}</td>
+      <td>{{op.account.role?.name}}
+        <div *ngIf="op.account.role">
+          <small *ngIf="op.account.role.authorities?.length > 0">({{op.account.role.authorities.join(', ')}})</small>
+        </div>
+      </td>
+      <td>
+        <span class="badge badge-sm badge-success mr-2" *ngFor="let sp of op.sellPoints">
+          {{sp.name}}
+        </span>
+      </td>
+<!--      <td>-->
+<!--        <button mat-icon-button color="primary" (click)="printOperatorEan(op, printTicket)"><i class="ft-printer"></i>-->
+<!--        </button>-->
+<!--      </td>-->
+      <td>
+        <button mat-icon-button color="primary" (click)="editOperator(op)"><i class="ft-edit"></i></button>
+        <!--        <button mat-icon-button color="warn"><i class="ft-trash-2"></i></button>-->
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <!--  <ngb-pagination class="d-flex justify-content-center"></ngb-pagination>-->
+</div>
+
+<ng-template #printTicket>
+  <h1 mat-dialog-title>
+    {{'PRODUCT_FORM.PRINT_TICKET' | translate}}
+  </h1>
+  <hr>
+  <div mat-dialog-content>
+    <div class="form-group col-lg-12 col-sm-12">
+      <label>{{'PRODUCT_FORM.ETIQUETTE_TYPE' | translate}}:</label>
+      <div class="input-group-icon input-group-icon-right">
+        <ng-select class="ng-select-barcode-type ng-select" [items]="types" [bindLabel]="'description'"
+                   [bindValue]="'id'" appendTo="body"
+                   (open)="translateTypes()"
+                   [(ngModel)]="selectedType" [virtualScroll]="true"
+                   placeholder="{{'PRODUCT_FORM.ETIQUETTE_TYPE' | translate}}">
+        </ng-select>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div mat-dialog-actions class="d-flex justify-content-end">
+    <div>
+      <button mat-button color="secondary" class="ml-2"
+              (click)="dialogRef.close(null)">{{'BUTTONS.CLOSE' | translate}}</button>
+      <button mat-flat-button color="primary"
+              (click)="dialogRef.close()">{{'BUTTONS.PRINT' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>

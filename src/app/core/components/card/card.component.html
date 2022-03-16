@@ -1,0 +1,20 @@
+
+<div class="card {{cardClass}}" [ngClass]="{'card-fullheight': fullheight}">
+	<div class="card-header" *ngIf="header && title">
+		<h5 class="box-title">{{title}}</h5>
+		<div class="card-actions" *ngIf="actions">
+			<a *ngIf="actions.collapsible" (click)="collapse()" class="ibox-collapse" href="javascript:;">
+				<i *ngIf="!collapsed" class="ti-angle-down"></i>
+				<i *ngIf="collapsed" class="ti-angle-up"></i>
+			</a>
+			<a *ngIf="actions.removable" (click)="remove()" class="ibox-remove" href="javascript:;"><i class="ti-close"></i></a>
+			<a *ngIf="actions.fullscreen" (click)="toggleFullscreen()" class="ibox-fullscreen-link" href="javascript:;"><i class="ti-fullscreen"></i></a>
+		</div>
+	</div>
+	<div  class="card-body">
+		<h5 *ngIf="title" class="box-title">{{title}}</h5>
+		<ng-content></ng-content>
+	</div>
+
+
+</div>

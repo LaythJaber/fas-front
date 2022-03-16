@@ -1,0 +1,118 @@
+<section class="cart-section section-b-space section-padding">
+  <div class="container">
+    <div class="row d-flex justify-content-end align-items-center p-2 mt-5">
+      <button mat-stroked-button color="primary"
+              style="margin-right: 12px" (click)="openProduct()">
+        <mat-icon>add</mat-icon>
+        {{'BUTTONS.ADD' | translate}}
+      </button>
+
+    </div>
+    <div class="col-sm-12 empty-cart-cls text-center" *ngIf="!shopCart?.shopCartRowDtoList?.length">
+      <img src="assets/img/icon-empty-cart.png" class="img-fluid mb-4">
+    </div>
+    <div class="row" *ngIf="shopCart?.shopCartRowDtoList?.length">
+      <div class="col-sm-12">
+        <table class="table cart-table table-responsive-xs">
+          <thead>
+          <tr class="table-head">
+            <th scope="col"></th>
+            <th scope="col">Prodotto</th>
+            <th scope="col">Prezzo/pz</th>
+            <th scope="col">Quantità</th>
+            <th scope="col">Totale</th>
+          </tr>
+          </thead>
+          <tbody *ngFor="let row of shopCart.shopCartRowDtoList">
+          <tr>
+            <td>
+              <a>
+                <img src="/assets/img/products/product-default.jpg" alt="" style="max-width: 35px">
+              </a>
+            </td>
+            <td class="product-size">
+                {{ row?.productFDto?.commercialDescription | titlecase }}
+            </td>
+            <td>
+              <div *ngIf="row?.productFDto?.inOffer && row?.productFDto?.priceOff" class="d-inline-block">
+                <h6 class="d-inline-block mr-2 product-sm-size" style="color: darkred">
+                  {{ row?.productFDto?.priceOff | number: "1.2-2" | numberCommaseparator }}€
+                </h6>
+                <h6 class="d-inline-block" style="font-size: 12px">
+                  <del class="mr-2">
+                    {{ row?.productFDto?.price | number: "1.2-2" | numberCommaseparator }}€
+                  </del>
+                </h6>
+              </div>
+
+              <div *ngIf="!row?.productFDto?.inOffer" class="d-inline-block">
+                <h6 class="product-sm-size">
+                  {{row?.productFDto?.price | number: "1.2-2" | numberCommaseparator }}€
+                </h6>
+              </div>
+            </td>
+            <td style="font-weight: bold">
+              <h5>{{row?.quantity}} PZ</h5>
+            </td>
+            <td>
+              <div *ngIf="row?.productFDto?.inOffer && row?.productFDto?.priceOff" class="d-inline-block">
+                <h5 class="d-inline-block mr-2" style="color: darkred">
+                  {{ (row?.price  * row?.quantity) | number: "1.2-2" | numberCommaseparator }}€
+                </h5>
+                <h5 class="d-inline-block">
+                  <del class="mr-2">
+                    {{ (row?.productFDto?.price * row?.quantity) | number: "1.2-2" | numberCommaseparator }}€
+                  </del>
+                </h5>
+              </div>
+
+              <div *ngIf="!row?.productFDto?.inOffer" class="d-inline-block">
+                <h5>
+                  {{ (row?.price  * row?.quantity) | number: "1.2-2" | numberCommaseparator }}€
+                </h5>
+              </div>
+            </td>
+            <td>
+              <a href="javascript:void(0)" class="icon">
+                <i class="ti-trash" style="font-size: 25px; color: red" title="Rimuovi" (click)="removeItem(row)"></i>
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <table style="margin-top: 24px !important; margin-left: 83% !important">
+          <tfoot>
+          <tr *ngIf="shopCart?.totalDiscount">
+            <td class="product-lg-size">Totale prodotti :</td>
+            <td>
+              <h4 class="product-lg-size"> {{ shopCart?.totalExcludingDiscount | number: "1.2-2" | numberCommaseparator }}€</h4>
+            </td>
+          </tr>
+          <tr *ngIf="shopCart?.totalDiscount">
+            <td class="product-lg-size">Sconti :</td>
+            <td>
+              <h4 class="product-lg-size"> {{ shopCart?.totalDiscount | number: "1.2-2" | numberCommaseparator }}€</h4>
+            </td>
+          </tr>
+          <tr>
+            <td class="product-lg-size">Totale spesa :</td>
+            <td>
+              <h4 class="product-lg-size"> {{ shopCart?.productsTotal | number: "1.2-2" | numberCommaseparator }}€</h4>
+            </td>
+          </tr>
+          <tr>
+            <td class="product-lg-size"></td>
+            <td>
+              <a href="javascript:void(0)" class="icon" (click)="deleteCart()">
+                <i class="ti-trash" style="font-size: 25px; color: red" title="Rimuovi"></i>
+              </a>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+<!--section end-->
+

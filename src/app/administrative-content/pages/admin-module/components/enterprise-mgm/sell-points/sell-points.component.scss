@@ -1,0 +1,104 @@
+.add-btn {
+  color: white;
+  background-color: lighten(#2B333D, 5%);
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15);
+  transition: .1s ease-in-out all;
+  cursor: pointer;
+
+  .add-btn-icon {
+    font-size: 3rem;
+    margin-bottom: .5rem;
+  }
+
+  h4 {
+    font-size: 16px;
+  }
+}
+
+.add-btn:hover {
+  background-color: #2B333D
+}
+
+.center-card {
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15);
+  // border: .5pt solid #a4a4a4;
+  background-color: #ffffff;
+  transition: .1s ease-in-out all;
+  position: relative;
+
+  .center-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .center-subtitle {
+    font-size: .9rem;
+    color: lighten(black, 60%)
+  }
+}
+
+.center-card-content {
+  padding: .5rem 1.2rem;
+  margin-top: -2rem;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.col-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+.tasks-list {
+  height: 268px;
+  position: relative;
+}
+
+.tasks-list > li {
+  padding-right: 0;
+  padding-left: 0;
+  padding: .8rem 1.5rem;
+}
+
+.task-actions {
+  display: none;
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  margin-top: -15px;
+  font-size: x-large;
+}
+
+.task-actions > a.dropdown-toggle {
+  color: #aaa;
+  height: 30px;
+  width: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-info {
+  padding-left: 34px;
+}
+
+.tasks-list > li .checkbox input:checked ~ span {
+  text-decoration: line-through;
+}
+
+.tasks-list > li:hover .task-actions {
+  display: block
+}
+
+.blue {
+  color: #2949EF !important
+}
+
+a:hover {
+  cursor: pointer;
+}

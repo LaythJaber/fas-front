@@ -1,0 +1,28 @@
+.fingerprint-icon {
+  font-size: 10rem;
+  color: #2f2fe1;
+  display: inline-block;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(to right, #2eb05b, #2eb05b 50%, #F2384E 50%);
+  background-size: 200% 100%;
+  background-position: 100%;
+  transition: background-position 275ms ease-in-out;
+  /*.animate {
+    animation: flashing ease-in-out infinite 3s;
+  }*/
+}
+.animate {
+  background-position: 0 100%;
+}
+@keyframes flashing {
+  0% {
+    color: black;
+  }
+  50% {
+    color: #878787;
+  }
+  100% {
+    color: black;
+  }
+}

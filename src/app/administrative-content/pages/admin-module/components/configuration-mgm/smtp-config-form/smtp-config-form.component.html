@@ -1,0 +1,57 @@
+<div class="container-fluid pt-4" >
+  <form [formGroup]="smtpConfigForm" class="form-row" id="smtpForm">
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-12">
+      <label for="smtpHost">{{'SMS.HOSTNAME' | translate}} </label>
+      <input type="text" class="form-control form-control-sm" id="smtpHost" formControlName="host">
+    </div>
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-12">
+      <label for="smtpPort">{{'SMS.PORT' | translate}}</label>
+      <input type="number" class="form-control form-control-sm" id="smtpPort" formControlName="port">
+    </div>
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-12">
+      <label for="smtpUsername">Username</label>
+      <input type="text" class="form-control form-control-sm" id="smtpUsername" formControlName="username">
+    </div>
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-12">
+      <label for="smtpPwd">Password</label>
+       <div class="input-group">
+      <input class="form-control form-control-sm" placeholder="{{'LOGIN.PASSWORD' | translate}}"
+             [type]="fieldTextType ? 'text' : 'password'" id="smtpPwd" formControlName="password">
+      <div class="input-group-append">
+        <span class="input-group-text">
+          <i
+            class="fa"
+            [ngClass]="{
+              'fa-eye-slash': !fieldTextType,
+              'fa-eye': fieldTextType
+            }"
+            (click)="toggleFieldTextType()"
+          ></i>
+        </span>
+      </div>
+    </div>
+    </div>
+
+  
+
+
+
+
+
+  </form>
+  <div class="d-flex justify-content-end">
+    <button mat-flat-button color="primary" form="smtpForm" [disabled]="smtpConfigForm.invalid" (click)="testConnection()" class="mr-3">
+     {{'BUTTONS.TEST' | translate}}
+    </button>
+
+    <button mat-flat-button color="primary" form="smtpForm" [disabled]="smtpConfigForm.invalid" (click)="saveSmtpConfig()">
+      <mat-icon>save</mat-icon> {{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+  <div class="d-flex justify-content-center" *ngIf="loading">
+    <mat-spinner  [diameter]="30" color="primary"></mat-spinner>
+  </div>
+  
+</div>
+
+

@@ -1,0 +1,234 @@
+<form class="form p-3" [formGroup]="stripeForm">
+
+  <div class="card card-fullheight">
+    <div class="card-body">
+
+      <div class="row mb-3">
+        <div class="col-md-12 col-sm-12">
+          <h4>Informazioni generali</h4>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-6">
+          <span>{{'STRIPE_FORM.DESCRIPTION' | translate}}</span>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+          <input type="text" formControlName="description" placeholder="{{'STRIPE_FORM.DESCRIPTION' | translate}}"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-6">
+          <span>Descrizione web</span>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+          <div class="input-group">
+            <input type="text" class="form-control form-control-sm" formControlName="descriptionWeb"
+                   placeholder="Descrizione web">
+            <div class="input-group-append">
+              <span class="input-group-text">
+                <i class="fa fa-plus" (click)="openTranslationModal(modalTranslationDescription)"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-6">
+          <span>Maggiorazione %</span>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+          <input type="text" formControlName="percent"
+                 placeholder="Percent"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-6">
+          <span>Costo</span>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+          <input type="text" formControlName="cost" placeholder="cost"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-6">
+          <span>Secondario</span>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+          <mat-checkbox formControlName="secondary"></mat-checkbox>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-6">
+          <span>Attiva</span>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+          <mat-checkbox formControlName="enabled"></mat-checkbox>
+        </div>
+      </div>
+
+      <div class="row mb-3 mt-3">
+        <div class="col-md-12 col-sm-12">
+          <h4>Parametri</h4>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-6">
+          <span>Valuta</span>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+          <input type="text" formControlName="currency" placeholder="Valuta"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6 col-sm-6">
+          <span>Secret_Key</span>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+          <input type="text" formControlName="secretKey" placeholder="Secret Key"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 col-sm-6">
+          <span>Public_Key</span>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+          <input type="text" formControlName="publicKey" placeholder="Public Key"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+
+      <div class="row mb-3 mt-3">
+        <div class="col-md-12 col-sm-12">
+          <h4>Informazioni addizionali</h4>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-12 col-sm-12">
+          <div class="input-group">
+            <textarea class="form-control form-control-sm" style="padding: 5px; height: 150px;"
+                      formControlName="additionalInfo"
+                      placeholder="Scrivi ulteriori informazioni sul pagamento che verranno mostrate ai clienti nella pagina di pagamento">
+            </textarea>
+            <div class="input-group-append">
+              <span class="input-group-text">
+                <i class="fa fa-plus" (click)="openTranslationModal(modalTranslationAdditionalInfo)"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-md-12 col-sm-12 ">
+          <button mat-flat-button class="float-right" color="primary"
+                  (click)="updatePayment()">
+            {{'BUTTONS.SAVE' | translate}}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</form>
+
+
+<ng-template #modalTranslationDescription>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'SHIPMENT_FORM.TRANSLATION' | translate}}</h4>
+    <button type="button" mat-button (click)="modalRef?.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="container-fluid" style="max-height: 500px; overflow-y: auto;">
+      <div class="form-row" *ngFor="let lang of languageList, let i=index">
+        <div class="form-group col-lg-2 col-md-2">
+          <label *ngIf="i===0">{{'SHIPMENT_FORM.LANG' | translate}}</label>
+          <input type="text" class="form-control form-control-sm" [value]="lang.code?.toUpperCase()" readonly>
+        </div>
+        <div class="form-group col-lg-10 col-md-10">
+          <label *ngIf="i===0">{{'SHIPMENT_FORM.DESCRIPTION' | translate}}</label>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="paymentDescriptionWebList[i]" >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div style="margin-left: auto;">
+      <button mat-button color="secondary" class="ml-2"
+              (click)="modalRef?.close()">
+        {{'BUTTONS.CLOSE' | translate}}
+      </button>
+      <button mat-flat-button color="primary"
+              (click)="saveDescriptionWebTranslation()">
+        {{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalTranslationAdditionalInfo>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'SHIPMENT_FORM.TRANSLATION' | translate}}</h4>
+    <button type="button" mat-button (click)="modalRef?.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="container-fluid" style="max-height: 500px; overflow-y: auto;">
+      <div class="form-row" *ngFor="let lang of languageList, let i=index">
+        <div class="form-group col-lg-2 col-md-2">
+          <label *ngIf="i===0">{{'SHIPMENT_FORM.LANG' | translate}}</label>
+          <input type="text" class="form-control form-control-sm" [value]="lang.code?.toUpperCase()" readonly>
+        </div>
+        <div class="form-group col-lg-10 col-md-10">
+          <label *ngIf="i===0">Informazioni addizionali</label>
+          <textarea class="form-control form-control-sm"
+                    style="padding: 5px; height: 100px;"
+                    [(ngModel)]="paymentAdditionalInfoList[i]"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div style="margin-left: auto;">
+      <button mat-button color="secondary" class="ml-2"
+              (click)="modalRef?.close()">
+        {{'BUTTONS.CLOSE' | translate}}
+      </button>
+      <button mat-flat-button color="primary"
+              (click)="saveAdditionalInfoTranslation()">
+        {{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>

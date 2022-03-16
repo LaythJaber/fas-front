@@ -1,0 +1,55 @@
+<form class="button-container"
+      [hidden]="disabled"
+      [formGroup]="cartButtonForm" (submit)="saveQuantity()" >
+
+    <div class="main-button" *ngIf="!clicked">
+        <a *ngIf="!checked" class="btn btn-solid" (click)="add()">
+            <span class="add-button-centered">acquista</span>
+        </a>
+        <a *ngIf="checked" class="btn btn-solid">
+           <em class="ti-check"></em>
+        </a>
+    </div>
+
+    <div class="quantity-box" *ngIf="clicked">
+        <div class="input-group">
+
+            <span class="input-group-prepend">
+                <button type="button"  class="btn quantity-left-minus" *ngIf="!focused"
+                        (click)="decQuantity()">
+                    <em class="ti-trash" *ngIf="shopCartRow.quantity <= 1"></em>
+                    <em class="ti-minus" *ngIf="shopCartRow.quantity > 1"></em>
+                </button>
+                 <button type="button" class="btn quantity-right-plus" data-type="minus"
+                         *ngIf="focused"
+                         (click)="resetQuantity()">
+                    <em class="ti-close"></em>
+                </button>
+            </span>
+
+            <input *ngIf="!shopCartRow?.productFDto?.weighted || (shopCartRow?.productFDto?.weighted && !displayWeightInAddButton)"
+                   type="number" min="1" name="quantity" formControlName="quantity" [value]="shopCartRow.quantity"
+                   (blur)="onBlur($event)"
+                   (focusin)="onFocusIn($event)"
+                   (focusout)="onFocusOut($event)" class="form-control form-control-sm">
+
+            <input *ngIf="shopCartRow?.productFDto?.weighted && displayWeightInAddButton"
+                   [type]="focused ? 'number' : 'text'" min="1" name="quantityText" formControlName="quantityText"
+                   (blur)="onBlur($event)"
+                   [value]="priceService.getWeightQuantity(shopCartRow?.productFDto, shopCartRow.quantity)"
+                   (focusin)="onFocusIn($event)"
+                   (focusout)="onFocusOut($event)" class="form-control form-control-sm">
+
+            <span class="input-group-prepend">
+                <button type="button" class="btn quantity-right-plus" *ngIf="!focused" (click)="incQuantity()">
+                    <em class="ti-plus"></em>
+                </button>
+                 <button type="button" class="btn quantity-right-plus" *ngIf="focused" (click)="$event.stopPropagation(); saveQuantity()">
+                    <em class="ti-save"></em>
+                </button>
+            </span>
+
+        </div>
+    </div>
+
+</form>

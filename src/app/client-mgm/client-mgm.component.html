@@ -1,0 +1,208 @@
+<div class="subheader">
+  <div class="container-fluid">
+    <form [formGroup]="filterForm">
+      <div class="row">
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'SUBHEADER.SEARCH' | translate}}</label>
+          <div class="search-input">
+            <div class="form-group">
+              <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn"
+                      (click)="filterForm.controls.textSearch.setValue(null)">
+                  <em class="ft-x"></em>
+                </span>
+                <input type="text" class="form-control form-control-sm"
+                       placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                       formControlName="textSearch"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'CATEGORY_FORM.STATUS' | translate}}</label>
+            <ng-select [items]="[{label:'Tutti',value:-1},{label:'Actif',value:0},{label:'Blocked',value:1}]"
+                       formControlName="status"
+                       bindValue="value"
+                       bindLabel="label"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       class="ng-select-sm ng-select-required"
+                       [clearable]="false"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'DATA_TABLE.CREATED' | translate}}</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/yyyy" [matDatepicker]="createdAtPicker"
+                   class="form-control form-control-sm"
+                   formControlName="createdAt" #createAtElem>
+            <span class="input-icon input-icon-right"
+                  (click)="createdAtPicker.opened ? createdAtPicker.close() : createdAtPicker.open()">
+              <em class="fas fa-calendar"></em>
+            </span>
+          </div>
+          <mat-datepicker #createdAtPicker></mat-datepicker>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label for="cancel-chk">
+            {{'CLIENT_FORM.FILTER.CANCELLED' | translate}} &nbsp;
+            <input type="checkbox" id="cancel-chk" formControlName="cancelled">
+          </label>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label style="position: relative !important;">
+            {{'CLIENT_FORM.FILTER.NOT_CONFIRMED' | translate}} &nbsp;
+            <span class="btn-badge">{{clientsNonConfirmedNumber}}</span>
+            <input type="checkbox" formControlName="confirmed">
+          </label>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <div class="action-btns">
+    <button mat-mini-fab color="primary" (click)="addNewClient()"
+            placement="left"
+            tooltipClass="custom-tooltip"
+            ngbTooltip="{{'CLIENT_FORM.NEW_CLIENT' | translate}}">
+      <em class="ft-plus"></em>
+    </button>
+  </div>
+</div>
+
+<div class="card card-fullheight">
+  <div class="card-body table-responsive">
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" style="width: min-content" [clearable]="false" appendTo="body"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table table-sm table-hover" aria-describedby="">
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns" scope="col" class="text-center">
+          {{c | translate}}
+        </th>
+        <th scope="col" *ngIf="!filterForm.controls.cancelled.value">&nbsp;</th>
+        <th scope="col" *ngIf="filterForm.controls.cancelled.value">
+          {{'DATA_TABLE.CANCEL_DATE' | translate}}
+        </th>
+        <th scope="col" *ngIf="filterForm.controls.cancelled.value">
+          {{'DATA_TABLE.CANCEL_BY' | translate}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let client of clientResponse?.data, let i = index">
+        <td class="text-center">
+          <ngb-highlight [result]="client?.clientId?.toString()"
+                         [term]="filterForm.controls.textSearch.value?.trim()"></ngb-highlight>
+        </td>
+        <td class="text-center">
+          <ngb-highlight [result]="client?.code"
+                         [term]="filterForm.controls.textSearch.value?.trim()"></ngb-highlight>
+        </td>
+        <td class="text-center">
+          <ngb-highlight [result]="client?.firstName + ' ' + client?.lastName"
+                         [term]="filterForm.controls.textSearch.value?.trim()">
+          </ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <i aria-hidden="true" class="fas fa-mars" style="color: #06B5B6"
+             *ngIf=" client?.gender?.toString() === 'MALE'"></i>
+          <i aria-hidden="true" class="fas fa-venus" style="color: #E50054"
+             *ngIf="client?.gender?.toString() === 'FEMALE'"></i>
+          <i aria-hidden="true" class="fas fa-transgender" id="transgender"
+             *ngIf="client?.gender?.toString() === 'OTHER'"></i>
+        </td>
+
+        <td class="text-center">
+          <ngb-highlight [result]="client?.email"
+                         [term]="filterForm.controls.textSearch.value?.trim()">
+          </ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <ngb-highlight [result]="client?.mobilePrefix + ' ' + client?.mobile"></ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <i aria-hidden="true" class="fab fa-facebook" *ngIf="client.registerSource?.toString()==='FACEBOOK'"></i>
+          <i aria-hidden="true" class="fas fa-envelope" style="color:#9ba2ce;"
+             *ngIf="client.registerSource?.toString()==='MAIL'"></i>
+          <i aria-hidden="true" class="fab fa-google" *ngIf="client.registerSource?.toString()==='GOOGLE'"></i>
+          <i aria-hidden="true" class="fas fa-cog" style="color:#9ba2ce;"
+             *ngIf="client.registerSource?.toString()==='WEB_APP'"></i>
+          <img src="../../../../../assets/img/logo/logo.png" width="14" style="border-radius: 20%" alt=""
+               *ngIf="!client.registerSource"/>
+        </td>
+
+        <td class="text-center">
+          {{client.createdAt |date : 'dd-MM-yyyy HH:mm'}}
+        </td>
+
+        <td class="text-center">
+          <em (click)="changeClientStatus(client)" *ngIf="!client.cancelled"
+             [ngStyle]="{'color': !client.blocked ? '#06B5B6':'#E50054'}"
+             class="ft-power" placement="top" tooltipClass="custom-tooltip"
+             ngbTooltip="{{'PROVIDER_FORM.ACTIVE'|translate}} / {{'PROVIDER_FORM.DEACTIVATED'|translate}}">
+          </em>
+        </td>
+
+        <td class="text-center" *ngIf="filterForm.controls.cancelled.value">
+          {{client.cancelledAt |date : 'dd-MM-yyyy HH:mm'}}
+        </td>
+        <td class="text-center" *ngIf="filterForm.controls.cancelled.value">
+          {{client.cancelledBy}}
+        </td>
+
+        <td class="text-center" *ngIf="!filterForm.controls.cancelled.value">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-link" id="dropdownBasic1" ngbDropdownToggle><em class="ft-more-vertical"></em>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem (click)="editClient(client)">
+                <em class="ft-edit-1"></em> {{'BUTTONS.EDIT' | translate}}</button>
+              <button ngbDropdownItem (click)="confirmClient(client)" *ngIf="!client.confirmed">
+                <em class="ft-activity"></em> {{'BUTTONS.CONFIRM' | translate}}</button>
+              <button ngbDropdownItem (click)="deleteClient(client)">
+                <em class="ft-trash-2"></em> {{'BUTTONS.CANCEL2' | translate}}</button>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="clientResponse?.totalRecords === 0" class="text-center">
+        <td colspan="8">{{'CLIENT_FORM.MGM.NO_CLIENT' | translate}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center"
+                    *ngIf="clientResponse?.totalRecords > 0"
+                    [collectionSize]="clientResponse?.totalRecords"
+                    size="sm"
+                    [pageSize]="request.pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="request.page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>

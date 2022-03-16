@@ -1,0 +1,14 @@
+<!-- As a heading -->
+<nav class="navbar bg-dark">
+  <ul>
+    <li class="nav-item page-heading">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/']" routerLinkActive="active">
+          <em class="fas fa-store-alt font-20"></em>
+        </a>
+        </li>
+        <li class="breadcrumb-item" *ngFor="let item of breadcrumbs">{{"HEADER.BREADCRUMB." + item | translate}}</li>
+      </ol>
+    </li>
+  </ul>
+</nav>

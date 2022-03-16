@@ -1,0 +1,215 @@
+<h1 mat-dialog-title *ngIf="!data.editMode">
+  {{'ADMIN.SELL_POINT.ADD_NEW' | translate}} [<b>{{data.enterprise.companyName}}</b>]
+</h1>
+<h1 mat-dialog-title *ngIf="data.editMode">
+  {{'ADMIN.SELL_POINT.EDIT' | translate}}  <b>{{data.sellPoint.name}}</b>
+</h1>
+<div mat-dialog-content class="py-2">
+  <form [formGroup]="sellPointForm" id="sellPointForm" (ngSubmit)="saveSellPoint()">
+    <p class="font-14 font-weight-bold text-black-50">{{'ADMIN.SELL_POINT.INFO' | translate}} </p>
+    <hr>
+    <div class="form-row">
+      <div class="form-group col-lg-4">
+        <label>{{'ADMIN.SELL_POINT.NAME' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="name">
+        <div *ngIf="submitted && sellPointForm.get('name').invalid" class="d-block invalid-feedback">
+          Name is required
+        </div>
+      </div>
+    <!--  <div class="form-group col-lg-3">
+        <label>{{'ADMIN.SELL_POINT.PLANNING_TYPE' | translate}}:</label>
+        <select class="form-control form-control-sm" formControlName="planningType">
+          <option [value]="null" disabled>select an option</option>
+          <option value="OPERATOR">Operator</option>
+          <option value="CABIN">Cabin</option>
+          <option value="OPERATOR_AND_CABIN">Operator and cabin</option>
+        </select>
+        <div *ngIf="submitted && sellPointForm.get('planningType').invalid" class="d-block invalid-feedback">
+          Planning type is required
+        </div>
+      </div>-->
+      <div class="form-group col-lg-4">
+        <label>{{'ADMIN.SELL_POINT.OPENING_HOUR' | translate}}:</label>
+        <div class="input-group input-group-sm">
+          <input class="form-control form-control-sm" type="text"
+                 maxlength="5"
+                 formControlName="startHour" [owlDateTime]="startTime" #startTimeElm>
+          <div class="input-group-append">
+            <button class="btn btn-outline-dark" [owlDateTimeTrigger]="startTime" type="button">
+              <i class="ft-clock"></i>
+            </button>
+          </div>
+        </div>
+        <owl-date-time [pickerType]="'timer'"  #startTime></owl-date-time>
+        <div *ngIf="submitted && sellPointForm.get('startHour').invalid" class="d-block invalid-feedback">
+          Start hour is required
+        </div>
+      </div>
+      <div class="form-group col-lg-4">
+        <label>{{'ADMIN.SELL_POINT.FINAL_HOUR' | translate}}:</label>
+        <div class="input-group input-group-sm">
+          <input class="form-control form-control-sm" formControlName="finishHour" maxlength="5"
+                 [owlDateTime]="finishTime" #finishTimeElm>
+          <div class="input-group-append">
+            <button class="btn btn-outline-dark" [owlDateTimeTrigger]="finishTime" type="button">
+              <i class="ft-clock"></i>
+            </button>
+          </div>
+        </div>
+        <owl-date-time [pickerType]="'timer'" #finishTime></owl-date-time>
+        <div *ngIf="submitted && sellPointForm.get('finishHour').invalid" class="d-block invalid-feedback">
+          Finish hour is required
+        </div>
+      </div>
+    </div>
+
+    <p class="font-14 font-weight-bold text-black-50">{{'ADMIN.SELL_POINT.ADDRESS' | translate}} </p>
+    <hr>
+    <!--address-->
+    <div class="form-row">
+      <div class="form-group col-lg-3">
+        <label>{{'ADMIN.SELL_POINT.ADDRESS' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="address">
+        <div *ngIf="submitted && sellPointForm.get('address').invalid" class="d-block invalid-feedback">
+          Address is required
+        </div>
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.SELL_POINT.STREET' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="street">
+        <div *ngIf="submitted && sellPointForm.get('street').invalid" class="d-block invalid-feedback">
+          Street is required
+        </div>
+      </div>
+      <div class="form-group col-lg-1">
+        <label>{{'ADMIN.SELL_POINT.COUNTRY' | translate}}:</label>
+        <ng-select class="ng-select-sm" [formControl]="countryFormControl" [items]="[{country: 'IT'}]"
+                   bindLabel="country"
+                   bindValue="country">
+        </ng-select>
+        <div *ngIf="submitted && countryFormControl.invalid" class="d-block invalid-feedback">
+          Choose a country
+        </div>
+      </div>
+      <div class="form-group col-lg-3">
+        <label>{{'ADMIN.SELL_POINT.ZIP_CODE' | translate}}:</label>
+        <ng-select class="ng-select-sm" [virtualScroll]="true"
+                   [loading]="zipCodeLoading"
+                   formControlName="zipCodeId" [items]="zipCodeList" bindLabel="cap"
+                   bindValue="id">
+          <ng-template ng-option-tmp let-item="item">
+            <span class="font-11"><b>{{item.city}}</b> : {{item.cap}}</span>
+          </ng-template>
+        </ng-select>
+        <div *ngIf="submitted && sellPointForm.get('zipCodeId').invalid" class="d-block invalid-feedback">
+          ZIP code is required
+        </div>
+      </div>
+      <div class="form-group col-lg-1">
+        <label>{{'ADMIN.SELL_POINT.PROVINCE' | translate}} :</label>
+        <input class="form-control form-control-sm" type="text" [formControl]="provinceFormControl">
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.SELL_POINT.CITY' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" [formControl]="cityFormControl">
+      </div>
+    </div>
+
+    <p class="font-14 font-weight-bold text-black-50">Contact</p>
+    <hr>
+    <div class="form-row">
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'ADMIN.SELL_POINT.PHONE' | translate}}:</label>
+        <div class="input-group input-group-sm">
+
+          <div class="input-group-prepend" ngbDropdown #myDrop="ngbDropdown">
+            <button class="btn btn-outline-secondary" type="button"
+                    ngbDropdownToggle>{{sellPointForm.get('phonePrefix').value ||  'BUTTONS.CHOOSE' | translate}}
+            </button>
+            <div class="dropdown-menu py-0" tabindex="1" ngbDropdownMenu>
+              <ng-select [items]="prefixList" [bindLabel]="'label'"
+                         [tabIndex]="1"
+                         autofocus
+                         [bindValue]="'prefix'" formControlName="phonePrefix" placeholder="search"
+                         (change)="myDrop.close()">
+              </ng-select>
+            </div>
+          </div>
+          <input type="tel" class="form-control form-control-sm" formControlName="phone">
+          <div *ngIf="submitted && sellPointForm.get('phone').getError('pattern')" class="d-block invalid-feedback">
+            Phone number is invalid
+          </div>
+          <div *ngIf="submitted && sellPointForm.get('phone').getError('required')" class="d-block invalid-feedback">
+            Phone number is required
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'ADMIN.SELL_POINT.MOBILE' | translate}}:</label>
+        <div class="input-group input-group-sm">
+
+          <div class="input-group-prepend" ngbDropdown #myDrop="ngbDropdown">
+            <button class="btn btn-outline-secondary" type="button"
+                    ngbDropdownToggle>{{sellPointForm.get('mobilePrefix').value ||  'BUTTONS.CHOOSE' | translate}}
+            </button>
+            <div class="dropdown-menu py-0" tabindex="1" ngbDropdownMenu>
+              <ng-select [items]="prefixList" [bindLabel]="'label'"
+                         [tabIndex]="1"
+                         autofocus
+                         [bindValue]="'prefix'" formControlName="mobilePrefix" placeholder="search"
+                         (change)="myDrop.close()" #mobileNgSelect>
+              </ng-select>
+            </div>
+          </div>
+          <input type="tel" class="form-control form-control-sm" formControlName="mobile">
+          <div *ngIf="submitted && sellPointForm.get('mobile').getError('pattern')" class="d-block invalid-feedback">
+            Mobile number is invalid
+          </div>
+          <div *ngIf="submitted && sellPointForm.get('mobile').getError('required')" class="d-block invalid-feedback">
+            Mobile number is required
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'ADMIN.SELL_POINT.EMAIL' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="email">
+        <div *ngIf="submitted && sellPointForm.get('email').getError('pattern')" class="d-block invalid-feedback">
+          E-mail format is invalid
+        </div>
+        <div *ngIf="submitted && sellPointForm.get('email').getError('required')" class="d-block invalid-feedback">
+          E-mail is required
+        </div>
+      </div>
+      <div class="form-group col-lg-3 col-md-4">
+        <label>{{'ADMIN.SELL_POINT.REFERENT' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="contact">
+        <div *ngIf="submitted && sellPointForm.get('contact').invalid" class="d-block invalid-feedback">
+          Referent is required
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>{{'ADMIN.SELL_POINT.DESCRIPTION' | translate}}:</label>
+      <textarea class="form-control" formControlName="description"></textarea>
+      <div *ngIf="submitted && sellPointForm.get('description').invalid" class="d-block invalid-feedback">
+        Description is required
+      </div>
+    </div>
+    <!--<div class="form-group">
+      <label>{{'ADMIN.SELL_POINT.NOTE' | translate}}:</label>
+      <textarea class="form-control" formControlName="note"></textarea>
+    </div>-->
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" class="ml-2" form="sellPointForm">
+    <mat-icon>save</mat-icon>
+    {{'BUTTONS.SAVE' | translate}}
+  </button>
+  <button mat-raised-button color="secondary" [matDialogClose]="null">
+    <mat-icon>close</mat-icon>
+    {{'BUTTONS.CLOSE' | translate}}
+  </button>
+</div>

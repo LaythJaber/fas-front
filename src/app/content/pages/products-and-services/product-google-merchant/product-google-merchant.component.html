@@ -1,0 +1,249 @@
+<div class="subheader" *ngIf="saleApp?.googleMerchantEnabled">
+  <div class="container-fluid">
+    <form [formGroup]="filterForm">
+      <div class="row">
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'SUBHEADER.SEARCH' | translate}}</label>
+          <div class="search-input">
+            <div class="form-group">
+              <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn"
+                      (click)="filterForm.controls.textSearch.setValue(null)">
+                  <em class="ft-x"></em>
+                </span>
+                <input type="text" class="form-control form-control-sm"
+                       placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                       formControlName="textSearch"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'GOOGLE_MERCHANT_FORM.FILTER.AVAILABILITY' | translate}} </label>
+          <ng-select [items]="availabilityList"
+                     formControlName="availability"
+                     [bindValue]="'id'"
+                     [bindLabel]="'label'"
+                     placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                     class="ng-select-sm"
+                     [clearable]="true"
+          >
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{'SALE_APP_FORM.AVAILABILITY.STATE.'+item.label | translate}}</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+              <span>{{'SALE_APP_FORM.AVAILABILITY.STATE.'+item.label | translate}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'CATEGORY_FORM.STATUS' | translate}}</label>
+            <ng-select [items]="statusList"
+                       formControlName="status"
+                       class="ng-select-sm"
+                       bindValue="id"
+                       bindLabel="label"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       [clearable]="false"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{'SALE_APP_FORM.PRODUCT.STATE.'+item.label | translate}}</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+                <span>{{'SALE_APP_FORM.PRODUCT.STATE.'+item.label | translate}}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'GOOGLE_MERCHANT_FORM.FILTER.EXPIRY_DATE' | translate}}</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/aaaa" [matDatepicker]="expirationDatePicker"
+                   class="form-control form-control-sm"
+                   formControlName="expirationDate" #createAtElem>
+            <span class="input-icon input-icon-right"
+                  (click)="expirationDatePicker.opened ? expirationDatePicker.close() : expirationDatePicker.open()">
+              <em class="fas fa-calendar"></em>
+            </span>
+          </div>
+          <mat-datepicker #expirationDatePicker></mat-datepicker>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <div class="action-btns">
+    <a mat-mini-fab href="https://merchants.google.com/"
+       placement="left"
+       tooltipClass="custom-tooltip"
+       ngbTooltip="{{'GOOGLE_MERCHANT_FORM.GO_GOOGLE' | translate}}"
+       target="_blank" class="ml-2" >
+      <em class="fab fa-google"></em>
+    </a>
+    <button mat-mini-fab color="primary" (click)="addProduct()"
+            class="ml-2"
+            placement="left"
+            tooltipClass="custom-tooltip"
+            ngbTooltip="{{'GOOGLE_MERCHANT_FORM.ADD' | translate}}">
+      <em class="ft-plus" ></em>
+    </button>
+  </div>
+</div>
+
+<div class="card mt-2" *ngIf="saleApp?.googleMerchantEnabled" #main>
+  <div class="card-body table-responsive">
+    <h4 style="border-bottom: 1px solid gainsboro">
+      {{'GOOGLE_MERCHANT_FORM.TITLE' | translate}}
+      <span style="font-size: 13px !important; color: gray;">
+        <em class="fa fa-sync" aria-hidden="true"
+            ngbTooltip="Sincronizza i prodotti Google"
+            (click)="synchronizeGoogle()" *ngIf="!syncInLoading"></em>
+        <em class="fa fa-sync fa-spin " aria-hidden="true"  *ngIf="syncInLoading"></em>
+      </span>
+      <span style="font-size: 13px !important; color: gray;
+      font-weight: normal !important; float: right; padding-top: 5px;">
+        <em class="fas fa-exclamation"></em>
+        {{'GOOGLE_MERCHANT_FORM.ALERT' | translate}}
+      </span>
+    </h4>
+
+    <div class="container-fluid mb-2">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-12 p-0">
+          <button mat-flat-button color="primary" class="mr-2" *ngIf="!productSelectedToDeleteInLoading"
+                  [disabled]="!isThereSelectedProductsToAdd()"
+                  (click)="deleteSelectedProductFromGoogleMerchant()">
+            {{'GOOGLE_MERCHANT_FORM.REMOVE_SELECTED_PRODUCTS' | translate}} ({{getSelectedNbr()}})
+          </button>
+          <button mat-flat-button color="primary" class="mr-2" *ngIf="productSelectedToDeleteInLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+
+          <button mat-flat-button color="warn" class="mr-2"
+                  *ngIf="!productAllToDeleteInLoading"
+                  [disabled]="googleProductsResponse?.data?.length <= 0"
+                  (click)="deleteAllProductFromGoogleMerchant()">
+            {{'GOOGLE_MERCHANT_FORM.REMOVE_ALL_PRODUCTS' | translate}} ({{googleProductsResponse?.totalRecords}})
+          </button>
+          <button mat-flat-button color="warn" class="mr-2" *ngIf="productAllToDeleteInLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+
+    <table class="table table-sm table-hover table-bordered">
+      <thead>
+      <tr>
+        <th scope="col" class="text-center">
+          <mat-checkbox [(ngModel)]="allProductSelected" (change)="selectPageProducts($event)"></mat-checkbox>
+        </th>
+        <th *ngFor="let c of columns" scope="col">
+          {{c | translate}}
+        </th>
+        <th scope="col">&nbsp;</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngIf="googleProductsResponse?.data?.length <= 0">
+        <td class="text-center" colspan="10">
+          {{'GOOGLE_MERCHANT_FORM.NO_PRODUCT' | translate}}
+        </td>
+      </tr>
+      <tr *ngFor="let product of googleProductsResponse?.data; let i = index">
+        <td class="text-center">
+          <mat-checkbox [(ngModel)]="productToDeleteList[i]"></mat-checkbox>
+        </td>
+        <td>
+          <ngb-highlight [result]="product.gid" [term]="filterForm.get('textSearch').value?.trim()"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="product.offerId" [term]="filterForm.get('textSearch').value?.trim()"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="product.gtin" [term]="filterForm.get('textSearch').value?.trim()"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="product.title" [term]="filterForm.get('textSearch').value?.trim()"></ngb-highlight>
+        </td>
+        <td>
+          {{'SALE_APP_FORM.PRODUCT.STATE.' + getProductStatus(product).toUpperCase() | translate}}
+        </td>
+        <td>
+          <ngb-highlight [result]="product.description" [term]="filterForm.get('textSearch').value?.trim()"></ngb-highlight>
+        </td>
+        <td>{{product.price?.value | number: "1.2-2" | numberCommaseparator }}€</td>
+<!--        <td>{{product.link}}</td>-->
+        <td>{{product.sellOnGoogleQuantity}}</td>
+        <td>
+          <span *ngIf="!product.availability">{{product.availability}}</span>
+          <span *ngIf="product.availability">
+            {{'SALE_APP_FORM.AVAILABILITY.STATE.' + product.availability.toUpperCase().replace(' ', '_') | translate}}
+          </span>
+        </td>
+        <td>{{product.availabilityDate | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+        <td>{{product.expirationDate | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+        <td>
+          <button mat-icon-button color="primary"  *ngIf="!product.inLoading"
+                  (click)="updateProduct(product)"
+                  placement="top" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'BUTTONS.EDIT'|translate}}">
+            <em class="ft-edit-1"></em>
+          </button>
+          <button mat-icon-button color="primary"  *ngIf="!product.inLoading"
+                  (click)="deleteProduct(product)"
+                  placement="top" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'BUTTONS.DELETE'|translate}}">
+            <em class="ft-trash"></em>
+          </button>
+          <button mat-icon-button *ngIf="product.inLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center"
+                    [collectionSize]="googleProductsResponse?.totalRecords"
+                    size="sm"
+                    [pageSize]="request.pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="request.page"
+                    *ngIf="googleProductsResponse?.totalRecords > 0"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+
+
+
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+
+  </div>
+</div>
+
+<div class="card card-fullheight mt-2" *ngIf="saleApp && !saleApp.googleMerchantEnabled">
+  <div class="card-body table-responsive text-center">
+    <h1>
+      {{'GOOGLE_MERCHANT_FORM.NOT_ACTIVE' | translate}}
+    </h1>
+  </div>
+</div>

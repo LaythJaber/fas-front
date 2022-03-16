@@ -1,0 +1,13 @@
+::ng-deep .card-header {
+  background: #2C2F48 !important;
+  border-bottom: 1px solid #2C2F48 !important;
+  border-radius: 0 !important;
+  button {
+    color: #ffffff !important;
+  }
+}
+
+::ng-deep ngb-accordion .card {
+  margin-top: 15px !important;
+  border: 1px solid #2C2F48 !important;
+}

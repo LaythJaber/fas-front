@@ -1,0 +1,10 @@
+<div class="page-heading">
+	<h1 class="page-title page-title-sep">{{title}}</h1>
+	<ol class="breadcrumb" *ngIf="breadcrumb">
+		<li class="breadcrumb-item"><a routerLink='/index' href="javascript:;">
+      <em class="fas fa-store-alt font-20"></em>
+    </a>
+    </li>
+		<li class="breadcrumb-item" *ngFor="let item of breadcrumb">{{item}}</li>
+	</ol>
+</div>

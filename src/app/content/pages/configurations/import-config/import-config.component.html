@@ -1,0 +1,276 @@
+<div class="card card-fullheight">
+  <div class="modal-header">
+    <h4 mat-dialog-title>Import {{'HEADER.CONFIGURATIONS' | translate}}</h4>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="importConfigForm">
+      <div>
+        <div class="row">
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'IMPORT_FORM.DEACTIVATE' | translate}} :</label>
+            <label class="checkbox checkbox-success">
+              <input formControlName="deactivate" type="checkbox"><span
+              style="font-size: 10px">{{'IMPORT_FORM.DEACTIVATE' | translate}}</span>
+            </label>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'IMPORT_FORM.SERVER' | translate}} :</label>
+            <input type="text" class="form-control form-control-sm" formControlName="ipServer">
+          </div>
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'IMPORT_FORM.PORT' | translate}} :</label>
+            <input type="number" min="0" class="form-control form-control-sm" formControlName="port">
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'IMPORT_FORM.HTTPS' | translate}} :</label>
+            <label class="checkbox checkbox-success">
+              <input formControlName="isHTTPS" type="checkbox"><span
+              style="font-size: 10px">{{'HTTPS' | translate}}</span>
+            </label>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'IMPORT_FORM.TYPE' | translate}}:</label>
+            <div class="input-group-icon input-group-icon-right">
+              <ng-select class="ng-select-type ng-select-sm" [items]="types" [bindLabel]="'description'"
+                         [bindValue]="'id'" appendTo="body" [clearable]="false"
+                         (open)="translateTypes()" formControlName="model"
+                         placeholder="{{'IMPORT_FORM.TYPE' | translate}}">
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3" *ngIf="importConfigForm.get('model')?.value === 'SELL_POINT'">
+            <label>{{'IMPORT_FORM.USERNAME' | translate}} :</label>
+            <input type="text" class="form-control form-control-sm" formControlName="username">
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3" *ngIf="importConfigForm.get('model')?.value === 'SELL_POINT'">
+            <label>{{'IMPORT_FORM.PASSWORD' | translate}} :</label>
+            <input type="password" class="form-control form-control-sm" formControlName="password">
+          </div>
+
+
+          <div class="form-group col-lg-3 col-md-3" *ngIf="importConfigForm.get('model')?.value === 'SELL_POINT'">
+            <label>{{'product to import' | translate}}:</label>
+            <div class="input-group-icon input-group-icon-right">
+              <ng-select class="ng-select-type ng-select-sm" [items]="types" [bindLabel]="'description'"
+                         [bindValue]="'id'" appendTo="body" [clearable]="false"
+                         (open)="translateProductTypes()" formControlName="productToImport"
+                         placeholder="{{'product to import' | translate}}">
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3" *ngIf="importConfigForm.get('model')?.value === 'SELL_POINT'">
+            <label>{{'price list' | translate}}:</label>
+            <div class="input-group-icon input-group-icon-right">
+              <ng-select class="ng-select-price ng-select ng-select-sm" [items]="priceList" [bindLabel]="'description'"
+                         [bindValue]="'id'" appendTo="body" formControlName="importedPriceListId"
+                         [virtualScroll]="true" [clearable]="false"
+                         placeholder="{{'choose price list' | translate}}">
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'IMPORT_FORM.REPEAT_NUMBER' | translate}} :</label>
+            <input type="number" min="1" class="form-control form-control-sm" formControlName="importPerDay">
+          </div>
+
+
+          <div class="form-group col-lg-3 col-md-3" *ngFor="let hour of hours, let i= index">
+            <label>{{'IMPORT_FORM.REPEAT_AT' | translate}} {{i + 1}}:</label>
+            <div class="input-group input-group-sm">
+              <input class="form-control form-control-sm" type="text" [value]="hour.value"
+                     maxlength="5">
+              <div class="input-group-append">
+                <button class="btn btn-outline-dark" (click)="fixHour(hourContent, i)" type="button">
+                  <i class="ft-clock"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row col-12">
+          <h6>{{'Notifiche errori import' | translate}}</h6>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-lg-3">
+            <label style="margin: 0">{{'Tipo notifica' | translate}} :</label>
+            <div class="d-flex justify-content-around align-items-center pt-2">
+              <label class="checkbox checkbox-outline-primary">
+                <input type="checkbox" formControlName="notificationMail">
+                <span>{{'PROMO_FORM.MAIL' | translate}}</span>
+              </label>
+              <label class="checkbox checkbox-outline-primary">
+                <input type="checkbox" formControlName="notificationSms">
+                <span>{{'PROMO_FORM.SMS' | translate}}</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'mail notification' | translate}} :</label>
+            <input type="email" class="form-control form-control-sm" placeholder="example@email.it"
+                   formControlName="email">
+          </div>
+
+          <div class="form-group col-lg-3 col-md-6">
+            <label>{{'mobile notification' | translate}}:</label>
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend" ngbDropdown #myDrop="ngbDropdown">
+                <button class="btn btn-outline-secondary" type="button"
+                        ngbDropdownToggle>{{importConfigForm.get('mobilePrefix').value || 'BUTTONS.CHOOSE' | translate}}
+                </button>
+                <div class="dropdown-menu py-0" tabindex="1" ngbDropdownMenu>
+                  <ng-select [items]="prefixList" [bindLabel]="'label'"
+                             [tabIndex]="1"
+                             autofocus
+                             [bindValue]="'prefix'" formControlName="mobilePrefix" placeholder="search"
+                             (change)="myDrop.close()" #mobileNgSelect>
+                  </ng-select>
+                </div>
+              </div>
+              <input type="tel" class="form-control form-control-sm" formControlName="mobile">
+            </div>
+          </div>
+
+          <div class="form-group col-lg-3 col-md-6">
+            <label>{{'sent Sms notification at' | translate}}:</label>
+            <div class="input-group input-group-sm">
+              <input class="form-control form-control-sm" type="text" formControlName="sentSmsAt"
+                     maxlength="5" [formControl]="datePickerSMS"
+                     (dateTimeChange)="setHour($event)" [owlDateTime]="sentSms">
+              <div class="input-group-append">
+                <button class="btn btn-outline-dark" [owlDateTimeTrigger]="sentSms" type="button">
+                  <i class="ft-clock"></i>
+                </button>
+              </div>
+              <owl-date-time [pickerType]="'timer'" #sentSms></owl-date-time>
+            </div>
+          </div>
+        </div>
+
+        <div class="pull-right" mat-dialog-actions>
+          <button mat-flat-button class="mr-3" color="accent" [disabled]="disableSave"
+                  (click)="test()">{{'BUTTONS.TEST' | translate}}
+          </button>
+          <button mat-flat-button color="primary" [disabled]="disableSave"
+                  (click)="saveImportConfig(priceListContent)">{{'BUTTONS.SAVE' | translate}}
+          </button>
+        </div>
+      </div>
+      <div>
+        <div class="row col-12">
+          <h6>{{'Server immagini (CouchDB)' | translate}}</h6>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'IMPORT_FORM.SERVER' | translate}} :</label>
+            <input type="text" class="form-control form-control-sm" formControlName="couchIpServer">
+          </div>
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'IMPORT_FORM.PORT' | translate}} :</label>
+            <input type="number" min="0" class="form-control form-control-sm" formControlName="couchPort">
+          </div>
+
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'Nome DB' | translate}} :</label>
+            <input type="text" class="form-control form-control-sm" formControlName="couchDb">
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'IMPORT_FORM.HTTPS' | translate}} :</label>
+            <label class="checkbox checkbox-success">
+              <input formControlName="isCouchHTTPS" type="checkbox"><span
+              style="font-size: 10px">{{'HTTPS' | translate}}</span>
+            </label>
+          </div>
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'IMPORT_FORM.USERNAME' | translate}} :</label>
+            <input type="text" class="form-control form-control-sm" formControlName="couchUsername">
+          </div>
+
+          <div class="form-group col-lg-3 col-md-3">
+            <label>{{'IMPORT_FORM.PASSWORD' | translate}} :</label>
+            <input type="password" class="form-control form-control-sm" formControlName="couchPassword">
+          </div>
+
+        </div>
+
+
+        <div class="pull-right" mat-dialog-actions>
+          <button mat-flat-button color="primary" *ngIf="config?.id"
+                  [disabled]="disableReplicate||!importConfigForm.get('couchIpServer').value
+                  ||!importConfigForm.get('couchPort').value||!importConfigForm.get('couchDb').value
+                  ||!importConfigForm.get('couchUsername').value||!importConfigForm.get('couchPassword').value"
+                  (click)="replicateDb()">{{'Replicate db' | translate}}
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+<ng-template #hourContent>
+  <div class="modal-header">
+    <h4 mat-dialog-title> {{'IMPORT_FORM.REPEAT_AT' | translate}} {{selectedIndex + 1}}</h4>
+  </div>
+  <div class="modal-body">
+    <div class="input-group input-group-sm">
+      <input class="form-control form-control-sm" type="text"
+             maxlength="5" [formControl]="datePickerForm"
+             (dateTimeChange)="setHour($event)"
+             [owlDateTime]="da">
+      <div class="input-group-append">
+        <button class="btn btn-outline-dark" [owlDateTimeTrigger]="da" type="button">
+          <i class="ft-clock"></i>
+        </button>
+      </div>
+      <owl-date-time [pickerType]="'timer'" #da></owl-date-time>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div mat-dialog-actions>
+      <button mat-flat-button class="mr-3"
+              (click)="matDialog.closeAll()">{{'BUTTONS.CANCEL' | translate}}
+      </button>
+      <button mat-flat-button color="primary"
+              (click)="saveHour()">{{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #priceListContent>
+  <div class="modal-header">
+    <h4 mat-dialog-title> {{'select price list to import product' | translate}} </h4>
+  </div>
+  <div class="modal-body">
+    <label>{{'price list' | translate}}:</label>
+    <ng-select class="ng-select-price ng-select" [items]="priceList" [bindLabel]="'description'"
+               [bindValue]="'id'" appendTo="body"
+               [(ngModel)]="selectedPrice" [virtualScroll]="true"
+               placeholder="{{'choose price list' | translate}}">
+    </ng-select>
+  </div>
+  <div class="modal-footer">
+    <div mat-dialog-actions>
+      <button mat-flat-button class="mr-3"
+              (click)="matDialog.closeAll()">{{'BUTTONS.CANCEL' | translate}}
+      </button>
+      <button mat-flat-button color="primary"
+              (click)="savePriceListConfig()">{{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>

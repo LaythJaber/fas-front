@@ -1,0 +1,127 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      {{'SIDENAV.LOGIN_CONFIGURATION' | translate}}
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="loginConfigurationForm">
+        <div class="form-group">
+          <mat-checkbox color="primary"
+                        formControlName="loginWithFacebook">{{'LOGIN_CONFIGURATION.LOGIN_REGISTER' | translate}}
+            Facebook
+          </mat-checkbox>
+        </div>
+        <div class="form-group">
+          <mat-checkbox color="primary"
+                        formControlName="loginWithGoogle">{{'LOGIN_CONFIGURATION.LOGIN_REGISTER' | translate}} Google
+          </mat-checkbox>
+        </div>
+        <div class="form-group">
+          <mat-checkbox color="primary"
+                        formControlName="loginRequired">{{'LOGIN_CONFIGURATION.LOGIN_REQUIRED' | translate}}</mat-checkbox>
+        </div>
+        <div class="form-group">
+          <mat-checkbox color="primary"
+                        formControlName="pricesVisibleByAnonymous">{{'LOGIN_CONFIGURATION.PRICES_VISIBLE_ANONYMOUS' | translate}}</mat-checkbox>
+        </div>
+        <div class="form-group">
+          <label for="type">{{'LOGIN_CONFIGURATION.LOGIN_AUTO_MANUAL' | translate}}</label>
+          <select class="form-control form-control-sm" formControlName="registrationConfirmationType" id="type">
+            <option ngValue="AUTO">{{'LOGIN_CONFIGURATION.AUTOMATIC' | translate}}</option>
+            <option ngValue="MANUAL">{{'LOGIN_CONFIGURATION.MANUAL' | translate}}</option>
+          </select>
+        </div>
+
+        <table class="table table-sm table-hover">
+          <thead>
+          <tr>
+            <th *ngFor="let c of columns" scope="col">{{c | translate}}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td> {{'Campo personalizzato 1'}} </td>
+            <td>
+              <input class="form-control form-control-sm" placeholder="{{'Campo personalizzato 1' | translate}}"
+                     formControlName="customField1Name" type="text"
+                     [required]="loginConfigurationForm.get('activeCustomField1').value">
+            </td>
+            <td>
+              <mat-checkbox color="primary" formControlName="activeCustomField1" style="margin-left: 10%;">{{' '}}
+              </mat-checkbox>
+            </td>
+            <td>
+              <mat-checkbox color="primary" formControlName="requiredCustomField1"
+                            [disabled]="!loginConfigurationForm.get('activeCustomField1').value">{{' '}}
+              </mat-checkbox>
+            </td>
+          </tr>
+
+
+          <tr>
+            <td> {{'Campo personalizzato 2'}} </td>
+            <td>
+              <input class="form-control form-control-sm" placeholder="{{'Campo personalizzato 2' | translate}}"
+                     formControlName="customField2Name" type="text"
+                     [required]="loginConfigurationForm.get('activeCustomField2').value">
+            </td>
+            <td>
+              <mat-checkbox color="primary" formControlName="activeCustomField2" style="margin-left: 10%;">{{' '}}
+              </mat-checkbox>
+            </td>
+            <td>
+              <mat-checkbox color="primary" formControlName="requiredCustomField2"
+                            [disabled]="!loginConfigurationForm.get('activeCustomField2').value">{{' '}}
+              </mat-checkbox>
+            </td>
+          </tr>
+
+
+          <tr>
+            <td> {{'Campo personalizzato 3'}} </td>
+            <td>
+              <input class="form-control form-control-sm" placeholder="{{'Campo personalizzato 3' | translate}}"
+                     formControlName="customField3Name" type="text"
+                     [required]="loginConfigurationForm.get('activeCustomField3').value">
+            </td>
+            <td>
+              <mat-checkbox color="primary" formControlName="activeCustomField3" style="margin-left: 10%;">{{' '}}
+              </mat-checkbox>
+            </td>
+            <td>
+              <mat-checkbox color="primary" formControlName="requiredCustomField3"
+                            [disabled]="!loginConfigurationForm.get('activeCustomField3').value">{{' '}}
+              </mat-checkbox>
+            </td>
+          </tr>
+
+          <tr>
+            <td> {{'Campo personalizzato 4'}} </td>
+            <td>
+              <input class="form-control form-control-sm" placeholder="{{'Campo personalizzato 4' | translate}}"
+                     formControlName="customField4Name" type="text"
+                  [required]="loginConfigurationForm.get('activeCustomField4').value">
+            </td>
+            <td>
+              <mat-checkbox color="primary" formControlName="activeCustomField4" style="margin-left: 10%;">{{' '}}
+              </mat-checkbox>
+            </td>
+            <td>
+              <mat-checkbox color="primary" formControlName="requiredCustomField4"
+                            [disabled]="!loginConfigurationForm.get('activeCustomField4').value">{{' '}}
+              </mat-checkbox>
+            </td>
+          </tr>
+
+          </tbody>
+        </table>
+
+      </form>
+    </div>
+
+    <div class="card-footer d-flex justify-content-end">
+      <button mat-flat-button color="primary" (click)="save()">{{'BUTTONS.SAVE' | translate}}</button>
+    </div>
+  </div>
+</div>

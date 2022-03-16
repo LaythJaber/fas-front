@@ -1,0 +1,113 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <mat-tab-group [selectedIndex]="0" mat-align-tabs="left">
+            <mat-tab>
+              <ng-template matTabLabel>{{'GENERAL_FORM.GENERAL_CONFIG_TAB.TITLE' | translate}}</ng-template>
+              <ng-template matTabContent>
+                <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                  <ngb-panel>
+                    <ng-template ngbPanelTitle>
+                        {{'Alert controllo aggiornamenti' | translate}}
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                      <div class="container-fluid">
+                        <form [formGroup]="appMobileConfigForm">
+
+                          <div>
+                            <div class="form-row">
+                              <div class="form-group col-lg-6 col-md-6 col-6">
+                                <label for="nva" class="font-weight-bold">{{'Nr Versione Android' | translate}}</label>
+                                <input id="nva" type="text" formControlName="androidVersionNumber" class="form-control form-control-sm"
+                                       placeholder="{{'Nr Versione Android' | translate}}"
+                                       style="width: 100%"/>
+                              </div>
+                              <div class="form-group col-lg-6 col-md-6 col-6">
+                                <label for="nvi" class="font-weight-bold">{{'Nr Versione IOS' | translate}}</label>
+                                <input id="nvi" type="text" formControlName="iosVersionNumber" class="form-control form-control-sm"
+                                       placeholder="{{'Nr Versione IOS' | translate}}"
+                                       style="width: 100%"/>
+                              </div>
+                              <div class="form-group col-lg-6 col-md-6 col-12">
+                                <label class="font-weight-bold mr-2">{{'Aggiorn. Android obblig. ' | translate}}</label>
+                                <mat-checkbox formControlName="androidObligatory"></mat-checkbox>
+                              </div>
+                              <div class="form-group col-lg-6 col-md-6 col-12">
+                                <label class="font-weight-bold mr-2">{{'Aggiorn. IOS obblig. ' | translate}}</label>
+                                <mat-checkbox formControlName="iosObligatory"></mat-checkbox>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div *ngIf="languageList" class="pt-3" style="border-top: 1px solid #2C2F48 !important;">
+                            <div class="form-group col-lg-12 col-md-12 col-12">
+                              <mat-tab-group formArrayName="transInfo" [selectedIndex]="selectedTab">
+                                <mat-tab *ngFor="let lang of languageList; let i = index" label="{{lang.description}}" [formGroupName]="i">
+                                  <div class="form-group mt-3">
+                                    <h6>Descrizione & nota</h6>
+                                  </div>
+                                  <div class="form-group col-12">
+                                    <input id="des" type="text" autocomplete="off" class="form-control-sm form-control"
+                                           placeholder="{{'Descrizione & nota' | translate}}" formControlName="description">
+                                  </div>
+
+                                  <div class="form-group mt-2">
+                                    <h6>Aggiornamento Obbligatorio</h6>
+                                  </div>
+                                  <div class="form-group col-12">
+                                    <label for="tob">{{'Titolo' | translate}}</label>
+                                    <input id="tob" type="text" autocomplete="off" class="form-control-sm form-control"
+                                           placeholder="{{'Titolo' | translate}}" formControlName="titleOblig">
+                                  </div>
+                                  <div class="form-group col-12">
+                                    <label for="dob">{{'Testo' | translate}}</label>
+                                    <textarea id="dob" type="text" autocomplete="off" class="form-control-sm form-control"
+                                              placeholder="{{'Testo di aggiornamento obbligatorio' | translate}}"
+                                              rows="6"
+                                              formControlName="descriptionOblig"></textarea>
+                                  </div>
+
+                                  <div class="form-group mt-2">
+                                    <h6>Aggiornamento Facoltativo</h6>
+                                  </div>
+                                  <div class="form-group col-12">
+                                    <label for="tfa">{{'Titolo' | translate}}</label>
+                                    <input id="tfa" type="text" autocomplete="off" class="form-control-sm form-control"
+                                           placeholder="{{'Titolo' | translate}}" formControlName="titleFacultatif">
+                                  </div>
+                                  <div class="form-group col-12">
+                                    <label for="dfa">{{'Testo' | translate}}</label>
+                                    <textarea id="dfa" type="text" autocomplete="off" class="form-control-sm form-control"
+                                              placeholder="{{'Testo di aggiornamento facoltativo' | translate}}"
+                                              rows="6"
+                                              formControlName="descriptionFacultatif"></textarea>
+                                  </div>
+                                </mat-tab>
+                              </mat-tab-group>
+                            </div>
+                          </div>
+
+                          <div class="form-row">
+                            <div class="form-group col-12 text-right">
+                              <button class="btn btn-primary" [disabled]="appMobileConfigForm.invalid" (click)="updateAppMobileConfiguration()">
+                                <em class="fas fa-save"></em>
+                                {{'BUTTONS.SAVE' | translate}}
+                              </button>
+                            </div>
+                          </div>
+
+                        </form>
+                      </div>
+                    </ng-template>
+                  </ngb-panel>
+                </ngb-accordion>
+              </ng-template>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

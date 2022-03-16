@@ -1,0 +1,49 @@
+
+<div class=" text-center p-5">
+  <h1 class="display-4">Applications</h1>
+  <p class="lead"><strong>These are</strong> the current and past applications</p>
+</div>
+
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Application Code</th>
+                <th>Program Name</th>
+                <th>Country</th>
+                  <th>
+                    <button class="btn custom-no-bg" aria-label="add" (click)="openSuperAdminMgmFormDialog()">
+                      <span aria-hidden="true" class="gray"><i class="fas fa-plus"></i></span>
+                    </button></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr class="alert" role="alert" *ngFor="let application of applications let i = index">
+                <td class="d-flex align-items-center">
+                  <div class="pl-3 ">
+                    <span class="d-block">{{application?.id}}</span>
+                    <span class="d-block gray small">{{'ADDED' | translate}}: {{application?.createdAt}} </span>
+                  </div>
+                </td>
+                <td>{{application?.programName}}</td>
+                <td>{{application?.country}}</td>
+                <td>
+
+  <!--                 <button class="btn custom-no-bg" data-dismiss="alert" aria-label="edit"   (click)="edit(application)">
+                     <span aria-hidden="true" class="gray"><i class="far fa-edit"></i></span>
+                   </button>
+
+                  <button ngbDropdownItem (click)="deleteApp(application, i)"><i
+                    class="ft-trash-2"></i> {{'BUTTONS.DELETE' | translate}}</button>
+                 </td>
+-->
+
+                <a mat-icon-button color="primary" (click)="edit(application)">
+                  <em class="ft-edit-1" tooltipClass="custom-tooltip" ngbTooltip="{{'BUTTONS.EDIT'|translate}}"></em></a>
+                <a mat-icon-button color="warn" (click)="deleteApp(application, i)">
+                  <em class="ft-trash-2" tooltipClass="custom-tooltip"
+                      ngbTooltip="{{'BUTTONS.DELETE'|translate}}"></em></a>
+
+              </tr>
+              </tbody>
+            </table>
+

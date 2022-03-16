@@ -1,0 +1,133 @@
+<div class="card auth-content mb-0">
+  <div class="card-body py-5" *ngIf="!response">
+    <div class="text-center mb-5">
+      <h3 class="mb-3 text-primary"><img src="/assets/img/fas.svg" alt="logo" width="200" class="my-3"></h3>
+    </div>
+    <form [formGroup]="registerForm" (ngSubmit)="submitForm()" id="login-form">
+      <!--      <div class="d-flex justify-content-end">-->
+      <!--        <button type="button" mat-button color="primary" class="mb-2" (click)="openBarcodeAuthentication()">-->
+      <!--          <i class="fas fa-barcode"></i> {{'LOGIN.USE_BARCODE' | translate}}</button>-->
+      <!--      </div>-->
+      <div class="mb-4">
+        <div class="md-form mb-0"><input class="form-control" placeholder="{{'LOGIN.USERNAME' | translate}}" type="text"
+                                         formControlName="username" autocomplete="true"></div>
+
+      </div>
+      <div class="mb-4">
+        <div class="md-form mb-0">
+          <div class="input-group">
+            <input class="form-control" placeholder="{{'LOGIN.PASSWORD' | translate}}"
+                   [type]="fieldTextType ? 'text' : 'password'" formControlName="password">
+            <div class="input-group-append">
+              <span class="input-group-text">
+                <i
+                  class="fa"
+                  [ngClass]="{
+                    'fa-eye-slash': !fieldTextType,
+                    'fa-eye': fieldTextType
+                  }"
+                  (click)="toggleFieldTextType()"
+                ></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="md-form mb-0">
+          <div class="input-group">
+            <input class="form-control" placeholder="{{'REGISTER.CONFIRM_PASSWORD' | translate}}"
+                   [type]="fieldTextType2 ? 'text' : 'password'" formControlName="passwordConfirm">
+            <div class="input-group-append">
+              <span class="input-group-text">
+                <i
+                  class="fa"
+                  [ngClass]="{
+                    'fa-eye-slash': !fieldTextType2,
+                    'fa-eye': fieldTextType2
+                  }"
+                  (click)="toggleFieldTextType2()"
+                ></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <mat-error *ngIf="registerForm.get('passwordConfirm').hasError('required') && registerForm.get('passwordConfirm').touched" >
+          Password confirmation is required
+        </mat-error>
+        <mat-error *ngIf="!registerForm.get('passwordConfirm').hasError('required') &&
+                                       registerForm.get('passwordConfirm').hasError('passwordsNotMatching')">
+          Passwords must match
+        </mat-error>
+      </div>
+
+      <div class="mb-4">
+        <div class="md-form mb-0"><input class="form-control" placeholder="{{'REGISTER.FIRST_NAME' | translate}}" type="text"
+                                         formControlName="firstName" autocomplete="true"></div>
+
+      </div>
+
+      <div class="mb-4">
+        <div class="md-form mb-0"><input class="form-control" placeholder="{{'REGISTER.LAST_NAME' | translate}}" type="text"
+                                         formControlName="lastName" autocomplete="true"></div>
+
+      </div>
+
+      <div class="mb-4">
+        <div class="md-form mb-0"><input class="form-control" placeholder="{{'REGISTER.MOBILE' | translate}}" type="tel"
+                                         formControlName="mobile" autocomplete="true"></div>
+
+      </div>
+
+      <div class="mb-4">
+        <div class="md-form mb-0"><input class="form-control" placeholder="{{'REGISTER.EMAIL' | translate}}" type="email"
+                                         formControlName="email" ></div>
+
+      </div>
+
+      <div class="mb-4">
+
+        <ng-select class="ng-select-required" formControlName="country" [items]="countries"
+                   placeholder="country">
+        </ng-select>
+
+      </div>
+
+      <div class="mb-4">
+        <div class="md-form mb-0"><input class="form-control" placeholder="{{'REGISTER.ADDRESS' | translate}}" type="text"
+                                         formControlName="address" autocomplete="true"></div>
+
+      </div>
+
+
+      <div class="flexbox mb-5">
+
+        <div></div>
+        <small class="form-text text-right"><a routerLink="/login" class="text-muted">I have an account </a></small>
+
+        <!--    <a routerLink='/snippets/auth/forgot-password'>{{'LOGIN.FORGET_PASSWORD' | translate}}</a>-->
+      </div>
+      <button class="btn btn-primary btn-rounded btn-block" form="login-form" [disabled]="!registerForm.valid"><i class="ft-log-in"></i>
+        {{'REGISTER.VALIDATION' | translate}}</button>
+    </form>
+
+
+    <div class="d-flex justify-content-between align-items-center footer mt-3">
+      <div class="version">
+        V 0.0.1
+      </div>
+      <div class="languages">
+        <a href="javascript:;" (click)="changeLang('en')"
+           [ngClass]="{disabled: translationLoaderService.getActiveLanguage() === 'en'}">English</a>
+        <a href="javascript:;" (click)="changeLang('fr')"
+           [ngClass]="{disabled: translationLoaderService.getActiveLanguage() === 'fr'}">Français</a>
+        <a href="javascript:;" (click)="changeLang('ar')"
+           [ngClass]="{disabled: translationLoaderService.getActiveLanguage() === 'ar'}">عربي</a>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+

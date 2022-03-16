@@ -1,0 +1,12 @@
+<div mat-dialog-title>
+  {{'PROMO_FORM.EDIT_TEMPLATE' | translate}}
+</div>
+
+<div mat-dialog-content>
+  <div id="email-editor" style="height: 77vh"></div>
+</div>
+
+<div mat-dialog-actions class="d-flex align-items-end justify-content-end">
+  <button mat-flat-button color="warn" matDialogClose="">{{'BUTTONS.CLOSE' | translate}}</button>
+  <button mat-flat-button color="primary" class="ml-2" (click)="save()">{{'BUTTONS.SAVE' | translate}}</button>
+</div>

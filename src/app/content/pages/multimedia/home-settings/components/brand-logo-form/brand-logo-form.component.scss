@@ -1,0 +1,14 @@
+.img-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+  img {
+    padding: 10px;
+    border: 1px solid #dbdbdb;
+    width: 150px;
+    object-fit: cover;
+  }
+}
+/deep/ .ng-dropdown-panel.brand-ng-select {
+  z-index: 1300;
+}

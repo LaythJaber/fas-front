@@ -1,0 +1,47 @@
+<div class=" text-center">
+  <h1 class="display-4">User Applications</h1>
+</div>
+
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>Application Code</th>
+    <th>Program Name</th>
+    <th>Country</th>
+    <th>Status</th>
+    <th class="d-flex align-items-center">
+      <button class="btn custom-no-bg"
+              tooltipClass="custom-tooltip"
+              ngbTooltip="assign new application"
+              (click)="assign()">
+        <span aria-hidden="true" class="gray"><i class="fa fa-globe"></i></span>
+
+      </button>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="alert" role="alert" *ngFor="let userApp of applications let i = index">
+    <td class="d-flex align-items-center">
+      <div class="pl-3 ">
+        <span class="d-block">{{userApp?.application.id}}</span>
+        <span class="d-block gray small">{{'ADDED' | translate}}: {{userApp?.application.createdAt}} </span>
+      </div>
+    </td>
+    <td>{{userApp?.application.programName}}</td>
+    <td>{{userApp?.application.country}}</td>
+    <td class="status pointer" (click)="changeApplicationStatus(userApp?.application, i)"><span class="active" *ngIf="userApp?.status === 'ACCEPTED'" >Accepted</span>
+      <span class="inactive" *ngIf="userApp?.status === 'REJECTED'">Rejected</span>
+      <span class="waiting" *ngIf="userApp?.status === 'PENDING'">Pending</span></td>
+
+    <td class="d-flex align-items-center">
+
+
+      <a mat-icon-button color="warn" (click)="detachApp(userApp?.application, i)">
+        <em class="ft-trash-2" tooltipClass="custom-tooltip"
+            ngbTooltip="{{'BUTTONS.DELETE'|translate}}"></em></a>
+    </td>
+  </tr>
+  </tbody>
+</table>

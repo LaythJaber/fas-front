@@ -1,0 +1,67 @@
+<div class="mat-dialog-title">
+  License configuration
+</div>
+
+<div mat-dialog-content>
+  <form [formGroup]="licenseForm" (ngSubmit)="save()" id="licenseForm">
+    <div class="form-row">
+      <div class="form-group col-12">
+        <label>{{'DATA_TABLE.NAME' | translate}}</label>
+        <input class="form-control form-control-sm" type="text" formControlName="name"
+               [readOnly]="this.data?.license?.name.toUpperCase().trim() === 'DEMO' || this.data?.license?.name.toUpperCase().trim() === 'STOCKCLOUDFREE'">
+      </div>
+      <div class="form-group col-12">
+        <label>{{'DATA_TABLE.DESCRIPTION' | translate}}</label>
+        <textarea class="form-control form-control-sm" formControlName="description"></textarea>
+      </div>
+     <!-- <div class="form-group col-12">
+        <label>{{'DATA_TABLE.TOKEN' | translate}}</label>
+        <input class="form-control form-control-sm" type="text" formControlName="token"
+               [readOnly]="this.data?.license?.name.toUpperCase().trim() === 'DEMO' || this.data?.license?.name.toUpperCase().trim() === 'STOCKCLOUDFREE'">
+        <div *ngIf="searchCodeLoadding" class="ml-2 mt-2">
+          <i class="fa fa-spinner fa-spin"> </i>
+        </div>
+        <div class="invalid-feedback" *ngIf="tokenError" translate>
+          {{msgError}}
+        </div>
+      </div>-->
+      <div class="form-group col-6">
+        <label>{{'ADMIN.GROUP.START_DATE' | translate}}</label>
+        <input class="form-control form-control-sm" type="date" formControlName="startDate" >
+      </div>
+      <div class="form-group col-6">
+        <label>{{'ADMIN.GROUP.EXPIRATION_DATE' | translate}}</label>
+        <input class="form-control form-control-sm" type="date" formControlName="expirationDate" >
+      </div>
+      <div class="form-group col-12">
+        <label>{{'DATA_TABLE.MAX_OPERATORS' | translate}}</label>
+        <input  class="form-control form-control-sm" type="number" formControlName="maxOperators">
+      </div>
+    </div>
+
+    <div *ngFor="let m of modules; let i = index">
+      <mat-checkbox  [ngModelOptions]="{standalone: true}"
+                     [checked]="descendantsAllSelected(m)"
+                     [indeterminate]="descendantsPartiallySelected(m)"
+                     (change)="selectedAllDescendants(m)"
+                     [(ngModel)]="m.selected">
+        {{m.label.startsWith('SIDENAV.') ? (m.label | translate) : m.label}}
+      </mat-checkbox>
+      <ul *ngIf="m.children" class="modules-children">
+        <li *ngFor="let c of m.children">
+          <mat-checkbox  [(ngModel)]="c.selected" [ngModelOptions]="{standalone: true}">
+            {{c.label.startsWith('SIDENAV.') ? (c.label | translate) : c.label}}
+          </mat-checkbox>
+        </li>
+      </ul>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-flat-button color="secondary" matDialogClose="" class="mr-2">
+    <mat-icon>clear</mat-icon>
+    {{'BUTTONS.CANCEL' | translate}}</button>
+  <button mat-flat-button color="primary" form="licenseForm">
+    <mat-icon>save</mat-icon>
+    {{'BUTTONS.SAVE' | translate}}</button>
+</div>

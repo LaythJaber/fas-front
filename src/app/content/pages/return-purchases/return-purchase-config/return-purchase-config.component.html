@@ -1,0 +1,222 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <mat-tab-group [selectedIndex]="0" mat-align-tabs="left">
+
+            <mat-tab>
+              <ng-template matTabLabel>Configurazione</ng-template>
+              <ng-template matTabContent>
+                <div class="card">
+                  <div class="card-body">
+                    <form [formGroup]="returnProductConfigForm">
+
+                      <div class="form-row">
+
+                        <div class="form-group col-6">
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label class="mr-2">Reso Abilitata</label>
+                              <mat-checkbox color="primary" formControlName="enabled"></mat-checkbox>
+                            </div>
+                            <div class="form-group col-12">
+                              <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Tempo tolleranza reso (Giorni)
+                              </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" formControlName="toleranceTime"
+                                       placeholder="Tempo tolleranza reso (in giorni)">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-group col-6">
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label class="mr-2">Reso IVA Abilitata</label>
+                              <mat-checkbox  color="primary" formControlName="ivaEnabled"></mat-checkbox>
+                            </div>
+                            <div class="form-group col-12">
+                              <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">
+                                    Tempo tolleranza reso iva (Giorni)
+                                  </span>
+                                </div>
+                                <input type="number" class="form-control form-control-sm" formControlName="ivaToleranceTime"
+                                       placeholder="Tempo tolleranza reso iva (in giorni)">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-group col-6">
+                          <label class="mr-2">Consentì allegato motivo reso</label>
+                          <mat-checkbox color="primary" formControlName="attachment"></mat-checkbox>
+                        </div>
+                        <div class="form-group col-6" *ngIf="false">
+                          <label class="mr-2">Reso IVA Abilitata</label>
+                          <mat-checkbox  color="primary" formControlName="ivaEnabled"></mat-checkbox>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="card-footer text-right">
+                    <button class="btn btn-primary"
+                            [disabled]="returnProductConfigForm.invalid"
+                            (click)="updateReturnProductConfig()">
+                      <em class="fas fa-save"></em>
+                      {{'BUTTONS.SAVE' | translate}}
+                    </button>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template matTabLabel>Condizioni di reso</ng-template>
+              <ng-template matTabContent>
+                <div class="container-fluid" style="padding-top: 10px !important; margin: 0 !important;"
+                     *ngIf="returnConditionForm && returnConditionForm.get('conditionsInfo')">
+                  <div class="row">
+                    <div class="col-12">
+                      <form [formGroup]="returnConditionForm">
+                        <mat-tab-group formArrayName="conditionsInfo" [selectedIndex]="selectedConditionTab" style="width: 100% !important;">
+                          <mat-tab *ngFor="let lang of languageList; let i = index" label="{{lang.description}}" [formGroupName]="i">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col-12">
+                                  <div class="form-row">
+                                    <div class="form-group col-12 mt-2">
+                                      <label>Title</label>
+                                      <input type="text" autocomplete="off"  class="form-control-sm form-control"
+                                             placeholder="Title" formControlName="title" />
+                                    </div>
+                                    <div class="form-group col-12">
+                                      <label>Conditions</label>
+                                      <angular-editor formControlName="conditions" [config]="editorConfig"></angular-editor>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </mat-tab>
+                        </mat-tab-group>
+                      </form>
+                      <div class="card-footer text-right">
+                        <button class="btn btn-primary"
+                                [disabled]="returnProductConfigForm.invalid"
+                                (click)="updateReturnConditions()">
+                          <em class="fas fa-save"></em>
+                          {{'BUTTONS.SAVE' | translate}}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template matTabLabel>Istruzioni reso</ng-template>
+              <ng-template matTabContent>
+                <div class="container-fluid" style="padding-top: 10px !important; margin-top: 0 !important;"
+                     *ngIf="returnInstructionForm && returnInstructionForm.get('instructionsInfo')">
+                  <div class="row">
+                    <div class="col-12">
+                      <form [formGroup]="returnInstructionForm">
+                        <mat-tab-group formArrayName="instructionsInfo" style="width: 100% !important;"
+                                       [selectedIndex]="selectedInstructionTab" (selectedIndexChange)="setTab($event)">
+                          <mat-tab *ngFor="let lang of languageList; let i = index" label="{{lang.description}}" [formGroupName]="i">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col-12">
+                                  <div class="form-row mt-3">
+                                    <div class="form-group col-6">
+                                      <h4>Instructions</h4>
+                                    </div>
+                                    <div class="form-group col-6 text-right">
+                                      <button class="btn btn-light"
+                                              [disabled]="returnInstructionForm.invalid"
+                                              (click)="updateReturnInstructions()">
+                                        <em class="fas fa-save"></em>
+                                      </button>
+                                    </div>
+
+                                    <div class="form-group col-12">
+                                      <angular-editor formControlName="instructions" [config]="editorConfig"></angular-editor>
+                                    </div>
+                                  </div>
+
+                                  <div class="form-row">
+                                    <div class="form-group col-12">
+                                      <h4>Files</h4>
+                                    </div>
+                                    <div class="form-group col-6">
+                                      <label for="files" class="btn btn-light">
+                                        Caricare files
+                                      </label>
+                                      <span *ngIf="fileInput?.files?.length">
+                                        {{fileInput.files.length}} file caricati
+                                      </span>
+                                      <input id="files" type="file" (change)="fileChange($event)"  #fileInput multiple style="visibility: hidden">
+                                    </div>
+                                    <div class="form-group col-6 text-right">
+                                      <button class="btn btn-light" (click)="addAttachments()">
+                                        <em class="fas fa-upload"></em>
+                                      </button>
+                                    </div>
+                                  </div>
+
+                                  <table class="table table-bordered" style="width: 100% !important; ">
+                                    <tr>
+                                      <th>Nome del file</th>
+                                      <th>Caricato su</th>
+                                      <th>Visualizza</th>
+                                      <th>Elimina</th>
+                                      <th>Scarica</th>
+                                    </tr>
+                                    <tr *ngIf="!((returnInstructionForm.get('instructionsInfo').value)[selectedInstructionTab2].attachments.length)">
+                                      <td colspan="5" class="text-center">Nessun file trovato</td>
+                                    </tr>
+                                    <tr *ngFor="let attachment of (returnInstructionForm.get('instructionsInfo').value)[selectedInstructionTab2].attachments">
+                                      <td>
+                                        {{attachment.name}}
+                                      </td>
+                                      <td>{{attachment.createdAt | date: "dd/MM/yyyy HH:mm"}}</td>
+                                      <td>
+                                        <a href="{{attachment.attachment}}" target="_blank">visualizza</a>
+                                      </td>
+                                      <td class="text-center">
+                                        <em class="fa fa-trash" (click)="deleteAttachment(attachment)"></em>
+                                      </td>
+                                      <td class="text-center">
+                                        <em class="fa fa-download" (click)="downloadAttachment(attachment)"></em>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </mat-tab>
+                        </mat-tab-group>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
+
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

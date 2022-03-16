@@ -1,0 +1,60 @@
+.role-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+.dropdown-toggle::after {
+  display:none;
+}
+.role-container {
+  cursor: pointer;
+  transition: background-color .2s ease-in-out;
+}
+.role-container:hover {
+  background-color: lighten(#2B333D, 76%);
+}
+.active-role {
+  background-color: #2B333D !important;
+  p {
+    color: lighten(black, 70%) !important;
+  }
+  border: none;
+  .ft-more-vertical, .role-title {
+    color: white;
+  }
+}
+
+.select-role-msg {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 400;
+  div {
+    width: 40%;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 470px){
+  .select-role-msg div {
+    width: 100%
+  }
+  .my-checkbox /deep/ .mat-checkbox-layout {
+    white-space: normal !important;
+  }
+}
+.modules-children {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.authorities-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  background-color: rgba(23, 30, 51, 0.13);
+}

@@ -1,0 +1,170 @@
+.custom-section {
+  border: 1px solid gainsboro;
+  padding: 15px;
+}
+.classic-card {
+  width: 275px;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  padding: 10px;
+  color: #808080;
+  position: relative;
+  .header-section {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    em {
+      padding: 0 10px;
+    }
+  }
+  .img-section {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    font-size: 7em;
+  }
+  .product-name {
+    padding: 10px;
+    margin: 20px 10px;
+    border-radius: 10px;
+    background: #dedede;
+  }
+  .discount-section {
+    display: flex;
+    justify-content: flex-end;
+    font-size: .8rem;
+    div {
+      padding: 2px 11px;
+      margin: 0 10px;
+      background-color: #588AE0;
+      color: white;
+    }
+  }
+  .prices, .prices-del {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1em;
+    padding: 0 10px;
+    div:last-child {
+      font-weight: 500;
+    }
+  }
+  .prices-del {
+    color: #a3a3a3;
+    margin: 10px 0;
+  }
+  .prices {
+    color: red;
+  }
+  .button-section {
+    padding: 20px 10px 10px;
+    button {
+      cursor: pointer;
+      width: 100%;
+      color: #ffffff;
+      letter-spacing: 0.05em;
+      border: 2px solid #5F43D4;
+      background-image: linear-gradient(
+          30deg
+        , #5F43D4 50%, transparent 50%);
+      background-size: 850px;
+      background-repeat: no-repeat;
+      background-position: 0;
+      transition: background 300ms ease-in-out;
+      line-height: 20px;
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 0;
+      padding: 6px 10px;
+      &:hover {
+        background-position: 100%;
+        color: #000000;
+        background-color: #ffffff;
+      }
+    }
+  }
+  .promo {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    background-color: #588AE0;
+    color: white;
+    padding: 3px 7px;
+  }
+}
+.cards-container {
+  display: flex;
+  .prod-card {
+    margin-right: 30px;
+  }
+}
+.fashion-card {
+  width: 275px;
+  .img-section {
+    position: relative;
+    .promo {
+      position: absolute;
+      top: 10px;
+      right: 5px;
+      letter-spacing: .1em;
+      font-weight: 600;
+      writing-mode: vertical-lr;
+      transform: rotate(-180deg);
+    }
+    .discount-section {
+      padding: 12px;
+      border-radius: 50%;
+      background-color: #5F43D4;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+  }
+  .product-details {
+    .product-name {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 10px;
+      background: #dedede;
+    }
+    .price {
+      del {
+        font-size: .8em;
+        font-weight: 400;
+        color: #b3b3b3;
+      }
+    }
+    .color-variant {
+      padding: 0;
+      li {
+        display: inline-block;
+        height: 20px;
+        width: 20px;
+        border-radius: 100%;
+        margin-right: 5px;
+        transition: all 0.1s ease;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+.color-variant {
+  padding: 0;
+  margin-bottom: 0;
+  li {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    margin-right: 5px;
+    transition: all 0.1s ease;
+    vertical-align: middle;
+  }
+}

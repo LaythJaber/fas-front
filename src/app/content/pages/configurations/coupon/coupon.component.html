@@ -1,0 +1,72 @@
+<mat-tab-group color="primary">
+  <mat-tab label="Coupon">
+    <div class="container tab-container">
+      <div class="card">
+        <div class="card-header">
+          <div class="font-14 font-weight-bold">Immagine</div>
+        </div>
+        <div class="card-body py-0">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 d-flex align-items-center flex-column py-2 first-col">
+              <div class="font-14 font-weight-bold mb-3 w-100">Immagine default coupon</div>
+              <p class="text-black-50 w-100 logo-desc">
+                L'immagine personalizzata viene visualizzata al posto dell'immagine del coupon predefinita
+              </p>
+
+              <ng-container *ngIf="!(couponDefaultImage?.imgResult || couponDefaultImage?.url)">
+                <label class="logo-dropzone mb-1">
+                  <em class="ft-image"></em>
+                  <input type="file" (change)="logoFileChange($event, 'COUPON')" accept="image/*">
+                </label>
+                <p class="font-11 text-black-50">{{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB</p>
+              </ng-container>
+
+              <div class="sortable-item" *ngIf="couponDefaultImage?.imgResult || couponDefaultImage?.url">
+                <div class="thumbnail mt-1">
+                  <img [src]="couponDefaultImage?.imgResult || couponDefaultImage?.url"
+                       style="max-width: 70%; max-height: 70%; object-fit: contain !important;"
+                       alt="logo-img">
+                  <ul class="menu-overlay">
+                    <li>
+                      <button matTooltip="{{'BUTTONS.DELETE' | translate}}"
+                              (click)="deleteDefaultCouponImage()"
+                              matTooltipPosition="above"
+                              mat-icon-button color="primary">
+                        <em class="fas fa-trash"></em>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <label class="custom-file-upload mt-2">
+                <input type="file" (change)="logoFileChange($event, 'COUPON')" accept="image/*">
+                <div class="file-name" *ngIf="!couponDefaultImage?.imgFile">
+                  {{'MULTIMEDIA.CHOOSE_FILE' | translate}} ({{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB)
+                </div>
+                <div class="file-name" *ngIf="couponDefaultImage?.imgFile">{{couponDefaultImage.imgFile.name}}</div>
+                <div class="browse-btn">{{'BUTTONS.BROWSE' | translate}}</div>
+              </label>
+            </div>
+
+            <div class="col-lg-6 col-md-12 d-flex align-items-center flex-column py-2 first-col"></div>
+          </div>
+        </div>
+
+        <div class="card-footer d-flex justify-content-end align-items-center">
+          <mat-progress-spinner color="primary" class="mr-3"
+                                diameter="20" [value]="saveCouponSpinnerValue" mode="determinate">
+          </mat-progress-spinner>
+          <button mat-flat-button color="primary"
+                  [disabled]="!couponDefaultImage?.imgResult"
+                  (click)="saveDefaultImages()">
+            <mat-icon>save</mat-icon>
+            {{'BUTTONS.SAVE' | translate}}</button>
+        </div>
+
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+

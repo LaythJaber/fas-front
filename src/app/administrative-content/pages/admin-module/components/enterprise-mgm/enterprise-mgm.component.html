@@ -1,0 +1,160 @@
+<!--<div class="page-content fade-in-up">-->
+<!--  <div class="row">-->
+<!--    <div class="page-heading col-md-10">-->
+<!--      <h1 class="page-title page-title-sep "> {{this.userService.getUser()?.groupName}}-->
+<!--      </h1>-->
+
+<!--      <ol class="breadcrumb">-->
+<!--        <li class="breadcrumb-item">{{'ADMIN.ENTERPRISE.LIST' | translate}}</li>-->
+<!--      </ol>-->
+<!--    </div>-->
+<!--    <div class="justify-content-end" style="text-align: end;"><h3><i class="ti-settings" (click)="openConfiguration(content)"></i>-->
+<!--    </h3>-->
+<!--    </div>-->
+<!--    </h3>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<div class="row">
+  <h3 class="col-10">Lista ditte</h3>
+  <div class="col-2 text-right">
+    <button mat-mini-fab color="primary" (click)="openAddEnterpriseForm()" *ngIf="isOwner"><i class="ti-plus"></i>
+    </button>
+  </div>
+</div>
+<div class="card card-fullheight">
+  <div class="card-body table-responsive">
+    <table class="table table-sm table-hover">
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns" scope="col">
+          {{c | translate}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let g of enterprisesList, let i = index">
+        <td>{{g.id}}</td>
+        <td>{{g.companyName}}</td>
+        <td>{{g.vatNumber}}</td>
+        <td>{{g.fiscalCode}}</td>
+        <td>{{g.email}}</td>
+        <td class="text-center">
+          <a mat-icon-button color="primary" (click)="showEntPdv(superAdminContent, g, $event)">
+            <em class="ft-list" tooltipClass="custom-tooltip" ngbTooltip="{{'DATA_TABLE.PDV_LIST'|translate}}"></em></a>
+          <a mat-icon-button color="primary" (click)="openEditEnterprise($event, g)">
+            <em class="ft-edit-1" tooltipClass="custom-tooltip" ngbTooltip="{{'BUTTONS.EDIT'|translate}}"></em></a>
+          <a mat-icon-button color="warn" (click)="deleteEnterprise($event, g)">
+            <em class="ft-trash-2" tooltipClass="custom-tooltip"
+                ngbTooltip="{{'BUTTONS.DELETE'|translate}}"></em></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!--<div class="card card-fullheight">-->
+<!--  <div class="card-body">-->
+
+
+<!--    <div class="row mb-3 text-right">-->
+<!--      <div class="col-md-12">-->
+<!--        <button class="btn btn-floating" (click)="openAddEnterpriseForm()" *ngIf="isOwner"><i class="ti-plus"></i>-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--      <div class="col-lg-3" *ngFor="let enterprise of enterprisesList">-->
+<!--        <div class="card mat-elevation-z1">-->
+<!--          <div class="card-body">-->
+<!--            <div class="d-flex justify-content-between mb-2">-->
+<!--              <h5 class="box-title mb-2"> {{enterprise.companyName}}</h5>-->
+<!--              <div class="btn-group-toggle">-->
+<!--                <a class="text-muted" (click)="openEditEnterprise($event, enterprise)"><i class="ti-pencil"></i></a>-->
+<!--                <a class="text-danger" (click)="deleteEnterprise($event, enterprise)"><i-->
+<!--                  class="ti-close ml-2"></i></a>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="card-fullwidth-block" *ngIf="!loading">-->
+<!--              <app-point-of-sales [enterprise]="enterprise"></app-point-of-sales>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<ng-template #content>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'HEADER.CONFIGURATIONS' | translate}}</h4>
+    <button type="button" mat-button mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="configForm" id="umForm">
+      <div class="row" style="height: 40vh;">
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>{{'PRODUCT_FORM.RECHARGE' | translate}} criteria :</label>
+          <ng-select class="ng-select-sm ng-select-required" [items]="rechargeCriterias" [bindLabel]="'description'"
+                     [bindValue]="'id'" (open)="translateRechargeCriterias()" formControlName="rechargeCriteria"
+                     placeholder="{{'PRODUCT_FORM.RECHARGE' | translate}}">
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6">
+          <label>{{'PRODUCT_FORM.PRICE' | translate}} criteria:</label>
+          <ng-select class="ng-select-sm ng-select-required" [items]="saleCriterias" [bindLabel]="'description'"
+                     [bindValue]="'id'" (open)="translateSaleCriterias()" formControlName="priceCriteria"
+                     placeholder="{{'PRODUCT_FORM.PRICE' | translate}}">
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6" *ngIf="configForm.get('rechargeCriteria').value == 'CUSTOM'">
+          <label>{{'PRODUCT_FORM.CUSTOM' | translate}} :</label>
+          <input type="number" class="form-control form-control-sm" formControlName="customRecharge">
+        </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <div mat-dialog-actions>
+          <button mat-flat-button color="primary" class="mr-3"
+                  (click)="dialogRef.close(null)">{{'BUTTONS.CLOSE' | translate}}
+          </button>
+          <button mat-flat-button color="primary"
+                  (click)="saveConfiguration()">{{'BUTTONS.SAVE' | translate}}
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #superAdminContent>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'Lista punti vendita' | translate}}</h4>
+    <button type="button" mat-button (click)="matDialog?.closeAll()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <app-point-of-sales [enterprise]="selectedEnt"></app-point-of-sales>
+  </div>
+
+  <div class="modal-footer">
+    <button mat-button color="secondary" class="ml-2"
+            (click)="matDialog?.closeAll()">
+      {{'BUTTONS.CLOSE' | translate}}
+    </button>
+  </div>
+</ng-template>

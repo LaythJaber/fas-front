@@ -1,0 +1,259 @@
+<div mat-dialog-title style="border-bottom: 1px solid gainsboro; margin-bottom: 15px;">
+  <h1>
+    {{'PRODUCT_LIST_FORM.TITLE' | translate}}
+    <button mat-icon-button style="float: right;" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </h1>
+</div>
+
+<!--<div mat-dialog-content>-->
+<div class="subheader">
+  <div class="container-fluid">
+    <form [formGroup]="filterForm">
+      <div class="row">
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="search-input">
+            <div class="form-group">
+              <div class="input-group-icon input-group-icon-right">
+                  <span class="input-icon input-icon-right reset-search-btn"
+                        (click)="filterForm.controls.textSearch.setValue(null)">
+                    <em class="ft-x"></em>
+                  </span>
+                <input type="text" class="form-control form-control-sm"
+                       placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                       formControlName="textSearch"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2">
+          <ng-select (scrollToEnd)="getCategories()"
+                     [virtualScroll]="true"
+                     class="ng-select-sm"
+                     [items]="categories"
+                     [bindLabel]="'name'"
+                     [bindValue]="'id'"
+                     formControlName="cat1"
+                     placeholder="{{'PRODUCT_FORM.CATEGORY_LEVEL1' | translate}}">
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2">
+          <ng-select (scrollToEnd)="getSubCategories()" class="ng-select-sm"
+                     [items]="subCategories"
+                     [bindLabel]="'name'"
+                     [bindValue]="'id'"
+                     [clearable]="false"
+                     formControlName="cat2"
+                     placeholder="{{'PRODUCT_FORM.CATEGORY_LEVEL2' | translate}}">
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2">
+          <ng-select (scrollToEnd)="getSubSubCategories()"
+                     class="ng-select-sm"
+                     [items]="subSubCategories"
+                     [bindLabel]="'name'"
+                     [bindValue]="'id'"
+                     [clearable]="false"
+                     formControlName="cat3"
+                     placeholder="{{'PRODUCT_FORM.CATEGORY_LEVEL3' | translate}}">
+            <ng-template ng-label-tmp let-item="item">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+              <span>{{item | localTranslate: 'name'}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <ng-select (scrollToEnd)="getBrands()"
+                     class="ng-select-sm"
+                     [items]="brandList"
+                     [bindLabel]="'description'"
+                     [bindValue]="'id'"
+                     formControlName="brandId"
+                     placeholder="{{'PRODUCT_FORM.BRAND' | translate}}">
+          </ng-select>
+        </div>
+
+        <div class="action-btns col-lg-2 col-md-2 d-flex justify-content-end align-items-start">
+          <button mat-mini-fab color="primary"
+                  (click)="resetFilter()"
+                  placement="left" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'PRODUCT_FORM.RESET_FILTER'|translate}}">
+            <em class="ft-refresh-ccw" style="font-size: 20px;"></em>
+          </button>
+          <button mat-mini-fab color="primary" class="ml-2"
+                  (click)="showHideFilter()"
+                  placement="left" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'PRODUCT_FORM.MORE_FILTER'|translate}}">
+            <em class="ft-filter" style="font-size: 20px;"></em>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="row" *ngIf="showFilter">
+
+        <div class="form-group col-lg-2 col-md-2">
+          <ng-select (scrollToEnd)="getManufacturers()" class="ng-select" [items]="manufacturersList"
+                     [bindLabel]="'description'"
+                     [bindValue]="'id'"
+                     formControlName="manufacturer"
+                     placeholder="{{'PRODUCT_FORM.MANUFACTURER' | translate}}">
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label>
+            {{'DATA_TABLE.SPECIAL' | translate}}
+            <input type="checkbox" formControlName="inEvidenza">
+          </label>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label>
+            Disattivati
+            <input type="checkbox" formControlName="disabled">
+          </label>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label>
+            {{'PRODUCT_FORM.PRICE_ZERO'|translate}}
+            <input type="checkbox" formControlName="priceZero">
+          </label>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label>
+            {{'PRODUCT_FORM.STOCK_ZERO'|translate}}
+            <input type="checkbox" formControlName="stockZero">
+          </label>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2"
+             style="display: flex; justify-content: left; align-items: center;">
+          <label>
+            {{'PRODUCT_FORM.IN_PROMO'|translate}}
+            <input type="checkbox" formControlName="inPromo">
+          </label>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card pb-5" >
+  <div class="card-body table-responsive">
+
+    <div class="container-fluid mb-2">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-12 p-0">
+          <button mat-flat-button color="primary" class="mr-2" *ngIf="!productSelectedToAddInLoading"
+                  [disabled]="!isThereSelectedProductsToAdd()"
+                  (click)="addSelectedProductToEbay()">
+            Aggiungi prodotti selezionati
+          </button>
+          <button mat-flat-button color="primary" class="mr-2" *ngIf="productSelectedToAddInLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+
+          <button mat-flat-button color="primary" class="mr-2" *ngIf="!productFilteredToAddInLoading"
+                  (click)="addFilteredProductToEbay()">
+            Aggiungi ({{responseProduct?.totalRecords}}) prodotti filtrati
+          </button>
+          <button mat-flat-button color="primary" class="mr-2" *ngIf="productFilteredToAddInLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <table class="table table-sm table-hover table-bordered">
+      <thead>
+      <tr>
+        <th scope="col" class="text-center">
+          <mat-checkbox [(ngModel)]="allProductSelected" (change)="selectPageProducts($event)"></mat-checkbox>
+        </th>
+        <th *ngFor="let c of columns" scope="col">
+          {{c | translate}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngIf="responseProduct && !responseProduct.data.length" class="text-center">
+        <td colspan="10" class="no-object-found">{{'PRODUCT_FORM.NO_PRODUCT_FOUND' | translate}}</td>
+      </tr>
+      <tr *ngFor="let product of responseProduct?.data; let i = index">
+        <td class="text-center">
+          <mat-checkbox [(ngModel)]="productToAddList[i]"></mat-checkbox>
+        </td>
+        <td>{{product.id}}</td>
+        <td>{{product.code}}</td>
+        <td>{{product | localTranslate: "commercialDescription"}}</td>
+        <td>{{product.priceSale | number: "1.2-2" | numberCommaseparator }}€</td>
+        <td>{{product.stock}}</td>
+        <td>
+          <button mat-icon-button color="primary" *ngIf="product.enabled">
+            <em class="ft-power"></em>
+          </button>
+          <button mat-icon-button color="warn" *ngIf="!product.enabled">
+            <em class="ft-power"></em>
+          </button>
+        </td>
+        <td>
+          <em [ngStyle]="{'color':product.inEvidenza ? '#237db3':'#E50054'}"
+             class="ft-power" placement="top" tooltipClass="custom-tooltip"
+             ngbTooltip="{{'PROVIDER_FORM.ACTIVE'|translate}} / {{'PROVIDER_FORM.DEACTIVATED'|translate}}">
+          </em>
+        </td>
+        <td>{{product.updatedAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+        <td class="text-center">
+          <button mat-icon-button color="primary" *ngIf="!product.inLoading"
+                  (click)="addProductToEbay(product)"
+                  placement="top"
+                  tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'BUTTONS.ADD'|translate}}">
+            <em class="ft-plus"></em>
+          </button>
+          <button mat-icon-button *ngIf="product.inLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center" *ngIf="responseProduct && responseProduct.totalRecords > request.pageSize"
+                    [collectionSize]="responseProduct.totalRecords" size="sm"
+                    [pageSize]="request.pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="request.page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+  </div>
+</div>

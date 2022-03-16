@@ -1,0 +1,83 @@
+<div mat-dialog-title>
+  {{'ADMIN.GROUP.DATE_VALIDITY_TITLE' | translate}}
+</div>
+
+<div mat-dialog-content>
+  <form [formGroup]="dateForm">
+    <div class="form-group">
+      <label>{{'ADMIN.GROUP.LICENSE_DURATION' | translate}}</label>
+      <div class="btn-group btn-group-sm btn-group-toggle d-block" ngbRadioGroup name="radioBasic" [formControl]="durationControl">
+        <div ngbDropdown class="d-inline-block" #dropdown="ngbDropdown">
+          <button class="btn btn-outline-gray btn-sm no-border-radius" [ngClass]="{'active': customDurationValue}" ngbDropdownToggle>
+            <span  *ngIf="customDurationValue; else notOk">{{customDurationValue}} {{'ADMIN.GROUP.DAYS' | translate}}</span>
+            <ng-template  #notOk>{{'ADMIN.GROUP.CUSTOM' | translate}}</ng-template>
+          </button>
+          <div ngbDropdownMenu class="px-3 py-2">
+            <div class="form-group mb-2"  style="width: 200px">
+              <label>{{'ADMIN.GROUP.NUMBER_OF_DAYS' | translate}}:</label>
+              <div class="input-group input-group-sm">
+                <input class="form-control form-control-sm" type="number" min="1" placeholder="{{'ADMIN.GROUP.NUMBER_OF_DAYS' | translate}}" [formControl]="customDuration">
+                <div class="input-group-append">
+                  <span class="input-group-text">{{'ADMIN.GROUP.DAYS' | translate}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-dark btn-sm" [disabled]="customDuration.invalid" (click)="saveCustomDuration(); dropdown.close()">{{'BUTTONS.SAVE' | translate}}</button>
+            </div>
+          </div>
+        </div>
+        <label ngbButtonLabel class="btn-outline-gray">
+          <input ngbButton type="radio" [value]="30"> 30 {{'ADMIN.GROUP.DAYS' | translate}} ({{'ADMIN.GROUP.MONTH' | translate}})
+        </label>
+        <label ngbButtonLabel class="btn-outline-gray">
+          <input ngbButton type="radio" [value]="90"> 90 {{'ADMIN.GROUP.DAYS' | translate}} ({{'ADMIN.GROUP.TRIMESTER' | translate}})
+        </label>
+        <label ngbButtonLabel class="btn-outline-gray">
+          <input ngbButton type="radio" [value]="180"> 180 {{'ADMIN.GROUP.DAYS' | translate}} ({{'ADMIN.GROUP.MONTHS' | translate}})
+        </label>
+        <label ngbButtonLabel class="btn-outline-gray">
+          <input ngbButton type="radio" [value]="360"> 360 {{'ADMIN.GROUP.DAYS' | translate}}  ({{'ADMIN.GROUP.YEAR' | translate}})
+        </label>
+      </div>
+    </div>
+    <div class="form-group mt-2">
+      <label>{{'ADMIN.GROUP.STARTS_AT' | translate}}</label>
+      <div class="input-group-icon input-group-icon-right">
+        <input [matDatepicker]="startDate" class="form-control" placeholder="start date" (click)="startDate.open()"
+               formControlName="startDate"
+               readonly>
+        <span class="input-icon input-icon-right">
+        <i class="fas fa-hourglass-start"></i>
+      </span>
+      </div>
+      <mat-datepicker #startDate></mat-datepicker>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-center">
+      <i class="ft-arrow-down font-36 d-block"></i>  <span>{{remainingDays | number : '1.0-0'}} / {{totalDays | number: '1.0-0'}}  ({{'ADMIN.GROUP.DAYS_REMAINS' | translate}})</span>
+    </div>
+
+    <div class="form-group">
+      <label>{{'ADMIN.GROUP.EXPIRES_AT' | translate}}</label>
+      <div class="input-group-icon input-group-icon-right">
+        <input [matDatepicker]="expirationDate" class="form-control" placeholder="{{'ADMIN.GROUP.EXPIRATION_DATE' | translate}}"
+               formControlName="expirationDate"
+               (click)="expirationDate.open()" [matDatepickerFilter]="myFilter" readonly>
+        <span class="input-icon input-icon-right">
+        <i class="fas fa-hourglass-end"></i>
+      </span>
+      </div>
+      <mat-datepicker #expirationDate></mat-datepicker>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-flat-button color="secondary" class="mr-2" [matDialogClose]="">
+    <mat-icon>clear</mat-icon>
+    {{'BUTTONS.CANCEL' | translate}}</button>
+  <button mat-flat-button color="primary" (click)="saveForm()">
+    <mat-icon>save</mat-icon>
+    {{'BUTTONS.SAVE' | translate}}</button>
+</div>

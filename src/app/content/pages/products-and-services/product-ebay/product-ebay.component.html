@@ -1,0 +1,263 @@
+<div class="subheader" *ngIf="saleApp?.ebayEnabled">
+  <div class="container-fluid">
+    <form [formGroup]="filterForm">
+      <div class="row">
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'SUBHEADER.SEARCH' | translate}}</label>
+          <div class="search-input">
+            <div class="form-group">
+              <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn"
+                      (click)="filterForm.controls.textSearch.setValue(null)">
+                  <em class="ft-x"></em>
+                </span>
+                <input type="text" class="form-control form-control-sm"
+                       placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                       formControlName="textSearch"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <div class="action-btns">
+    <a mat-mini-fab href="https://www.ebay.com/sh/lst/active"
+       placement="left"
+       tooltipClass="custom-tooltip"
+       ngbTooltip="Vai su Ebay"
+       target="_blank" class="ml-2" >
+      <em class="fab fa-ebay"></em>
+    </a>
+    <button mat-mini-fab color="primary" (click)="addProduct()"
+            class="ml-2"
+            placement="left"
+            tooltipClass="custom-tooltip"
+            ngbTooltip="{{'GOOGLE_MERCHANT_FORM.ADD' | translate}}">
+      <em class="ft-plus" ></em>
+    </button>
+  </div>
+</div>
+
+<div class="card mt-2" *ngIf="saleApp?.ebayEnabled" #main>
+  <div class="card-body table-responsive">
+    <h4 style="border-bottom: 1px solid gainsboro; padding-bottom: 5px;">
+      Ebay Prodotti
+      <span style="font-size: 13px !important;
+      color: gray;
+      font-weight: normal !important; float: right; padding-top: 5px;">
+        <em class="fa fa-sync" aria-hidden="true"
+            ngbTooltip="Sincronizza i prodotti Ebay"
+            (click)="synchronizeEbay()" *ngIf="!syncInLoading"></em>
+        <em class="fa fa-sync fa-spin" aria-hidden="true" *ngIf="syncInLoading"></em>
+      </span>
+    </h4>
+
+    <div class="container-fluid mb-2">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-12 p-0">
+          <button mat-flat-button color="warn" class="mr-2" *ngIf="!productSelectedToDeleteInLoading"
+                  [disabled]="!isThereSelectedProductsToAdd()"
+                  (click)="deleteSelectedProductFromEbay()">
+            {{'GOOGLE_MERCHANT_FORM.REMOVE_SELECTED_PRODUCTS' | translate}} ({{getSelectedNbr()}})
+          </button>
+          <button mat-flat-button color="warn" class="mr-2" *ngIf="productSelectedToDeleteInLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+
+          <button mat-flat-button color="warn" class="mr-2"
+                  *ngIf="!productAllToDeleteInLoading"
+                  [disabled]="ebayResponse?.data?.length <= 0"
+                  (click)="deleteAllProductFromEbay()">
+            {{'GOOGLE_MERCHANT_FORM.REMOVE_ALL_PRODUCTS' | translate}} ({{ebayResponse?.totalRecords}})
+          </button>
+          <button mat-flat-button color="warn" class="mr-2" *ngIf="productAllToDeleteInLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+
+          <button mat-flat-button color="primary" class="mr-2" *ngIf="!productSelectedToDeleteInLoading"
+                  [disabled]="!isThereSelectedProductsToAdd()"
+                  (click)="addSelectedProductsToEbay()">
+            Crea e pubblica offerte  ({{getSelectedNbr()}})
+          </button>
+          <button mat-flat-button color="primary" class="mr-2" *ngIf="productSelectedToDeleteInLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+
+    <table class="table table-sm table-hover table-bordered">
+      <thead>
+      <tr>
+        <th scope="col" class="text-center">
+          <mat-checkbox [(ngModel)]="allProductSelected" (change)="selectPageProducts($event)"></mat-checkbox>
+        </th>
+        <th *ngFor="let c of columns" scope="col">
+          {{c | translate}}
+        </th>
+        <th scope="col">&nbsp;</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngIf="ebayResponse?.data?.length <= 0">
+        <td class="text-center" colspan="10">
+          {{'GOOGLE_MERCHANT_FORM.NO_PRODUCT' | translate}}
+        </td>
+      </tr>
+      <tr *ngFor="let item of ebayResponse?.data; let i = index">
+        <td class="text-center">
+          <mat-checkbox [(ngModel)]="productToDeleteList[i]"></mat-checkbox>
+        </td>
+        <td>
+          <img [src]="item.product.imageUrls[0]" alt="" style="height: 100px; width: 100px;"/>
+        </td>
+        <td>
+          <ngb-highlight [result]="item.sku" [term]="filterForm.get('textSearch').value?.trim()"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="item.product.ean[0]" [term]="filterForm.get('textSearch').value?.trim()"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="item.product.title" [term]="filterForm.get('textSearch').value?.trim()"></ngb-highlight>
+        </td>
+        <td>
+          <div [innerHTML]="item.product.description"></div>
+        </td>
+        <td>
+          {{item.availability.shipToLocationAvailability.quantity}}
+        </td>
+        <td>
+          <ngb-highlight [result]="item.product.brand" [term]="filterForm.get('textSearch').value?.trim()"></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight [result]="item.condition" [term]="filterForm.get('textSearch').value?.trim()"></ngb-highlight>
+          <p>
+            {{item.conditionDescription}}
+          </p>
+        </td>
+        <td>
+          <button mat-icon-button color="primary"  *ngIf="!item.inLoading"
+                  (click)="openProductOffersModal(item)"
+                  placement="top" tooltipClass="custom-tooltip"
+                  ngbTooltip="Vedi offerte">
+            <em class="ft-activity"></em>
+          </button>
+          <button mat-icon-button color="primary"  *ngIf="!item.inLoading"
+                  (click)="openUpdateProduct(updateItemFormModal, item)"
+                  placement="top" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'BUTTONS.EDIT'|translate}}">
+            <em class="ft-edit-1"></em>
+          </button>
+          <button mat-icon-button color="primary"  *ngIf="!item.inLoading"
+                  (click)="deleteProduct(item)"
+                  placement="top" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'BUTTONS.DELETE'|translate}}">
+            <em class="ft-trash"></em>
+          </button>
+          <button mat-icon-button *ngIf="item.inLoading">
+            <em class="fa fa-spin fa-spinner"></em>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center"
+                    [collectionSize]="ebayResponse?.totalRecords"
+                    size="sm"
+                    [pageSize]="request.pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="request.page"
+                    *ngIf="ebayResponse?.totalRecords > 0"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+
+
+    <div class="form-row">
+      <div class="form-group col-lg-12 text-center">
+        <label>{{'GOOGLE_MERCHANT_FORM.SHOW_ROWS' | translate}}</label>
+        <label>
+          <select class="ml-2 mr-2" [(ngModel)]="request.pageSize" (change)="showRows()">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="29">29</option>
+            <option value="30">30</option>
+            <option value="31">31</option>
+            <option value="50">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
+            <option value="150">150</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="card card-fullheight mt-2" *ngIf="saleApp && !saleApp.ebayEnabled">
+  <div class="card-body table-responsive text-center">
+    <h1>
+      Devi attivare Ebay
+    </h1>
+  </div>
+</div>
+
+<ng-template #updateItemFormModal>
+  <div class="modal-header">
+    <h4 mat-dialog-title>Dettaglio del Offerta</h4>
+    <button type="button" mat-button (click)="modalRef.close(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="container">
+      <form [formGroup]="updateItemForm">
+        <div class="form-row">
+          <div class="form-group col-12">
+            <label><strong>Titolo: </strong></label>
+            <input type="text" class="form-control form-control-sm" formControlName="title">
+          </div>
+
+          <div class="form-group col-12">
+            <label><strong>Descrizione: </strong></label>
+            <textarea class="form-control form-control-sm" rows="12" formControlName="description"></textarea>
+          </div>
+
+          <div class="form-group col-12">
+            <label><strong>Marca: </strong></label>
+            <input type="text" class="form-control form-control-sm" formControlName="brand">
+          </div>
+
+          <div class="form-group col-12">
+            <label><strong>Giacenza : </strong></label>
+            <input type="number" class="form-control form-control-sm"
+                  formControlName="quantity">
+          </div>
+
+          <div class="form-group col-12">
+            <label><strong>Ean : </strong></label>
+            <input type="text" class="form-control form-control-sm" formControlName="ean">
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button mat-flat-button color="primary"
+            [disabled]="updateItemForm.invalid"
+            (click)="modalRef.close(true)">
+      {{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+</ng-template>

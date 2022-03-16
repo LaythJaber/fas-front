@@ -1,0 +1,314 @@
+<div class="form-content">
+
+  <div class="form-row p-2 mb-3" style="border-bottom: 1px solid gainsboro;">
+    <div class="col-12">
+
+      <div *ngIf="editMode" class="pull-left">
+        <span class="d-inline-block">
+          {{'CLIENT_FORM.DETAILS.CREATION_DATE' | translate}}:
+          <input type="text" class="form-control form-control-sm" readonly
+                 value="{{client?.createdAt |date : 'dd-MM-yyyy HH:mm'}}">
+        </span>
+        <span class="ml-2 d-inline-block">
+          {{'CLIENT_FORM.DETAILS.UPDATE_DATE' | translate}}:
+          <input type="text" class="form-control form-control-sm" readonly
+                 value="{{client?.updatedAt |date : 'dd-MM-yyyy HH:mm'}}">
+        </span>
+        <span class="ml-2 d-inline-block">
+          {{'DATA_TABLE.CODE' | translate}}:
+          <input type="text" class="form-control form-control-sm" readonly
+                 value="{{client?.code}}">
+        </span>
+      </div>
+
+      <div class="pull-right">
+        <button mat-stroked-button style="margin-right: 10px" color="primary" *ngIf="editMode && client?.email"
+                (click)="openPasswordModal(passwordModal)">
+          {{'BUTTONS.EDIT_PASSWORD' | translate}}
+        </button>
+        <button mat-stroked-button style="margin-right: 10px" color="primary" *ngIf="!editMode"
+                (click)="saveClient()" [disabled]="!clientForm.valid">
+          <mat-icon>save</mat-icon>
+          {{'BUTTONS.SAVE' | translate}}
+        </button>
+        <button mat-stroked-button color="primary" *ngIf="editMode && !editClicked"
+                style="margin-right: 12px" (click)="activateEdit()">
+          <mat-icon>edit</mat-icon>
+          {{'BUTTONS.EDIT' | translate}}
+        </button>
+        <button mat-stroked-button color="primary" *ngIf="editMode && editClicked" style="margin-right: 12px"
+                (click)="updateClient()" [disabled]="clientForm.invalid">
+          <mat-icon>save</mat-icon>
+          {{'BUTTONS.SAVE' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <form class="form px-3 pb-3" [formGroup]="clientForm" id="clientForm">
+    <div class="row">
+      <div class="form-group col-lg-3 col-md-6">
+        <label>{{'CLIENT_FORM.DETAILS.FIRST_NAME' | translate}} :</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.DETAILS.FIRST_NAME' | translate}}"
+               class="form-control form-control-sm" formControlName="firstName"
+               [ngClass]="{ 'is-invalid': submitted && clientForm.get('firstName').invalid }"
+        >
+        <div *ngIf="submitted && clientForm.get('firstName').invalid;" class="invalid-feedback">
+          {{'CLIENT_FORM.DETAILS.INVALID_NAME' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-6">
+        <label>{{'CLIENT_FORM.DETAILS.LAST_NAME' | translate}} :</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.DETAILS.LAST_NAME' | translate}}"
+               class="form-control form-control-sm" formControlName="lastName"
+               [ngClass]="{ 'is-invalid': submitted && clientForm.get('lastName').invalid }"
+        >
+        <div *ngIf="submitted && clientForm.get('lastName').invalid;" class="invalid-feedback">
+          {{'CLIENT_FORM.DETAILS.INVALID_LAST_NAME' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-6">
+        <label>{{'CLIENT_FORM.DETAILS.DATE_OF_BIRTH' | translate}}:</label>
+        <div class="input-group-icon input-group-icon-right">
+          <input type="text" [matDatepicker]="birthPicker"
+                 class="form-control "
+                 formControlName="dateOfBirth" #dateOfBirthElm>
+          <span
+            class="input-icon input-icon-right"
+            (click)="birthPicker.opened ? birthPicker.close() : birthPicker.open()">
+              <i aria-hidden="true" class="fas fa-calendar"></i>
+            </span>
+        </div>
+        <mat-datepicker #birthPicker></mat-datepicker>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-6">
+        <label>{{'CLIENT_FORM.DETAILS.FISCAL_CODE' | translate}}:</label>
+        <input type="text" placeholder="{{'CLIENT_FORM.DETAILS.FISCAL_CODE' | translate}}"
+               class="form-control form-control-sm" formControlName="fiscalCode">
+      </div>
+
+      <div class="form-group col-lg-3 col-md-6">
+        <label>{{'CLIENT_FORM.DETAILS.GENDER' | translate}} :</label>
+        <div class="d-flex justify-content-around align-items-center pt-2"
+             [ngStyle]="{'color': clientForm.get('gender').invalid ? 'red' : 'unset'}">
+          <label class="radio radio-primary mr-4">
+            <input type="radio" formControlName="gender" value="MALE">
+            <span>{{'CLIENT_FORM.DETAILS.MALE' | translate}}</span>
+          </label>
+          <label class="radio radio-primary">
+            <input type="radio" formControlName="gender" value="FEMALE">
+            <span>{{'CLIENT_FORM.DETAILS.FEMALE' | translate}}</span>
+          </label>
+          <label class="radio radio-primary">
+            <input type="radio" formControlName="gender" value="OTHER">
+            <span>{{'CLIENT_FORM.DETAILS.OTHER' | translate}}</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-6">
+        <label>{{'CLIENT_FORM.DETAILS.MOBILE' | translate}}:</label>
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend" ngbDropdown #myDrop="ngbDropdown">
+            <button class="btn btn-outline-secondary" type="button"
+                    ngbDropdownToggle>{{clientForm.get('mobilePrefix').value || 'BUTTONS.CHOOSE' | translate}}
+            </button>
+            <div class="dropdown-menu py-0" tabindex="1" ngbDropdownMenu>
+              <ng-select [items]="prefixList" [bindLabel]="'label'"
+                         [tabIndex]="1"
+                         autofocus
+                         [bindValue]="'prefix'" formControlName="mobilePrefix" placeholder="search"
+                         (change)="myDrop.close()" #mobileNgSelect>
+              </ng-select>
+            </div>
+          </div>
+          <input type="tel" class="form-control form-control-sm" formControlName="mobile"
+                 [ngClass]="{ 'is-invalid': submitted && clientForm.get('mobile').invalid }"
+          >
+          <div *ngIf="submitted && clientForm.get('mobile').invalid" class="invalid-feedback">
+            {{'CLIENT_FORM.DETAILS.MOBILE_INVALID' | translate}}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-6">
+        <label>{{'CLIENT_FORM.DETAILS.EMAIL' | translate}}</label>
+        <input type="email" class="form-control form-control-sm" placeholder="example@email.it"
+               formControlName="email" required="">
+        <div *ngIf="submitted && clientForm.get('email').invalid" class="invalid-feedback">
+          {{'CLIENT_FORM.DETAILS.EMAIL_INVALID' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-6" *ngIf="!editMode">
+        <label>{{'CLIENT_FORM.DETAILS.PASSWORD' | translate}}</label>
+        <div class="input-group">
+          <input [type]="clientForm.controls.psd.value ? 'text' : 'password'"
+                 class="form-control form-control-sm" formControlName="password">
+          <div class="input-group-append">
+              <span class="input-group-text">
+                <em class="fa"
+                   [ngClass]="{'fa-eye-slash': !clientForm.controls.psd.value,'fa-eye': clientForm.controls.psd.value}"
+                   (click)="clientForm.controls.psd.setValue(!clientForm.controls.psd.value)"
+                ></em>
+              </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-6">
+        <label>{{'CLIENT_FORM.DETAILS.COUNTRY' | translate}}</label>
+        <ng-select [items]="nationalities"
+                   required="false"
+                   class="ng-select-sm"
+                   formControlName="nationality">
+        </ng-select>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-6" *ngIf="loginConf?.activeCustomField1">
+        <label>{{loginConf?.customField1Name | translate}} :</label>
+        <input type="text" placeholder="{{loginConf?.customField1Name | translate}}"
+               class="form-control form-control-sm" formControlName="customField1Value"
+               [ngClass]="{ 'is-invalid': submitted && !clientForm.get('customField1Value').value && loginConf?.requiredCustomField1 }"
+        >
+        <div *ngIf="submitted && !clientForm.get('customField1Value').value && loginConf?.requiredCustomField1;" class="invalid-feedback">
+          {{'CLIENT_FORM.DETAILS.INVALID_NAME' | translate}}
+        </div>
+      </div>
+
+
+      <div class="form-group col-lg-3 col-md-6" *ngIf="loginConf?.activeCustomField2">
+        <label>{{loginConf?.customField2Name | translate}} :</label>
+        <input type="text" placeholder="{{loginConf?.customField2Name | translate}}"
+               class="form-control form-control-sm" formControlName="customField2Value"
+               [ngClass]="{ 'is-invalid': submitted && !clientForm.get('customField2Value').value && loginConf?.requiredCustomField2 }"
+        >
+        <div *ngIf="submitted && !clientForm.get('customField2Value').value && loginConf?.requiredCustomField2;" class="invalid-feedback">
+          {{'CLIENT_FORM.DETAILS.INVALID_NAME' | translate}}
+        </div>
+      </div>
+
+
+      <div class="form-group col-lg-3 col-md-6" *ngIf="loginConf?.activeCustomField3">
+        <label>{{loginConf?.customField3Name | translate}} :</label>
+        <input type="text" placeholder="{{loginConf?.customField3Name | translate}}"
+               class="form-control form-control-sm" formControlName="customField3Value"
+               [ngClass]="{ 'is-invalid': submitted && !clientForm.get('customField3Value').value && loginConf?.requiredCustomField3 }"
+        >
+        <div *ngIf="submitted && !clientForm.get('customField3Value').value && loginConf?.requiredCustomField3;" class="invalid-feedback">
+          {{'CLIENT_FORM.DETAILS.INVALID_NAME' | translate}}
+        </div>
+      </div>
+
+
+      <div class="form-group col-lg-3 col-md-6" *ngIf="loginConf?.activeCustomField4">
+        <label>{{loginConf?.customField4Name | translate}} :</label>
+        <input type="text" placeholder="{{loginConf?.customField4Name | translate}}"
+               class="form-control form-control-sm" formControlName="customField4Value"
+               [ngClass]="{ 'is-invalid': submitted && !clientForm.get('customField4Value').value && loginConf?.requiredCustomField4 }"
+        >
+        <div *ngIf="submitted && !clientForm.get('customField4Value').value && loginConf?.requiredCustomField4;" class="invalid-feedback">
+          {{'CLIENT_FORM.DETAILS.INVALID_NAME' | translate}}
+        </div>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="pagesInfo?.page1Status || pagesInfo?.page2Status || pagesInfo?.page3Status">
+
+      <div class="form-group col-lg-3 col-md-6" *ngIf="pagesInfo?.page1Status">
+        <label class="checkbox checkbox-outline-primary">
+          <input type="checkbox" formControlName="newsletters">
+          <span>{{pagesInfo?.page1Title}}</span>
+        </label>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-6" *ngIf="pagesInfo?.page2Status">
+        <label class="checkbox checkbox-outline-primary">
+          <input type="checkbox" formControlName="marketing">
+          <span>{{pagesInfo?.page2Title}}</span>
+        </label>
+      </div>
+
+      <div class="form-group col-lg-3 col-md-6" *ngIf="pagesInfo?.page3Status">
+        <label class="checkbox checkbox-outline-primary">
+          <input type="checkbox" formControlName="privacy">
+          <span>{{pagesInfo?.page3Title}}</span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="form-group col-lg-12">
+        <label>{{'CLIENT_FORM.DETAILS.NOTE' | translate}}:</label>
+        <textarea class="form-control" rows="5" style="resize: none" formControlName="note"></textarea>
+      </div>
+    </div>
+  </form>
+
+</div>
+
+<ng-template #passwordModal>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'CLIENT_FORM.DETAILS.PASSWORD_MODAL.CHANGE' | translate}}</h4>
+    <button type="button" mat-button mat-dialog-close (click)="dialogRef.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="passwordForm">
+      <div class="form-row">
+        <div class="form-group col-lg-6 col-md-6">
+          <label>{{'CLIENT_FORM.DETAILS.PASSWORD_MODAL.NEW' | translate}}</label>
+          <div class="input-group">
+            <input [type]="passwordForm.controls.npsd.value ? 'text' : 'password'"
+                   class="form-control form-control-sm" formControlName="newPassword">
+            <div class="input-group-append">
+              <span class="input-group-text">
+                <em class="fa"
+                  [ngClass]="{'fa-eye-slash': !passwordForm.controls.npsd.value,'fa-eye': passwordForm.controls.npsd.value}"
+                  (click)="showHidePassword($event)"
+                ></em>
+              </span>
+            </div>
+          </div>
+          <div class="d-block invalid-feedback"
+               *ngIf="passwordForm.get('newPassword').touched && passwordForm.get('newPassword').invalid">
+            {{'CLIENT_FORM.DETAILS.PASSWORD_MODAL.INVALID' | translate}}
+          </div>
+        </div>
+        <div class="form-group col-lg-6 col-md-6">
+          <label>{{'CLIENT_FORM.DETAILS.PASSWORD_MODAL.CONFIRM' | translate}}</label>
+          <div class="input-group">
+            <input [type]="passwordForm.controls.cpsd.value ? 'text' : 'password'"
+                   class="form-control form-control-sm" formControlName="confirmPassword">
+            <div class="input-group-append">
+              <span class="input-group-text">
+                <em class="fa"
+                   [ngClass]="{'fa-eye-slash': !passwordForm.controls.cpsd.value,'fa-eye': passwordForm.controls.cpsd.value}"
+                   (click)="passwordForm.controls.cpsd.setValue(!passwordForm.controls.cpsd.value)"
+                ></em>
+              </span>
+            </div>
+          </div>
+          <div class="d-block invalid-feedback"
+               *ngIf="passwordForm.get('confirmPassword').getError('notSame')">
+            {{'CLIENT_FORM.DETAILS.PASSWORD_MODAL.INVALID_CONFIRM' | translate}}
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button mat-flat-button (click)="dialogRef.close()">
+      {{'BUTTONS.PREVIOUS' | translate}}
+    </button>
+    <button mat-flat-button color="primary" (click)="sendRestPassword()" [disabled]="passwordForm.invalid">
+      {{'BUTTONS.OK' | translate}}
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,24 @@
+
+  <h1 mat-dialog-title>Choose the date of the Meet </h1>
+
+
+  <div mat-dialog-content class="p-16 pb-0 m-0">
+
+    <form name="eventForm" [formGroup]="eventForm" novalidate class="event-form w-100-p" >
+
+
+      <mat-form-field class="example-full-width">
+        <input matInput  [matDatepicker]="picker" formControlName="dateMeet" placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </form>
+
+  </div>
+
+
+
+  <div class="d-flex align-items-end  justify-content-end">
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [disabled]="eventForm.invalid" (click)="createEventForm()">Add Appointment</button>
+  </div>

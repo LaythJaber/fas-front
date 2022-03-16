@@ -1,0 +1,375 @@
+<div class="form-container show-container ">
+
+  <div class="form-header">
+    <div class="d-flex align-items-center" style="min-width: fit-content;">
+      <!--      <button mat-icon-button color="primary" (click)="closeForm()">-->
+      <!--        <mat-icon>close</mat-icon>-->
+      <!--      </button>-->
+      <div *ngIf="editMode">{{'MOVEMENT_FORM.MOVEMENT_DETAILS' | translate}}</div>
+      <div *ngIf="!editMode" class="hide">{{'MOVEMENT_FORM.CREATE_MOVEMENT' | translate}}</div>
+    </div>
+    <button mat-button color="primary" *ngIf="!editMode " [disabled]="disableSave" (click)="save()">
+      <mat-icon>save</mat-icon>
+      {{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+
+  <div class="form-content">
+    <form class="form p-3 movement-container" [formGroup]="movementForm" id="movementForm">
+      <div class="form-row">
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'MOVEMENT_FORM.DATE' | translate}}:</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" [matDatepicker]="date" class="form-control form-control-sm" formControlName="date">
+            <span class="input-icon input-icon-right" (click)="date.opened ? date.close() : date.open()">
+              <i aria-hidden="true" class="fas fa-calendar"></i>
+            </span>
+          </div>
+          <mat-datepicker #date></mat-datepicker>
+        </div>
+
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'MOVEMENT_FORM.NUMBER' | translate}} :</label>
+          <input type="text" class="form-control form-control-sm" formControlName="number" readonly>
+        </div>
+
+        <!--        <div class="form-group col-lg-2 col-md-3">-->
+        <!--          <label>{{'MOVEMENT_FORM.CLIENT' | translate}} :</label>-->
+        <!--          <input type="text" class="form-control form-control-sm" formControlName="client" readonly>-->
+        <!--        </div>-->
+
+        <!--        <div class="form-group col-lg-2 col-md-3">-->
+        <!--          <label>{{'MOVEMENT_FORM.PAYMENT' | translate}} :</label>-->
+        <!--          <ng-select class="ng-select-sm" (open)="translatePayment()" [items]="payments" [bindLabel]="'description'"-->
+        <!--                     [bindValue]="'id'" [clearable]="true" formControlName="paymentMethod" [virtualScroll]="true">-->
+        <!--          </ng-select>-->
+        <!--        </div>-->
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'MOVEMENT_FORM.TOTAL_QUANTITY' | translate}} a pezzi: </label>
+          <input type="tel" currencyMask [options]="{ prefix: ''}" class="form-control form-control-sm"
+                 formControlName="totalQuantityPiece" readonly>
+        </div>
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'MOVEMENT_FORM.TOTAL_QUANTITY' | translate}} per KG:</label>
+          <input type="tel" currencyMask [options]="{ prefix: ''}" class="form-control form-control-sm"
+                 formControlName="totalQuantityGR" readonly>
+        </div>
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'MOVEMENT_FORM.TOTAL_QUANTITY' | translate}} per L:</label>
+          <input type="tel" currencyMask [options]="{ prefix: ''}" class="form-control form-control-sm"
+                 formControlName="totalQuantityML" readonly>
+        </div>
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'MOVEMENT_FORM.TYPE' | translate}} : <span class="badge badge-info badge-circle"
+                                                              *ngIf="movement?.type =='SALE'"
+                                                              (click)="openTransactionDetails(transactionContent)">
+                        <em class="ti-info"></em>  </span></label>
+          <ng-select class="ng-select-sm" (open)="translateTypes()" [items]="types" [bindLabel]="'description'"
+                     [bindValue]="'id'" [clearable]="false" formControlName="type" [virtualScroll]="true">
+          </ng-select>
+        </div>
+        <div class="form-group  col-lg-9 col-md-10">
+          <label> {{'MOVEMENT_FORM.NOTE' | translate}} :</label>
+          <div class="input-group-icon input-group-icon-left input-group-sm">
+              <span class="input-icon input-icon-left">
+                 <i aria-hidden="true" class="ti-info"></i>
+               </span>
+            <input type="text" class="form-control form-control-sm" formControlName="note">
+          </div>
+        </div>
+
+      </div>
+
+    </form>
+    <form class="form p-3 movement-container" [formGroup]="newProdForm" id="newProdForm" *ngIf="!editMode">
+      <div class="form-row">
+        <h4>{{'MOVEMENT_FORM.ADD_PRODUCT' | translate}}:</h4>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-lg-6 col-md-3">
+          <label>{{'MOVEMENT_FORM.SEARCH_PRODUCT' | translate}} :</label>
+          <ng-select [items]="products" appendTo="body" formControlName="productId"
+                     bindValue="id" [typeahead]="productSearch$"
+                     [clearable]="true"
+                     bindLabel="translatedDesc"
+                     placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                     class="ng-select-product ng-select-sm"
+                     [virtualScroll]="true">
+          </ng-select>
+        </div>
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'MOVEMENT_FORM.QUANTITY' | translate}}  {{stockType}} :</label>
+          <input type="number" class="form-control form-control-sm" formControlName="quantity">
+        </div>
+        <div class="form-group col-lg-3 col-md-3">
+          <button mat-flat-button color="primary" class="add-btn-class" (click)="addProduct()"
+                  [disabled]="!newProdForm.get('productId').value">
+            {{'BUTTONS.ADD' | translate}}
+          </button>
+        </div>
+      </div>
+    </form>
+    <div class="table-responsive">
+      <table class="table table-sm table-hover" style="max-height: 50vh !important;">
+        <caption></caption>
+        <thead>
+        <tr>
+          <th *ngFor="let c of columns" scope="col">{{c | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let product of productsForm.controls; let i = index" [formGroup]="productsForm.controls[i]">
+          <td>{{("0000" + product?.get('seq')?.value).slice(-4)}}</td>
+          <td>{{product?.get('prodCode')?.value}} </td>
+          <td>{{product?.get('prodDescription')?.value}}</td>
+          <td class="quantity-td">
+            <input type="number"  min="1" class="form-control form-control-sm"
+                   formControlName="quantity" (change)="updateTotalQuantity()">
+          </td>
+          <td>{{product?.get('stockType')?.value}}</td>
+          <td *ngIf="!editMode">
+            <button (click)="editProd(product)" color="warn" mat-icon-button>
+              <i aria-hidden="true" class="ft-edit-2"></i>
+            </button>
+          </td>
+          <td *ngIf="!editMode">
+            <button (click)="delete($event, product)" color="warn" mat-icon-button>
+              <i aria-hidden="true" class="ft-trash-2"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #transactionContent>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'payment details' | translate}}</h4>
+    <button type="button" mat-button (click)="paymentDialog.close(null)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+
+    <div class="row" style="font-size: 12px;">
+      <div class="col-4" style="border-right: 1px solid gainsboro;">
+        <div class="form-group">
+          <label><strong>Codice ordine: </strong></label>
+          <span style="float: right">
+            {{purchase.code}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label><strong>Data ordine: </strong></label>
+          <span style="float: right">
+            {{purchase.createdAt | date: 'dd/MM/yyyy \'alle\' HH:mm'}}
+          </span>
+        </div>
+      </div>
+
+      <div class="col-4" style="border-right: 1px solid gainsboro;">
+        <div class="form-group">
+          <label><strong>Codice cliente: </strong></label>
+          <span style="float: right">
+            {{purchase.client.code}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label><strong>Nome Cognome: </strong></label>
+          <span style="float: right">
+            {{purchase.client.firstName + ' ' + purchase.client.lastName}}
+          </span>
+        </div>
+      </div>
+
+
+      <div class="col-4">
+        <div class="form-group">
+          <label><strong>Stato attuale: </strong></label>
+          <span style="float: right">
+            {{'PURCHASE_FORM.STATE.' + purchase.state | translate}}
+            <span *ngIf="purchase.state.toString() === 'CANCELED'">
+              (dall {{purchase.stateHistoryList[0].operator ? 'Operatore' : 'Cliente'}})
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+
+    <table class="table table-sm table-responsive ">
+      <tr>
+        <th scope="col">EAN</th>
+        <th scope="col">Descrizione</th>
+        <th scope="col">Prezzo</th>
+        <th scope="col" class="text-center">Q.tà Ordinata</th>
+        <th scope="col" class="text-center">Q.tà Consegnata</th>
+        <th scope="col">Sconti</th>
+        <th scope="col">Prezzo Totale</th>
+        <th scope="col" class="text-center">Disponibile</th>
+      </tr>
+      <tbody>
+      <tr *ngIf="rowList && !rowList.length">
+        <td colspan="10" class="text-center">
+          Nessun row trovato
+        </td>
+      </tr>
+      <tr *ngFor="let row of rowList; let i=index">
+        <td>
+          {{row.product?.productCodes[0]?.code}}
+        </td>
+        <td>
+          {{row.product | localTranslate: 'description'}}
+          <div *ngIf="row?.colorValue" class="variation">
+            <strong>Colore:</strong> {{row?.colorValue}}
+          </div>
+          <div *ngIf="row?.sizeValue" class="variation">
+            <strong>Taglia:</strong> {{row?.sizeValue}}
+          </div>
+        </td>
+        <td>
+          <div *ngIf="row.weighted">
+            {{row.priceKgLtr | number: "1.2-2" | numberCommaseparator }}€/{{row.priceKgLtrUm}}
+          </div>
+          <span *ngIf="row.couponUnitPrice <= 0">
+                <span *ngIf="!row.inOffer">
+                  {{row.price | number: "1.2-2" | numberCommaseparator }}€/{{priceService.getUnit(row)}}
+                </span>
+                <span *ngIf="row.inOffer">
+                  {{row.priceInOffer | number: "1.2-2" | numberCommaseparator }}€/{{priceService.getUnit(row)}}
+                  <del class="ml-2">{{row.price | number: "1.2-2" | numberCommaseparator }}€</del>
+                </span>
+              </span>
+          <span *ngIf="row.couponUnitPrice > 0">
+                {{row.couponUnitPrice | number: "1.2-2" | numberCommaseparator }}€/{{priceService.getUnit(row)}}
+            <span *ngIf="row.inOffer" class="ml-2">
+                   <del>{{row.priceInOffer | number: "1.2-2" | numberCommaseparator }}€</del>
+                </span>
+                <del class="ml-2">{{row.price | number: "1.2-2" | numberCommaseparator }}€</del>
+              </span>
+        </td>
+        <td class="text-center">
+          <div *ngIf="!row.weighted">
+            {{row.quantityOrdered}}
+          </div>
+          <div *ngIf="row.weighted">
+            {{priceService.getWeightQuantityInRow(row, row.quantityOrdered)}}
+          </div>
+        </td>
+        <td class="text-center">
+              <span *ngIf="!row.editQte && row.quantityDelivered > 0">
+                  <span *ngIf="!row.weighted">
+                    {{row.quantityDelivered}}
+                  </span>
+                  <span *ngIf="row.weighted">
+                    {{priceService.getWeightQuantityInRow(row, row.quantityDelivered)}}
+                  </span>
+              </span>
+        </td>
+        <td>
+          <span *ngIf="row.discount > 0">-{{row.discount | number: "1.2-2" | numberCommaseparator }}€</span>
+        </td>
+        <td>
+              <span *ngIf="row.couponTotalPrice <= 0">
+                {{row.rowTotal | number: "1.2-2" | numberCommaseparator }}€
+              </span>
+          <span *ngIf="row.couponTotalPrice > 0">
+                {{row.couponTotalPrice | number: "1.2-2" | numberCommaseparator }}€
+                <del class="ml-2">{{row.rowTotal | number: "1.2-2" | numberCommaseparator }}€</del>
+              </span>
+        </td>
+        <td class="text-center">
+          {{row.product.stock > 0 ? ('COMMON.YES' | translate) : ('COMMON.NO' | translate)}}
+          ({{row.product.stock}})
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <h6><u>Recap</u></h6>
+
+    <table class="table table-sm table-responsive ">
+      <thead>
+      <tr>
+        <th scope="col">&nbsp;</th>
+        <th scope="col">Totale prodotti</th>
+        <th scope="col">Sconti</th>
+        <th scope="col">Supplementi</th>
+        <th scope="col">Convenzioni</th>
+        <th scope="col"
+            *ngIf="purchase.coupon && purchase.coupon.discountType.toString() === 'PERCENT'">Coupon
+        </th>
+        <th scope="col">Spedezione</th>
+        <th scope="col">Comm. pagamento</th>
+        <th scope="col">Tot. ordine</th>
+        <th scope="col">Tot. pagare</th>
+        <th scope="col"
+            *ngIf="purchase.payment.type.toString() === 'STRIPE' || purchase.payment.type.toString() === 'PAYPAL'">
+          Tot. preautorizzato
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Ordinato</td>
+        <td>{{purchase.initialProductTotal + purchase.initialDiscountTotal | number: "1.2-2" | numberCommaseparator }}
+          €
+        </td>
+        <td>{{purchase.initialDiscountTotal | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td>{{purchase.initialSupplement | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td>{{purchase.initialConventionTotal | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td *ngIf="purchase.coupon && purchase.coupon.discountType.toString() === 'PERCENT'">
+          {{purchase.initialCouponDiscountTotal | number: "1.2-2" | numberCommaseparator }}
+          €
+        </td>
+        <td>{{purchase.initialShippingCost | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td>{{purchase.paymentCostTotal | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td>{{purchase.initialTotal | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td>{{purchase.initialTotalToPay | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td
+          *ngIf="purchase.payment.type.toString() === 'STRIPE' || purchase.payment.type.toString() === 'PAYPAL'"></td>
+      </tr>
+
+
+      <tr>
+        <td>Consegnato</td>
+        <td>{{purchase.finalProductTotal + purchase.finalDiscountTotal | number: "1.2-2" | numberCommaseparator }} €
+        </td>
+        <td>{{purchase.finalDiscountTotal | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td>{{purchase.finalSupplement | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td>{{purchase.finalConventionTotal | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td *ngIf="purchase.coupon && purchase.coupon.discountType.toString() === 'PERCENT'">
+          {{purchase.finalCouponDiscountTotal | number: "1.2-2" | numberCommaseparator }} €
+        </td>
+        <td>{{purchase.finalShippingCost | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td> <span *ngIf="purchase.state.toString() === 'IN_DELIVERY' || purchase.state.toString() === 'DELIVERED'
+              || purchase.state.toString() === 'IN_PREPARATION'">
+                {{purchase.paymentCostTotal | number: "1.2-2" | numberCommaseparator }}€
+              </span>
+          <span *ngIf="!(purchase.state.toString() === 'IN_DELIVERY' || purchase.state.toString() === 'DELIVERED'
+              || purchase.state.toString() === 'IN_PREPARATION')">
+                {{0 | number: "1.2-2" | numberCommaseparator }}€
+              </span>
+        </td>
+        <td>{{purchase.finalTotal | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td>{{purchase.finalTotalToPay | number: "1.2-2" | numberCommaseparator }} €</td>
+        <td *ngIf="purchase.payment.type.toString() === 'STRIPE' || purchase.payment.type.toString() === 'PAYPAL'">
+          {{purchase.preauthorizedAmount | number: "1.2-2" | numberCommaseparator }} €
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <div class="modal-footer">
+    <div mat-dialog-actions>
+      <button mat-flat-button color="warn" class="mr-3"
+              (click)="paymentDialog.close(null)">{{'BUTTONS.CLOSE' | translate}}
+      </button>
+    </div>
+  </div>
+</ng-template>

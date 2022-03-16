@@ -1,0 +1,80 @@
+<div class="card">
+  <div class="card-body">
+
+    <div class=" text-center">
+      <h1 class="display-4">My DS</h1>
+      <p class="lead"><strong>Please complete this form</strong> to ensure we know the right informations about you.</p>
+    </div>
+
+
+    <form [formGroup]="formGroup">
+      <mat-horizontal-stepper  #stepper formArrayName="formArray">
+        <mat-step formGroupName="0" [stepControl]="formArray?.get([0])">
+          <ng-template matStepLabel>Personal Info</ng-template>
+
+          <div class="d-flex justify-content-end">
+            <button mat-raised-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+        <mat-step formGroupName="1" [stepControl]="formArray?.get([1])">
+          <ng-template matStepLabel>Education</ng-template>
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+        <mat-step formGroupName="2" [stepControl]="formArray?.get([2])">
+          <ng-template matStepLabel>Professional Experience</ng-template>
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+        <mat-step formGroupName="3" [stepControl]="formArray?.get([3])">
+          <ng-template matStepLabel>Passeport</ng-template>
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+        <mat-step formGroupName="4" [stepControl]="formArray?.get([4])">
+          <ng-template matStepLabel>Family</ng-template>
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+        <mat-step formGroupName="5" [stepControl]="formArray?.get([5])">
+          <ng-template matStepLabel>Travel</ng-template>
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+        <mat-step formGroupName="6" [stepControl]="formArray?.get([6])">
+          <ng-template matStepLabel>Other</ng-template>
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+          </div>
+        </mat-step>
+        <!--
+        <mat-step>
+          <ng-template matStepLabel>Done</ng-template>
+          <p>You are now done.</p>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </mat-step>
+        -->
+      </mat-horizontal-stepper>
+    </form>
+  </div>
+
+</div>

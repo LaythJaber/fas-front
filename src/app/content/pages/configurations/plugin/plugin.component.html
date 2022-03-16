@@ -1,0 +1,342 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <mat-tab-group [selectedIndex]="0" mat-align-tabs="left">
+            <mat-tab>
+              <ng-template matTabLabel>{{'PLUGIN_FORM.PLUGIN_TAB.VARIOUS' | translate}}</ng-template>
+              <ng-template matTabContent>
+                <div class="container-fluid pt-3 pb-5">
+                  <div class="row">
+
+                    <!--  TrustPilot Config  -->
+                    <div class="col-lg-4 col-md-6 col-12 p-3">
+                      <div>
+                        <h4>{{'PLUGIN_FORM.PLUGIN_TAB.TRUST_PILOT.TITLE' | translate}}</h4>
+                      </div>
+                      <div class="custom-section">
+                        <form [formGroup]="pluginTrustPilotForm">
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="tbi">{{'PLUGIN_FORM.PLUGIN_TAB.TRUST_PILOT.BUSINESS_UNIT_ID' | translate}}</label>
+                              <input id="tbi" type="text" formControlName="trustPilotBusinessUnitId" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.TRUST_PILOT.BUSINESS_UNIT_ID' | translate}}" style="width: 100%"/>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="tti">{{'PLUGIN_FORM.PLUGIN_TAB.TRUST_PILOT.TEMPLATE_ID' | translate}}</label>
+                              <input id="tti" type="text" formControlName="trustPilotTemplateId" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.TRUST_PILOT.TEMPLATE_ID' | translate}}" style="width: 100%"/>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="ta" class="mr-2">{{'PLUGIN_FORM.PLUGIN_TAB.ACTIVE' | translate}}</label>
+                              <mat-checkbox id="ta" color="primary" formControlName="trustPilotEnabled"></mat-checkbox>
+                            </div>
+                          </div>
+                          <div class="form-row btns">
+                            <div class="form-group col-12 text-right">
+                              <button class="btn btn-primary" [disabled]="pluginTrustPilotForm.invalid"
+                                      (click)="updateTrustPilotPlugin()">
+                                <em class="fas fa-save"></em>
+                                {{'BUTTONS.SAVE' | translate}}
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+
+                    <!-- Google Analytics Config   -->
+                    <div class="col-lg-4 col-md-6 col-12 p-3">
+                      <div>
+                        <h4>{{'PLUGIN_FORM.PLUGIN_TAB.GOOGLE_ANALYTICS.TITLE' | translate}}</h4>
+                      </div>
+                      <div class="custom-section">
+                        <form [formGroup]="pluginGoogleAnalyticsForm">
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="gid">{{'PLUGIN_FORM.PLUGIN_TAB.GOOGLE_ANALYTICS.ID' | translate}} </label>
+                              <input id="gid" type="text" formControlName="googleAnalyticId" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.GOOGLE_ANALYTICS.ID' | translate}}" style="width: 100%"/>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="ga" class="mr-2">{{'PLUGIN_FORM.PLUGIN_TAB.ACTIVE' | translate}} </label>
+                              <mat-checkbox id="ga" color="primary" formControlName="googleAnalyticsEnabled"></mat-checkbox>
+                            </div>
+                          </div>
+                          <div class="form-row btns">
+                            <div class="form-group col-12 text-right">
+                              <button class="btn btn-primary" [disabled]="pluginGoogleAnalyticsForm.invalid"
+                                      (click)="updateGoogleAnalyticsPlugin()">
+                                <em class="fas fa-save"></em>
+                                {{'BUTTONS.SAVE' | translate}}
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+
+                    <!-- Facebook Pixel Config   -->
+                    <div class="col-lg-4 col-md-6 col-12 p-3">
+                      <div>
+                        <h4>{{'PLUGIN_FORM.PLUGIN_TAB.FACEBOOK_PIXEL.TITLE' | translate}}</h4>
+                      </div>
+                      <div class="custom-section">
+                        <form [formGroup]="pluginFacebookPixelForm">
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="fid">{{'PLUGIN_FORM.PLUGIN_TAB.FACEBOOK_PIXEL.ID' | translate}} </label>
+                              <input id="fid" type="text" formControlName="facebookPixelId" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.FACEBOOK_PIXEL.TITLE' | translate}}" style="width: 100%"/>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="fa" class="mr-2">{{'PLUGIN_FORM.PLUGIN_TAB.ACTIVE' | translate}} </label>
+                              <mat-checkbox id="fa" color="primary" formControlName="facebookPixelEnabled"></mat-checkbox>
+                            </div>
+                          </div>
+                          <div class="form-row btns">
+                            <div class="form-group col-12 text-right">
+                              <button class="btn btn-primary" [disabled]="pluginFacebookPixelForm.invalid"
+                                      (click)="updateFacebookPixelPlugin()">
+                                <em class="fas fa-save"></em>
+                                {{'BUTTONS.SAVE' | translate}}
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+
+                    <!-- Iubenda Config   -->
+                    <div class="col-lg-6 col-md-12 col-12 p-3">
+                      <div>
+                        <h4>{{'PLUGIN_FORM.PLUGIN_TAB.IUBENDA.TITLE' | translate}}</h4>
+                      </div>
+                      <div class="custom-section">
+                        <form [formGroup]="pluginIubendaForm">
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <h5>{{'PLUGIN_FORM.PLUGIN_TAB.IUBENDA.PRIVACY_POLICY' | translate}}</h5>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="iid">{{'PLUGIN_FORM.PLUGIN_TAB.IUBENDA.ID' | translate}}</label>
+                              <input id="iid" type="text" formControlName="iubendaId" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.IUBENDA.ID' | translate}}" style="width: 100%"/>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="ipa" class="mr-2">{{'PLUGIN_FORM.PLUGIN_TAB.ACTIVE' | translate}} </label>
+                              <mat-checkbox id="ipa" color="primary" formControlName="iubendaPrivacyEnabled"></mat-checkbox>
+                            </div>
+                          </div>
+
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <h5>{{'PLUGIN_FORM.PLUGIN_TAB.IUBENDA.COOKIES_POLICY' | translate}}</h5>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="ica" class="mr-2">{{'PLUGIN_FORM.PLUGIN_TAB.ACTIVE' | translate}} </label>
+                              <mat-checkbox id="ica" color="primary" formControlName="iubendaCookiesEnabled"></mat-checkbox>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="ics">{{'PLUGIN_FORM.PLUGIN_TAB.IUBENDA.SCRIPT' | translate}} </label>
+                              <textarea id="ics" rows="12" formControlName="iubendaCookiesScript" class="form-control form-control-sm"
+                                        placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.IUBENDA.MAIN_SCRIPT_CONTENT' | translate}}" style="width: 100%"></textarea>
+                            </div>
+                          </div>
+
+                          <div class="form-row">
+                            <div class="form-group col-12 text-right">
+                              <button class="btn btn-primary" [disabled]="pluginIubendaForm.invalid"
+                                      (click)="updateIubendaPlugin()">
+                                <em class="fas fa-save"></em>
+                                {{'BUTTONS.SAVE' | translate}}
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+
+                    <!-- SellPoint Config   -->
+                    <div class="col-lg-6 col-md-6 col-12 p-3">
+                      <div>
+                        <h4>{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.TITLE' | translate}}</h4>
+                      </div>
+                      <div class="custom-section">
+                        <form [formGroup]="connectorSellPointForm">
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <h5>{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.GENERAL' | translate}}</h5>
+                            </div>
+                          </div>
+
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="spu">{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.URL' | translate}} </label>
+                              <input id="spu" type="text" formControlName="sellPointUrl" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.URL' | translate}}" style="width: 100%"/>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-6">
+                              <label for="spun">{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.USERNAME' | translate}} </label>
+                              <input id="spun" type="text" formControlName="sellPointUsername" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.USERNAME' | translate}}" style="width: 100%"/>
+                            </div>
+                            <div class="form-group col-6">
+                              <label for="spps">{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.PASSWORD' | translate}} </label>
+                              <div class="input-group-icon input-group-icon-right">
+                                <input id="spps" [type]="showPassword ? 'text': 'password'"
+                                       placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.PASSWORD' | translate}}"
+                                       class="form-control form-control-sm" formControlName="sellPointPassword">
+                                <span class="input-icon input-icon-right" (click)="showPassword = !showPassword">
+                                  <em class="fa" [ngClass]="{'fa-eye': showPassword, 'fa-eye-slash': !showPassword}"></em>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-6">
+                              <label for="spgca" class="mr-2">{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.GENERIC_CUSTOMER' | translate}} </label>
+                              <mat-checkbox id="spgca" color="primary" formControlName="sellPointGenericCustomerEnabled"></mat-checkbox>
+                            </div>
+                            <div class="form-group col-6" *ngIf="connectorSellPointForm.get('sellPointGenericCustomerEnabled').value === true">
+                              <input id="spgcc" type="text"
+                                     formControlName="sellPointGenericCustomerCode" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.GENERIC_CUSTOMER_CODE' | translate}}" style="width: 100%"/>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="spa" class="mr-2">{{'PLUGIN_FORM.PLUGIN_TAB.ACTIVE' | translate}} </label>
+                              <mat-checkbox id="spa" color="primary" formControlName="sellPointEnabled"></mat-checkbox>
+                            </div>
+                          </div>
+
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <h5>{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.SPECIFICS' | translate}}</h5>
+                            </div>
+                          </div>
+
+                          <div class="form-row">
+                            <div class="form-group col-6">
+                              <label for="spcid">{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.COMPANY_ID' | translate}} </label>
+                              <input id="spcid" type="text" formControlName="sellPointCompanyId" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.COMPANY_ID' | translate}}" style="width: 100%"/>
+                            </div>
+                            <div class="form-group col-6">
+                              <label for="spsid">{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.STORE_ID' | translate}} </label>
+                              <input id="spsid" type="text" formControlName="sellPointStoreId" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.STORE_ID' | translate}}" style="width: 100%"/>
+                            </div>
+                          </div>
+                          <div class="form-row mb-3">
+                            <div class="form-group col-6">
+                              <label for="speid">{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.EMPLOYER_ID' | translate}} </label>
+                              <input id="speid" type="text" formControlName="sellPointEmployerId" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.EMPLOYER_ID' | translate}}" style="width: 100%"/>
+                            </div>
+                            <div class="form-group col-6">
+                              <label for="spssid">{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.SEASON_ID' | translate}} </label>
+                              <input id="spssid" type="text" formControlName="sellPointSeasonId" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.SELL_POINT.SEASON_ID' | translate}}" style="width: 100%"/>
+                            </div>
+                          </div>
+
+                          <div class="form-row">
+                            <div class="form-group col-12 text-right">
+                              <button class="btn btn-primary" [disabled]="connectorSellPointForm.invalid"
+                                      (click)="updateSellPointConnector()">
+                                <em class="fas fa-save"></em>
+                                {{'BUTTONS.SAVE' | translate}}
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+
+                    <!-- Food Manager Config   -->
+                    <div class="col-lg-6 col-md-6 col-12 p-3">
+                      <div>
+                        <h4>{{'PLUGIN_FORM.PLUGIN_TAB.FOOD_MANAGER.TITLE' | translate}}</h4>
+                      </div>
+                      <div class="custom-section">
+                        <form [formGroup]="connectorFoodManagerForm">
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="fmud">{{'PLUGIN_FORM.PLUGIN_TAB.FOOD_MANAGER.URL' | translate}} </label>
+                              <input id="fmud" type="text" formControlName="foodManagerUrl" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.FOOD_MANAGER.URL' | translate}}" style="width: 100%"/>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="fmgca" class="mr-2">{{'PLUGIN_FORM.PLUGIN_TAB.FOOD_MANAGER.GENERIC_CUSTOMER' | translate}} </label>
+                              <mat-checkbox id="fmgca" color="primary" formControlName="foodManagerGenericCustomerEnabled"></mat-checkbox>
+                            </div>
+                          </div>
+                          <div class="form-row" *ngIf="connectorFoodManagerForm.get('foodManagerGenericCustomerEnabled').value === true">
+                            <div class="form-group col-12">
+                              <input id="fmgcc" type="text"
+                                     formControlName="foodManagerGenericCustomerCode" class="form-control form-control-sm"
+                                     placeholder="{{'PLUGIN_FORM.PLUGIN_TAB.FOOD_MANAGER.GENERIC_CUSTOMER_CODE' | translate}}" style="width: 100%"/>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-12">
+                              <label for="fma" class="mr-2">{{'PLUGIN_FORM.PLUGIN_TAB.ACTIVE' | translate}} </label>
+                              <mat-checkbox id="fma" color="primary" formControlName="foodManagerEnabled"></mat-checkbox>
+                            </div>
+                          </div>
+                          <div class="form-row btns">
+                            <div class="form-group col-12 text-right">
+                              <button class="btn btn-primary" [disabled]="connectorFoodManagerForm.invalid"
+                                      (click)="updateFoodManagerConnector()">
+                                <em class="fas fa-save"></em>
+                                {{'BUTTONS.SAVE' | translate}}
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
+
+
+            <mat-tab>
+              <ng-template matTabLabel>{{'PLUGIN_FORM.SALE_APP_TAB.TITLE' | translate}}</ng-template>
+              <ng-template matTabContent>
+                <app-sale-app></app-sale-app>
+              </ng-template>
+            </mat-tab>
+          </mat-tab-group>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

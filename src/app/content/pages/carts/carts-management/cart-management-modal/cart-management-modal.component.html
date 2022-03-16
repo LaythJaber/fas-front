@@ -1,0 +1,176 @@
+<div class="modal-header">
+  <h5>
+    Dettaglio carrello
+  </h5>
+  <button type="button" mat-button mat-dialog-close (click)="close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<section class="cart-section section-b-space section-padding">
+  <div class="row d-flex justify-content-end align-items-center mt-5 mb-5">
+
+    <button mat-mini-fab color="primary" (click)="openProduct(cart?.clientId)" placement="left"
+      tooltipClass="custom-tooltip">
+      <em class="ft-plus" style="font-size: 20px;"></em>
+    </button>
+
+  </div>
+
+  <div class="col-sm-12 empty-cart-cls text-center" *ngIf="!cartRows?.length">
+    <img src="assets/img/icon-empty-cart.png" class="img-fluid mb-4" alt="">
+  </div>
+  <div class="row" *ngIf="cartRows?.length">
+    <div class="col-sm-12">
+
+
+      <div class="table-responsive">
+        <table class="table  table-sm  table-hover table-bordered">
+          <thead>
+            <tr class="table-head">
+              <th scope="col"></th>
+              <th scope="col">Prodotto</th>
+              <th scope="col">Prezzo/UM</th>
+              <th scope="col">Quantità</th>
+              <th scope="col">Totale</th>
+              <th scope="col">Sostitutibile</th>
+              <th scope="col">Azione</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let row of cartRows">
+            <tr>
+              <td>
+                <a>
+                  <img src="/assets/img/products/product-default.jpg" alt="" style="max-width: 35px">
+                </a>
+              </td>
+              <td class="product-size">
+                {{row?.productFDto?.commercialDescription | titlecase}}
+                <div *ngIf="row?.colorValue" class="variation">
+                  <strong>Colore:</strong> {{row?.colorValue}}
+                </div>
+                <div *ngIf="row?.sizeValue" class="variation">
+                  <strong>Taglia:</strong> {{row?.sizeValue}}
+                </div>
+              </td>
+              <!--<td>
+                <div *ngIf="!row?.productFDto?.inOffer" class="d-inline-block">
+                  {{row?.price | number: "1.2-2" | numberCommaseparator }}€
+                </div>
+                <div *ngIf="row?.productFDto?.inOffer" class="d-inline-block" style="color: darkred">
+                  {{priceService.getPriceInOfferPerUnit(row.productFDto, row.quantity)
+                  | number: "1.2-2" | numberCommaseparator }}€
+                  {{row?.price | number: "1.2-2" | numberCommaseparator }}€
+                </div>
+              </td>-->
+
+
+              <td>
+                <div *ngIf="row?.productFDto?.weighted">
+                  {{row?.productFDto?.pricePerPrincipalMeasureUnit
+                  | number: "1.2-2" | numberCommaseparator }}€/{{row?.productFDto?.unit}}
+                </div>
+                <div *ngIf="!row?.productFDto?.inOffer" class="d-inline-block">
+                  {{priceService.getPricePerUnit(row.productFDto, row.quantity, row.colorId, row.sizeId)
+                  | number: "1.2-2" | numberCommaseparator}}€/{{priceService.getUnit(row?.productFDto)}}
+                </div>
+                <div *ngIf="row?.productFDto?.inOffer" class="d-inline-block" style="color: red !important;">
+                  {{priceService.getPriceInOfferPerUnit(row.productFDto, row.quantity)
+                  | number: "1.2-2" | numberCommaseparator }}€/{{priceService.getUnit(row?.productFDto)}}
+
+                  {{priceService.getPricePerUnit(row.productFDto, row.quantity, row.colorId, row.sizeId)
+                  | number: "1.2-2" | numberCommaseparator }}€
+                </div>
+              </td>
+
+              <!--<td>
+                {{row?.quantity}} PZ
+              </td>-->
+              <td style="width: 150px !important;">
+                <div style="margin: 0 auto !important;">
+                    <!--<div *ngIf="row.productFDto.weighted && !displayWeightInAddButton"
+                         style="font-size: 11px; color: gray">
+                        ({{priceService.getWeightQuantity(row.productFDto, row.quantity)}})
+                    </div>-->
+                    <app-add-to-cart-button 
+                    [cart]="cart"
+                    [shopCartRow]="row"
+                                            [productId]="row.productFDto.id"
+                                            [productType]="row.productFDto.type"
+                                            [colorId]="row.colorId"
+                                            [sizeId]="row.sizeId"
+                                            (shopCart)='newRow($event)'
+                    >
+                    </app-add-to-cart-button>
+                </div>
+            </td>
+              <td>
+                <div *ngIf="!row?.productFDto?.inOffer" class="d-inline-block">
+
+                  {{row?.rowTotal | number: "1.2-2" | numberCommaseparator}}€
+
+                </div>
+                <div *ngIf="row?.productFDto?.inOffer" class="d-inline-block" style="color: darkred">
+                  {{row?.rowTotal | number: "1.2-2" | numberCommaseparator}}€
+
+                  {{(row?.priceCalculated * row?.quantity)| number: "1.2-2" | numberCommaseparator}}€
+
+                </div>
+              </td>
+              <td *ngIf="cartConfig && cartConfig.replaceableCheck">
+                    <mat-checkbox [checked]="row.replaceable"
+                                  (change)="toggleRowReplaceable($event, row)"></mat-checkbox>
+            </td>
+              <td>
+
+                <!--   <button mat-icon-button color="primary" (click)="editProduct(product)" placement="top"
+                  tooltipClass="custom-tooltip" ngbTooltip="{{'BUTTONS.EDIT'|translate}}">
+                  <em class="ft-edit-1"></em>
+                </button>-->
+                <button (click)="removeItem(row)" color="warn" mat-icon-button placement="top" title="Rimuovi">
+                  <em class="ft-trash-2"></em>
+                </button>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <table style="margin-top: 24px !important; margin-left: 83% !important">
+        <tfoot>
+          <tr *ngIf="cart?.totalDiscount">
+            <td class="product-lg-size">Totale prodotti :</td>
+            <td>
+              <span class="product-lg-size"> {{ cart?.totalExcludingDiscount | number: "1.2-2" | numberCommaseparator
+                }}€
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="cart?.totalDiscount">
+            <td class="product-lg-size">Sconti :</td>
+            <td>
+              <span class="product-lg-size"> {{ cart?.totalDiscount | number: "1.2-2" | numberCommaseparator }}€</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="product-lg-size">Totale spesa :</td>
+            <td>
+              <span class="product-lg-size"> {{ cart?.productsTotal | number: "1.2-2" | numberCommaseparator }}€</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="product-lg-size"></td>
+            <td>
+
+
+              <button type="button" class="btn btn-outline-danger" (click)="deleteCart()">Cancella carrello</button>
+
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>
+<!--section end-->

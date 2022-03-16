@@ -1,0 +1,749 @@
+<mat-tab-group color="primary">
+  <mat-tab label="{{'MULTIMEDIA.LOGOS_AND_ICONS' | translate}}">
+    <div class="container tab-container">
+      <div class="card mb-3">
+        <div class="card-header">
+          <div class="font-14 font-weight-bold">Logo</div>
+        </div>
+        <div class="card-body py-0">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 d-flex align-items-center flex-column py-2 first-col">
+              <div class="font-14 font-weight-bold mb-3 w-100">{{'MULTIMEDIA.HEADER_LOGO.TITLE' | translate}}</div>
+              <p class="text-black-50 w-100 logo-desc">{{'MULTIMEDIA.HEADER_LOGO.DESCRIPTION' | translate}}</p>
+              <ng-container *ngIf="!(logo?.imgResult || logo?.url)">
+                <label class="logo-dropzone mb-1">
+                  <em class="ft-image"></em>
+                  <input type="file" (change)="logoFileChange($event)" accept="image/*">
+                </label>
+                <p class="font-11 text-black-50">{{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB</p>
+              </ng-container>
+              <div class="icon-img-container" *ngIf="logo?.imgResult || logo?.url">
+                <img [src]="logo.imgResult || logo?.url"
+                     width="80px" alt="logo-img">
+              </div>
+              <label class="custom-file-upload mt-2">
+                <input type="file" (change)="logoFileChange($event)" accept="image/*">
+                <div class="file-name" *ngIf="!logo?.imgFile">
+                  {{'MULTIMEDIA.CHOOSE_FILE' | translate}} ({{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB)
+                </div>
+                <div class="file-name" *ngIf="logo?.imgFile">{{logo.imgFile.name}}</div>
+                <div class="browse-btn">{{'BUTTONS.BROWSE' | translate}}</div>
+              </label>
+            </div>
+            <div class="col-lg-6 col-md-12 d-flex align-items-center flex-column py-2">
+              <div class="font-14 font-weight-bold mb-3 w-100">{{'MULTIMEDIA.FAVICON.TITLE' | translate}}</div>
+              <p class="text-black-50 w-100 logo-desc">{{'MULTIMEDIA.FAVICON.DESCRIPTION' | translate}}</p>
+              <ng-container *ngIf="!(faviconLogo?.imgResult || faviconLogo?.url)">
+                <label class="logo-dropzone mb-1">
+                  <em class="ft-image"></em>
+                  <input type="file" (change)="logoFileChange($event, 'FAVICON')" accept="image/*">
+                </label>
+                <p class="font-11 text-black-50">{{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB</p>
+              </ng-container>
+              <div class="icon-img-container" *ngIf="faviconLogo?.imgResult || faviconLogo?.url">
+                <img [src]="faviconLogo.imgResult || faviconLogo?.url" width="40px" alt="logo-img">
+              </div>
+              <label class="custom-file-upload mt-2">
+                <input type="file" (change)="logoFileChange($event, 'FAVICON')" accept="image/*">
+                <div class="file-name" *ngIf="!faviconLogo?.imgFile">
+                  {{'MULTIMEDIA.CHOOSE_FILE' | translate}} ({{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB)
+                </div>
+                <div class="file-name" *ngIf="faviconLogo?.imgFile">{{faviconLogo.imgFile.name}}</div>
+                <div class="browse-btn">{{'BUTTONS.BROWSE' | translate}}</div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer d-flex justify-content-end align-items-center">
+          <mat-progress-spinner color="primary" class="mr-3"
+                                diameter="20" [value]="saveLogosSpinnerValue" mode="determinate">
+          </mat-progress-spinner>
+          <button mat-flat-button color="primary" [disabled]="!(logo?.imgResult || faviconLogo?.imgResult)" (click)="saveLogoAndFavicon()">
+            <mat-icon>save</mat-icon>
+            {{'BUTTONS.SAVE' | translate}}
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="font-14 font-weight-bold">Icons</div>
+        </div>
+        <div class="card-body py-0">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 d-flex align-items-center flex-column py-2 first-col">
+              <div class="font-14 font-weight-bold mb-3 w-100">{{'MULTIMEDIA.CART_ICON.TITLE' | translate}}</div>
+              <p class="text-black-50 w-100 logo-desc">{{'MULTIMEDIA.CART_ICON.DESCRIPTION' | translate}}</p>
+              <ng-container *ngIf="!(cartIcon?.imgResult || cartIcon?.url)">
+                <label class="logo-dropzone mb-1">
+                  <em class="ft-image"></em>
+                  <input type="file" (change)="logoFileChange($event, 'CART')" accept="image/*">
+                </label>
+                <p class="font-11 text-black-50">{{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB</p>
+              </ng-container>
+              <img [src]="cartIcon?.imgResult || cartIcon?.url"
+                   width="100px" *ngIf="cartIcon?.imgResult || cartIcon?.url" alt="logo-img">
+              <label class="custom-file-upload mt-2">
+                <input type="file" (change)="logoFileChange($event, 'CART')" accept="image/*">
+                <div class="file-name" *ngIf="!cartIcon?.imgFile">
+                  {{'MULTIMEDIA.CHOOSE_FILE' | translate}} ({{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB)
+                </div>
+                <div class="file-name" *ngIf="cartIcon?.imgFile">{{cartIcon.imgFile.name}}</div>
+                <div class="browse-btn">{{'BUTTONS.BROWSE' | translate}}</div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer d-flex justify-content-end align-items-center">
+          <mat-progress-spinner color="primary" class="mr-3"
+                                diameter="20" [value]="saveIconsSpinnerValue" mode="determinate">
+          </mat-progress-spinner>
+          <button mat-flat-button color="primary"
+                  [disabled]="!cartIcon?.imgResult"
+                  (click)="saveIcon()">
+            <mat-icon>save</mat-icon>
+            {{'BUTTONS.SAVE' | translate}}</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="font-14 font-weight-bold">Immagine</div>
+        </div>
+        <div class="card-body py-0">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 d-flex align-items-center flex-column py-2 first-col">
+              <div class="font-14 font-weight-bold mb-3 w-100">Immagine default prodotti</div>
+              <p class="text-black-50 w-100 logo-desc">
+                L'immagine personalizzata viene visualizzata al posto dell'immagine del prodotto predefinita
+              </p>
+
+              <ng-container *ngIf="!(productDefaultImage?.imgResult || productDefaultImage?.url)">
+                <label class="logo-dropzone mb-1">
+                  <em class="ft-image"></em>
+                  <input type="file" (change)="logoFileChange($event, 'PRODUCT')" accept="image/*">
+                </label>
+                <p class="font-11 text-black-50">{{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB</p>
+              </ng-container>
+
+              <div class="sortable-item" *ngIf="productDefaultImage?.imgResult || productDefaultImage?.url">
+                <div class="thumbnail mt-1">
+                  <img [src]="productDefaultImage?.imgResult || productDefaultImage?.url"
+                       style="max-width: 70%; max-height: 70%; object-fit: contain !important;"
+                       alt="logo-img">
+                  <ul class="menu-overlay">
+                    <li>
+                      <button matTooltip="{{'BUTTONS.DELETE' | translate}}"
+                              (click)="deleteDefaultProductImage()"
+                              matTooltipPosition="above"
+                              mat-icon-button color="primary">
+                        <em class="fas fa-trash"></em>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <label class="custom-file-upload mt-2">
+                <input type="file" (change)="logoFileChange($event, 'PRODUCT')" accept="image/*">
+                <div class="file-name" *ngIf="!productDefaultImage?.imgFile">
+                  {{'MULTIMEDIA.CHOOSE_FILE' | translate}} ({{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB)
+                </div>
+                <div class="file-name" *ngIf="productDefaultImage?.imgFile">{{productDefaultImage.imgFile.name}}</div>
+                <div class="browse-btn">{{'BUTTONS.BROWSE' | translate}}</div>
+              </label>
+            </div>
+
+            <div class="col-lg-6 col-md-12 d-flex align-items-center flex-column py-2 first-col">
+              <div class="font-14 font-weight-bold mb-3 w-100">Immagine default categoria</div>
+              <p class="text-black-50 w-100 logo-desc">
+                L'immagine personalizzata viene visualizzata al posto dell'immagine della categoria predefinita
+              </p>
+
+              <ng-container *ngIf="!(categoryDefaultImage?.imgResult || categoryDefaultImage?.url)">
+                <label class="logo-dropzone mb-1">
+                  <em class="ft-image"></em>
+                  <input type="file" (change)="logoFileChange($event, 'CATEGORY')" accept="image/*">
+                </label>
+                <p class="font-11 text-black-50">{{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB</p>
+              </ng-container>
+
+              <div class="sortable-item" *ngIf="categoryDefaultImage?.imgResult || categoryDefaultImage?.url">
+                <div class="thumbnail mt-1">
+                  <img [src]="categoryDefaultImage?.imgResult || categoryDefaultImage?.url"
+                       style="max-width: 70%; max-height: 70%; object-fit: contain !important;"
+                       alt="logo-img">
+                  <ul class="menu-overlay">
+                    <li>
+                      <button matTooltip="{{'BUTTONS.DELETE' | translate}}"
+                              (click)="deleteDefaultCategoryImage()"
+                              matTooltipPosition="above"
+                              mat-icon-button color="primary">
+                        <em class="fas fa-trash"></em>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <label class="custom-file-upload mt-2">
+                <input type="file" (change)="logoFileChange($event, 'CATEGORY')" accept="image/*">
+                <div class="file-name" *ngIf="!categoryDefaultImage?.imgFile">
+                  {{'MULTIMEDIA.CHOOSE_FILE' | translate}} ({{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB)
+                </div>
+                <div class="file-name" *ngIf="categoryDefaultImage?.imgFile">{{categoryDefaultImage.imgFile.name}}</div>
+                <div class="browse-btn">{{'BUTTONS.BROWSE' | translate}}</div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer d-flex justify-content-end align-items-center">
+          <mat-progress-spinner color="primary" class="mr-3"
+                                diameter="20" [value]="saveIconsSpinnerValue" mode="determinate">
+          </mat-progress-spinner>
+          <button mat-flat-button color="primary"
+                  [disabled]="!productDefaultImage?.imgResult && !categoryDefaultImage?.imgResult"
+                  (click)="saveDefaultImages()">
+            <mat-icon>save</mat-icon>
+            {{'BUTTONS.SAVE' | translate}}</button>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="{{'MULTIMEDIA.CAROUSEL_IMAGES' | translate}}">
+    <div class="container tab-container">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div class="font-14 font-weight-bold">{{'MULTIMEDIA.CAROUSEL_IMAGES' | translate}}</div>
+          <button mat-icon-button (click)="openCarouselCropper()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <div class="card-body">
+          <div *ngIf="carouselImages?.length === 0">
+            {{'MULTIMEDIA.NO_IMAGE_FOUND' | translate}}<
+          </div>
+          <div class="row sortable-grid" id="imageGridCarousel" #imageGridCarousel>
+            <div class="col-xl-3 col-lg-3 col-md-6 col-12 sortable-item"
+                 *ngFor="let a of carouselImages; let i = index" [attr.data-carousel-id]="a.id">
+              <div class="thumbnail mt-3">
+                <img [src]="a.url" [alt]="a.link">
+                <ul class="menu-overlay">
+                  <li>
+                    <button matTooltip="{{'BUTTONS.EDIT' | translate}}"
+                            (click)="$event.stopPropagation(); openEditCarouselDialog(a)"
+                            matTooltipPosition="above"
+                            mat-icon-button color="primary">
+                      <em class="fas fa-edit"></em>
+                    </button>
+                  </li>
+                  <li >
+                    <button matTooltip="{{'BUTTONS.DELETE' | translate}}"
+                            matTooltipPosition="above"
+                            (click)="$event.stopPropagation(); deleteCarouselImage(a.id, i)"
+                            mat-icon-button color="primary">
+                      <em class="fas fa-trash"></em>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="{{'MULTIMEDIA.OTHER_OPTIONS' | translate}}">
+    <div class="container tab-container">
+      <form [formGroup]="otherOptionsForm" id="otherOptionsForm">
+        <div class="card">
+          <div class="card-header">
+            <div class="font-14 font-weight-bold">Sections display & settings</div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+
+              <div class="col-4">
+                <h6>
+                  {{'MULTIMEDIA.SERVICE_SECTION' | translate}}
+                  <em class="ft-info"
+                      [ngbPopover]="popContent"
+                      triggers="mouseenter:mouseleave"
+                      placement="right-top" popoverClass="popover-with-img"
+                      [popoverTitle]="popTitle">
+                  </em>
+                </h6>
+                <ng-template #popTitle>{{'MULTIMEDIA.HINT' | translate}}</ng-template>
+                <ng-template #popContent>
+                  <img src="./assets/img/multimedia/home/service-section.jpg" width="500px">
+                </ng-template>
+              </div>
+              <div class="col-8">
+                <div class="form-group">
+                  <mat-checkbox formControlName="serviceSectionDisplay">{{'MULTIMEDIA.DISPLAY' | translate}}</mat-checkbox>
+                </div>
+                <div class="mb-3">
+                  <div class="d-flex align-items-center mt-2">
+                    <label class="custom-file-upload mr-2">
+                      <input type="file" (change)="stepsIconFileChange($event, 0)" accept="image/*">
+                      <div class="file-name" *ngIf="!firstStepIcon?.imgFile">
+                        {{'MULTIMEDIA.CHOOSE_FILE' | translate}} ({{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB)
+                      </div>
+                      <div class="file-name" *ngIf="firstStepIcon?.imgFile">{{firstStepIcon.imgFile.name}}</div>
+                      <div class="browse-btn">{{'BUTTONS.BROWSE' | translate}}</div>
+                    </label>
+                    <img [src]="firstStepIcon.imgResult || firstStepIcon?.url" width="40px"
+                         *ngIf="firstStepIcon?.url || firstStepIcon?.imgResult">
+                  </div>
+                  <div class="d-flex align-items-center mt-2">
+                    <label class="custom-file-upload mr-2">
+                      <input type="file" (change)="stepsIconFileChange($event, 1)" accept="image/*">
+                      <div class="file-name" *ngIf="!secondStepIcon?.imgFile">
+                        {{'MULTIMEDIA.CHOOSE_FILE' | translate}} ({{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB)
+                      </div>
+                      <div class="file-name" *ngIf="secondStepIcon?.imgFile">{{secondStepIcon.imgFile.name}}</div>
+                      <div class="browse-btn">{{'BUTTONS.BROWSE' | translate}}</div>
+                    </label>
+                    <img [src]="secondStepIcon.imgResult || secondStepIcon?.url" width="40px"
+                         *ngIf="secondStepIcon?.url || secondStepIcon?.imgResult">
+                  </div>
+                  <div class="d-flex align-items-center mt-2">
+                    <label class="custom-file-upload mr-2">
+                      <input type="file" (change)="stepsIconFileChange($event, 2)" accept="image/*">
+                      <div class="file-name" *ngIf="!thirdStepIcon?.imgFile">
+                        {{'MULTIMEDIA.CHOOSE_FILE' | translate}} ({{'MULTIMEDIA.MAX_SIZE' | translate}} 500KB)
+                      </div>
+                      <div class="file-name" *ngIf="thirdStepIcon?.imgFile">{{thirdStepIcon.imgFile.name}}</div>
+                      <div class="browse-btn">{{'BUTTONS.BROWSE' | translate}}</div>
+                    </label>
+                    <img [src]="thirdStepIcon.imgResult || thirdStepIcon?.url" width="40px"
+                         *ngIf="thirdStepIcon?.url || thirdStepIcon?.imgResult">
+                  </div>
+                </div>
+                <mat-accordion formArrayName="transInfo">
+                  <mat-expansion-panel
+                    *ngFor="let c of otherOptionsTransInfo.controls; let i = index"
+                    [formGroupName]="i">
+                    <mat-expansion-panel-header>
+                      {{langs ? langs[i]?.description : c.get('langCode').value | uppercase}}
+                    </mat-expansion-panel-header>
+                    <div class="font-weight-bold mb-2"> 1 step</div>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.TITLE' | translate}}</span>
+                        </div>
+                        <input class="form-control form-control-sm" formControlName="firstStepTitle" type="text">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.SUBTITLE' | translate}}</span>
+                        </div>
+                        <input class="form-control form-control-sm" formControlName="firstStepSubtitle" type="text">
+                      </div>
+                    </div>
+                    <div class="font-weight-bold mb-2"> 2 step</div>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.TITLE' | translate}}</span>
+                        </div>
+                        <input class="form-control form-control-sm" formControlName="secondStepTitle" type="text">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.SUBTITLE' | translate}}</span>
+                        </div>
+                        <input class="form-control form-control-sm" formControlName="secondStepSubtitle" type="text">
+                      </div>
+                    </div>
+                    <div class="font-weight-bold mb-2"> 3 step</div>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.TITLE' | translate}}</span>
+                        </div>
+                        <input class="form-control form-control-sm" formControlName="thirdStepTitle" type="text">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.SUBTITLE' | translate}}</span>
+                        </div>
+                        <input class="form-control form-control-sm" formControlName="thirdStepSubtitle" type="text">
+                      </div>
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+
+              <div class="col-12 my-4">
+                <mat-divider></mat-divider>
+              </div>
+
+              <div class="col-4">
+                <h6>Slide</h6>
+              </div>
+              <div class="col-8">
+                <ng-container formArrayName="transInfo">
+                  <div class="form-group"
+                       *ngFor="let c of otherOptionsTransInfo.controls; let i = index"
+                       [formGroupName]="i">
+                    <label>Label</label>
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            {{langs ? langs[i]?.description : c.get('langCode').value}}
+                        </span>
+                      </div>
+                      <input type="text" placeholder="Label" class="form-control form-control-sm"
+                             formControlName="slideLabel">
+                    </div>
+                  </div>
+                </ng-container>
+
+              </div>
+
+              <div class="col-12 mb-4">
+                <mat-divider></mat-divider>
+              </div>
+
+              <div class="col-4">
+                <h6>Blog</h6>
+              </div>
+              <div class="col-8">
+                <div class="form-group">
+                  <mat-checkbox formControlName="blogDisplay">{{'MULTIMEDIA.DISPLAY' | translate}}</mat-checkbox>
+                </div>
+                <mat-accordion formArrayName="transInfo">
+                  <mat-expansion-panel
+                    *ngFor="let c of otherOptionsTransInfo.controls; let i = index"
+                    [formGroupName]="i">
+                    <mat-expansion-panel-header>
+                      {{langs ? langs[i]?.description : c.get('langCode').value | uppercase}}
+                    </mat-expansion-panel-header>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.TITLE' | translate}} 1</span>
+                        </div>
+                        <input type="text" placeholder="Label" class="form-control form-control-sm"
+                               formControlName="blogTitle1">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.TITLE' | translate}} 2</span>
+                        </div>
+                        <input type="text" placeholder="Label" class="form-control form-control-sm"
+                               formControlName="blogTitle2">
+                      </div>
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+
+              <div class="col-12 my-4">
+                <mat-divider></mat-divider>
+              </div>
+
+              <div class="col-4">
+                <h6>Parallax</h6>
+              </div>
+              <div class="col-8">
+                <div class="form-group">
+                  <mat-checkbox formControlName="parallaxDisplay">{{'MULTIMEDIA.DISPLAY' | translate}}</mat-checkbox>
+                </div>
+                <div class="form-group">
+                  <button mat-flat-button color="primary" type="button" (click)="parallaxFileInput.click()">
+                    <mat-icon>file_upload</mat-icon>
+                    {{'BUTTONS.ADD' | translate}}
+                  </button>
+                  <label>
+                    <input type="file" accept="image/**" (change)="parallaxFileChange($event)"
+                           style="display: none;" #parallaxFileInput>
+                  </label>
+                </div>
+                <img [src]="parallax.imgResult || parallax.url"
+                     width="400px" class="mb-3"
+                     *ngIf="parallax?.imgResult || parallax?.url">
+              </div>
+
+              <div class="col-12 mb-4">
+                <mat-divider></mat-divider>
+              </div>
+
+              <div class="col-4">
+                <h6>Footer</h6>
+              </div>
+              <div class="col-8">
+                <section class="mb-3">
+                  <h6>Newsletter</h6>
+                  <div class="form-group">
+                    <mat-checkbox formControlName="newsletterDisplay">{{'MULTIMEDIA.DISPLAY' | translate}}</mat-checkbox>
+                  </div>
+                  <mat-accordion formArrayName="transInfo">
+                    <mat-expansion-panel
+                      *ngFor="let c of otherOptionsTransInfo.controls; let i = index"
+                      [formGroupName]="i">
+                      <mat-expansion-panel-header>
+                        {{langs ? langs[i]?.description : c.get('langCode').value | uppercase}}
+                      </mat-expansion-panel-header>
+                      <div class="form-group">
+                        <div class="input-group input-group-sm">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">{{'MULTIMEDIA.TITLE' | translate}}</span>
+                          </div>
+                          <input type="text" placeholder="Label" class="form-control form-control-sm"
+                                 formControlName="newsletterTitle">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group input-group-sm">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">{{'MULTIMEDIA.SUBTITLE' | translate}}</span>
+                          </div>
+                          <input type="text" placeholder="Label" class="form-control form-control-sm"
+                                 formControlName="newsletterSubtitle">
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+
+                </section>
+
+                <section class="mb-3">
+                  <h6>Social icons</h6>
+                  <div class="form-group">
+                    <mat-checkbox formControlName="socialIconsDisplay">{{'MULTIMEDIA.DISPLAY' | translate}}</mat-checkbox>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <em class="fab fa-facebook"></em>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control form-control-sm" formControlName="facebookLink"
+                             placeholder="https://www.facebook.com/page">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <em class="fab fa-instagram"></em>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control form-control-sm" formControlName="instagramLink"
+                             placeholder="https://www.instagram.com/account">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <em class="fab fa-twitter"></em>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control form-control-sm" formControlName="twitterLink"
+                             placeholder="https://www.twitter.com/account">
+                    </div>
+                  </div>
+                </section>
+
+                <section class="mb-3">
+                  <ng-container formGroupName="storeInfo">
+                    <h6>{{'MULTIMEDIA.STORE_INFO' | translate}}</h6>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.ADDRESS' | translate}}</span>
+                        </div>
+                        <input type="text" placeholder="{{'MULTIMEDIA.ADDRESS' | translate}}" formControlName="address"
+                               class="form-control form-control-sm">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.MAP_ADDRESS' | translate}}</span>
+                        </div>
+                        <input type="text" placeholder="{{'MULTIMEDIA.MAP_ADDRESS' | translate}}" formControlName="googleMapsUrl"
+                               class="form-control form-control-sm">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.EMAIL' | translate}}</span>
+                        </div>
+                        <input type="email" placeholder="{{'MULTIMEDIA.EMAIL' | translate}}" formControlName="email"
+                               class="form-control form-control-sm">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">{{'MULTIMEDIA.PHONE' | translate}}</span>
+                        </div>
+                        <input type="tel" placeholder="{{'MULTIMEDIA.PHONE' | translate}}" formControlName="phone"
+                               class="form-control form-control-sm">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Fax</span>
+                        </div>
+                        <input type="tel" placeholder="Fax" formControlName="fax" class="form-control form-control-sm">
+                      </div>
+                    </div>
+                  </ng-container>
+                  <div class="form-group">
+                    <mat-checkbox formControlName="paymentCardsDisplay">{{'MULTIMEDIA.SHOW_PAYMENT_CARDS' | translate}}</mat-checkbox>
+                  </div>
+
+                  <h6>Copy right</h6>
+                  <div class="form-group">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <em class="fas fa-copyright"></em>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control form-control-sm" formControlName="copyRight">
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-content-end align-items-center">
+            <mat-progress-spinner color="primary" class="mr-3"
+                                  diameter="20" [value]="saveSpinnerValue" mode="determinate">
+            </mat-progress-spinner>
+            <button mat-flat-button color="primary"
+                    (click)="saveOtherOptions()" [disabled]="loadingOtherOptions"
+                    form="otherOptionsForm">
+              <mat-icon>save</mat-icon>
+              {{'BUTTONS.SAVE' | translate}}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="{{'MULTIMEDIA.SITE_INFO' | translate}}">
+    <div class="container tab-container">
+      <app-information></app-information>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="{{'MULTIMEDIA.SECONDARY_SLIDES' | translate}}">
+    <div class="container tab-container">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div class="font-14 font-weight-bold">{{'MULTIMEDIA.SECONDARY_SLIDES' | translate}}</div>
+          <button mat-icon-button (click)="openSecondarySlideCropper()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <div class="card-body">
+          <div *ngIf="secondarySlides?.length === 0">
+            {{'MULTIMEDIA.NO_SLIDE_FOUND' | translate}}
+          </div>
+          <div class="row sortable-grid" #slidesGrid>
+            <div class="col-xl-3 col-lg-3 col-md-6 col-12 sortable-item"
+                 *ngFor="let slide of secondarySlides; let i = index" [attr.data-slide-id]="slide.id">
+              <div class="thumbnail mt-3">
+                <img [src]="slide.imageUrl">
+                <ul class="menu-overlay">
+                  <li>
+                    <button (click)="$event.stopPropagation();toggleActiveSlide(slide)"
+                            mat-icon-button [color]="slide.active ? 'primary' : 'warn'">
+                      <em class="fas fa-lock-open" *ngIf="slide.active"></em>
+                      <em class="fas fa-lock" *ngIf="!slide.active"></em>
+                    </button>
+                  </li>
+                  <li>
+                    <button matTooltip="{{'BUTTONS.EDIT' | translate}}"
+                            (click)="$event.stopPropagation();openEditSecondarySlideDialog(slide)"
+                            matTooltipPosition="above"
+                            mat-icon-button color="primary">
+                      <em class="fas fa-edit"></em>
+                    </button>
+                  </li>
+                  <li >
+                    <button matTooltip="{{'BUTTONS.DELETE' | translate}}"
+                            matTooltipPosition="above"
+                            (click)="$event.stopPropagation();deleteSecondarySlide(slide.id, i)"
+                            mat-icon-button color="primary">
+                      <em class="fas fa-trash"></em>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="{{'MULTIMEDIA.BRANDS_LOGOS' | translate}}">
+    <div class="container tab-container">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div class="font-14 font-weight-bold">{{'MULTIMEDIA.BRANDS_LOGOS' | translate}}</div>
+          <input style="display: none" type="file" accept="image/*" (change)="selectBrandLogo($event)" #brandLogoInput>
+          <button mat-icon-button (click)="brandLogoInput.click()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <div class="card-body">
+          <div *ngIf="brandsLogos?.length === 0">
+            {{'MULTIMEDIA.NO_BRANDS_LOGOS' | translate}}
+          </div>
+          <div class="row">
+            <div class="col-xl-3 col-lg-3 col-md-6 col-12"
+                 *ngFor="let logo of brandsLogos; let i = index">
+              <div class="brand-logo mt-1">
+                <img [src]="logo.logoUrl">
+                <ul class="menu-overlay">
+                  <li>
+                    <button matTooltip="{{'BUTTONS.EDIT' | translate}}"
+                            (click)="$event.stopPropagation(); openEditBrandLogo(logo)"
+                            matTooltipPosition="above"
+                            mat-icon-button color="primary">
+                      <em class="fas fa-edit"></em>
+                    </button>
+                  </li>
+                  <li >
+                    <button matTooltip="{{'BUTTONS.DELETE' | translate}}"
+                            matTooltipPosition="above"
+                            (click)="$event.stopPropagation(); deleteBrandLogo(logo.id, i)"
+                            mat-icon-button color="primary">
+                      <em class="fas fa-trash"></em>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+

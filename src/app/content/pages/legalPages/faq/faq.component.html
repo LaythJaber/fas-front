@@ -1,0 +1,123 @@
+<div class="subheader">
+  <div class="search-input w-250">
+    <div class="form-group">
+      <div class="input-group-icon input-group-icon-right">
+        <span class="input-icon input-icon-right reset-search-btn" (click)="searchText.setValue(null)">
+          <i class="ft-x"></i>
+        </span>
+        <input type="text" class="form-control" placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+               [formControl]="searchText">
+      </div>
+    </div>
+  </div>
+  <div class="action-btns">
+    <button class="btn btn-primary btn-rounded btn-block mb-4" (click)="newQAModal()">
+      <span class="btn-icon"><i class="ti-plus"></i>{{'PAGE_FORM.NEWQA' | translate}}</span>
+    </button>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-md-6 col-sm-6">
+<div class="form-group">
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="gridCheck"
+           [formControl]="active">
+    <label class="form-check-label" for="gridCheck">
+      {{'PAGE_FORM.ACTIVATE' | translate}}
+    </label>
+  </div>
+</div>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-sm-3 col-md-3">
+
+    <button class="btn btn-primary btn-rounded btn-block mb-4" (click)="newModule(moduleContent)">
+      <span class="btn-icon"><i class="ti-plus"></i>{{'PAGE_FORM.NEW_MODULE' | translate}}</span>
+    </button>
+    <div class="nav flex-column faq-categories-nav">
+      <a *ngFor="let module of modules"  class="nav-link d-flex align-items-center p-2 hover-link"
+         [ngClass]="{'active': module.id && module.id == activeModuleId}"
+         (click)="getFaqsByModule(module.id)" >
+        <i class="badge-point  mr-3"  [ngClass]="{'badge-primary': module.id && module.id == activeModuleId,
+       'badge-dark':  module.id && module.id != activeModuleId }"></i>{{module.name}}
+        <div class="task-actions">
+          <a class="text-muted" (click)="editModule($event, module, moduleContent)"><i class="ti-pencil"></i></a>
+          <a class="text-danger" (click)="deleteModule($event, module)"><i class="ti-trash ml-2"></i></a>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="col-sm-9 col-md-9">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="box-title">{{'PAGE_FORM.FAQ' | translate}}</h5>
+
+      </div>
+      <div class="card-body">
+        <h5 class="mb-4 font-16 text-muted"> {{ 'PAGE_FORM.ALL_QUESTION' | translate}} — {{qas.length}}</h5>
+
+        <div class="faq-list">
+          <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+            <ngb-panel *ngFor="let qa of qas" >
+              <ng-template ngbPanelTitle>
+                {{qa.question}}
+                <i class="ft-edit" style="    position: absolute;
+                  right: 80px;" (click)="editQa($event, qa)"></i>
+                <i class="ft-trash" style="    position: absolute;
+                  right: 40px;" (click)="deleteQa($event, qa)"></i>
+                <mat-icon >keyboard_arrow_down</mat-icon>
+              </ng-template>
+              <ng-template ngbPanelContent> <div [innerHTML]="qa.answer"></div></ng-template>
+            </ngb-panel>
+          </ngb-accordion>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #moduleContent>
+  <div class="modal-header">
+    <h4 mat-dialog-title *ngIf="!editMode">{{'PAGE_FORM.ADD_MODULE' | translate}}</h4>
+    <h4 mat-dialog-title *ngIf="editMode">{{'PAGE_FORM.EDIT_MODULE' | translate}}</h4>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="moduleForm" id="moduleForm">
+      <div class="row">
+        <div class="col-lg-12 col-md-12">
+          <label>{{'PAGE_FORM.LANGUAGE' | translate}}:</label>
+          <div class="input-group-icon input-group-icon-right">
+            <ng-select class="ng-select" [items]="languages" [bindLabel]="'description'" [bindValue]="'id'"
+                       (open)="translateLanguages()"
+                       formControlName="langEnum" placeholder="{{'CONFIGURATION.LANGUAGE_CODE' | translate}}">
+            </ng-select>
+          </div>
+        </div>
+        <div class="form-group col-lg-12 col-md-12 mt-5">
+          <label>{{'PAGE_FORM.MODULE_NAME' | translate}}</label>
+          <input type="text"
+                 class="form-control form-control-sm" formControlName="name">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div mat-dialog-actions>
+          <button mat-flat-button color="primary" class="mr-3" mat-dialog-close>{{'BUTTONS.CLOSE' |
+            translate}}
+          </button>
+
+          <button mat-flat-button color="primary" (click)="saveModule()">{{'BUTTONS.SAVE' | translate}}
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</ng-template>
+
+
+
+

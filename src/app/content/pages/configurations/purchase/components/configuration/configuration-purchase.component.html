@@ -1,0 +1,58 @@
+<div class="container pt-3 pb-5">
+  <div class="row">
+    <div class="col-lg-4 col-md-6 col-12 p-3">
+      <div class="custom-section">
+        <form [formGroup]="cancelTimeForm">
+          <div class="form-row">
+            <div class="form-group col-12">
+              <label for="time">Tempo annulalmento ordine (ore): </label>
+              <input id="time" type="number" formControlName="cancelTime" min="1" class="form-control form-control-sm"
+                     placeholder="Tempo in ore" style="width: 100%"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-12 text-right">
+              <button class="btn btn-primary" [disabled]="cancelTimeForm.invalid" (click)="saveTime()">
+                <em class="fas fa-save"></em>
+                {{'BUTTONS.SAVE' | translate}}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-12 p-3">
+      <div class="custom-section">
+        <form [formGroup]="conditionPageForm">
+          <div class="form-row">
+            <div class="form-group col-12">
+              <label for="page">Selezione pagina accessibile da checkout: </label>
+              <ng-select id="page" [items]="pageList"
+                         formControlName="conditionPageNumber"
+                         class="ng-select-sm ng-select-required"
+                         [bindValue]="'id'"
+                         [bindLabel]="'label'"
+                         placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                         [clearable]="false"
+                         [searchable]="false"
+              >
+              </ng-select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-12 text-right">
+              <button class="btn btn-primary"
+                      [disabled]="conditionPageForm.invalid"
+                      (click)="saveConditionPage()">
+                <em class="fas fa-save"></em>
+                {{'BUTTONS.SAVE' | translate}}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,229 @@
+<div class="subheader">
+  <div class="container-fluid">
+    <form [formGroup]="filterForm">
+      <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-8 col-6">
+          <div class="form-group">
+            <div class="input-group-icon input-group-icon-right">
+              <div class="input-group-icon input-group-icon-right">
+                      <span class="input-icon input-icon-right reset-search-btn"
+                            (click)="filterForm.controls.textSearch.setValue(null)">
+                        <i class="ft-x"></i>
+                      </span>
+                <input type="text" class="form-control "
+                       placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+                       formControlName="textSearch"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-3 col-md-3 col-sm-4 col-6">
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/yyyy" [matDatepicker]="dateFromPicker"
+                   class="form-control "
+                   formControlName="dateFrom" #dateFromElem>
+            <span class="input-icon input-icon-right"
+                  (click)="dateFromPicker.opened ? dateFromPicker.close() : dateFromPicker.open()">
+                    <i class="fas fa-calendar"></i>
+             </span>
+          </div>
+          <mat-datepicker #dateFromPicker></mat-datepicker>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2 col-sm-4 col-6">
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/yyyy" [matDatepicker]="dateToPicker"
+                   class="form-control"
+                   formControlName="dateTo" #dateToElem>
+            <span class="input-icon input-icon-right"
+                  (click)="dateToPicker.opened ? dateToPicker.close() : dateToPicker.open()">
+                    <i class="fas fa-calendar"></i>
+                  </span>
+          </div>
+          <mat-datepicker #dateToPicker></mat-datepicker>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2 col-sm-4 col-6">
+          <ng-select [items]="types"
+                     (click)="translateTypes()"
+                     class="ng-select"
+                     formControlName="couponType"
+                     bindValue="value"
+                     bindLabel="label"
+                     placeholder="{{'COUPON.TYPE' | translate}}">
+          </ng-select>
+        </div>
+
+        <div class="action-btns col-lg-2 col-md-2 col-sm-4 col-4 d-flex justify-content-between">
+          <button mat-mini-fab color="primary" (click)="resetFilter()" placement="left" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'PRODUCT_FORM.RESET_FILTER'|translate}}">
+            <i class="ft-refresh-ccw" style="font-size: 20px;"></i>
+          </button>
+          <button mat-mini-fab color="primary" (click)="showHideFilter()" placement="left" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'PRODUCT_FORM.MORE_FILTER'|translate}}">
+            <i class="ft-filter" style="font-size: 20px;"></i>
+          </button>
+          <button mat-mini-fab color="primary" (click)="addNewCoupon()" placement="left" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'COUPON.FORM.ADD_COUPON'|translate}}">
+            <i class="ft-plus" style="font-size: 20px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="showFilter">
+        <div class="form-group col-lg-2 col-md-2 col-sm-3 col-6">
+          <div class="input-group-icon input-group-icon-right">
+            <ng-select [items]="conditionTypes"
+                       (open)="translateConditionTypes()"
+                       formControlName="couponConditionType"
+                       class="ng-select"
+                       bindValue="value"
+                       bindLabel="label"
+                       placeholder="{{'COUPON.CONDITIONTYPE' | translate}}"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2 col-sm-3 col-6">
+          <div class="input-group-icon input-group-icon-right">
+            <ng-select [items]="promotionTypes"
+                       (click)="translatePromotionTypes()"
+                       formControlName="promotionType"
+                       class="ng-select"
+                       bindValue="value"
+                       bindLabel="label"
+                       placeholder="{{'COUPON.PROMOTIONTYPE' | translate}}"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2 col-sm-3 col-6">
+          <div class="input-group-icon input-group-icon-right">
+            <ng-select [items]="discountTypes"
+                       (click)="translatePromotionTypes()"
+                       formControlName="discountType"
+                       class="ng-select"
+                       bindValue="value"
+                       bindLabel="label"
+                       placeholder="{{'COUPON.DISCOUNTTYPE' | translate}}"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+<div class="card card-fullheight">
+
+
+  <div class="card-body table-responsive">
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table table-sm table-hover table-bordered">
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns_1" scope="col">{{c | translate}} <i class="fas fa-sort" style="margin-left: 10px"
+                                                                         (click)="sortRows(c)"></i></th>
+        <th *ngFor="let c of columns_2" scope="col">{{c | translate}} </th>
+
+        <th *ngFor="let c of columns_3" scope="col">{{c | translate}} <i class="fas fa-sort" style="margin-left: 10px"
+                                                                         (click)="sortRows(c)"></i></th>
+        <th *ngFor="let c of columns_4" scope="col">{{c | translate}} </th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let coupon of couponResponse?.data, let i = index" (click)="editCoupon(coupon)">
+
+        <td>
+          <ngb-highlight [result]="coupon?.couponId"></ngb-highlight>
+        </td>
+
+        <td> {{coupon?.code}}</td>
+
+        <td>
+          <ngb-highlight [result]="coupon?.description"></ngb-highlight>
+        </td>
+
+        <td> {{coupon?.promo}} </td>
+
+        <td> {{coupon?.dateFrom |date : 'dd-MM-yyyy'}} </td>
+
+        <td> {{coupon?.dateTo |date : 'dd-MM-yyyy'}} </td>
+
+        <td> {{'COUPON.' + coupon?.couponType | translate}} </td>
+
+        <td>  {{'COUPON.' + coupon?.discountType | translate}}  </td>
+
+        <td> {{coupon?.discount}} </td>
+
+        <td> {{coupon?.minProductQuantity}} </td>
+
+        <td> {{coupon?.minAmountOrder}} </td>
+
+
+        <td>  {{coupon?.maxNumberUse}}  </td>
+
+        <td *ngIf="coupon?.couponType === 'BYPERSON'"> {{getCouponUsed(coupon)}}</td>
+        <td *ngIf="coupon?.couponType !== 'BYPERSON'">{{coupon?.actualNumberUse}}</td>
+
+        <td>
+          <ngb-highlight [result]="'COUPON.' + coupon?.promotionType | translate"></ngb-highlight>
+        </td>
+
+        <td> {{'COUPON.' + coupon?.couponConditionType | translate}}  </td>
+
+
+        <td>  {{coupon?.auditSection?.createdAt |date : 'dd-MM-yyyy HH:mm'}} </td>
+
+        <td>  {{coupon?.auditSection?.updatedAt |date : 'dd-MM-yyyy HH:mm'}}  </td>
+
+        <td>
+          <button mat-icon-button color="primary" (click)="editCoupon(coupon)" placement="top"
+                  tooltipClass="custom-tooltip" ngbTooltip="{{'BUTTONS.EDIT'|translate}}">
+            <em class="ft-edit-1"></em>
+          </button>
+          <button (click)="deleteCoupon($event, coupon)" color="warn" mat-icon-button placement="top"
+                  tooltipClass="custom-tooltip" ngbTooltip="{{'PRODUCT_FORM.CANCEL'|translate}}">
+            <i class="ft-trash-2"></i>
+          </button>
+        </td>
+
+      </tr>
+      <tr *ngIf="couponResponse?.totalRecords === 0" class="text-center">
+        <td colspan="18">{{'COUPON.FORM.NO_COUPON' | translate}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center"
+                    *ngIf="couponResponse?.totalRecords > 0"
+                    [collectionSize]="couponResponse?.totalRecords"
+                    size="sm"
+                    [pageSize]="request.pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="request.page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>

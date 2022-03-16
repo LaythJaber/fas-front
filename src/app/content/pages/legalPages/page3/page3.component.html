@@ -1,0 +1,74 @@
+<form class="form p-3" [formGroup]="legalPage" id="legalPage">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6 col-sm-6">
+          <div class="form-group">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="gridCheck"
+                     formControlName="active">
+              <label class="form-check-label" for="gridCheck">
+                {{'PAGE_FORM.ACTIVATE' | translate}}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-16 col-sm-6">
+          <div class="form-group">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="gridCheck1"
+                     formControlName="mandatory">
+              <label class="form-check-label" for="gridCheck1">
+                {{'PAGE_FORM.MANDATORY' | translate}}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6 col-sm-6">
+          <label>{{'PAGE_FORM.LANGUAGE_CODE' | translate}}:</label>
+          <div class="input-group-icon input-group-icon-right">
+            <ng-select class="ng-select" [items]="languages" [bindLabel]="'description'" [bindValue]="'id'"
+                       (open)="translateLanguages()"
+                       formControlName="langEnum" placeholder="{{'CONFIGURATION.LANGUAGE_CODE' | translate}}">
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-6"></div>
+
+        <div class="col-md-6 col-sm-6 mt-5">
+          <label>{{'PAGE_FORM.PAGE_NAME' | translate}} </label>
+          <input type="text" formControlName="name"
+                 placeholder="{{'PAGE_FORM.PAGE_NAME' | translate}}"
+                 class="form-control form-control-sm">
+        </div>
+        <div class="col-md-6 col-sm-6 mt-5">
+          <label>{{'PAGE_FORM.INFO' | translate}} </label>
+          <textarea class="form-control" rows="3" style="resize: none" formControlName="info"></textarea>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-md-12 col-sm-12 mt-5">
+          <ckeditor class="w-100 col-12" formControlName="htmlContent" [config]="config"></ckeditor>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-md-12 col-sm-12 ">
+          <button mat-flat-button class="float-right" color="primary" (click)="save()">
+            {{'BUTTONS.SAVE' | translate}}
+          </button>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</form>

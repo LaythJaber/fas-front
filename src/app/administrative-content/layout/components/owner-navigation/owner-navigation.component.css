@@ -1,0 +1,20 @@
+.footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  padding: 20px;
+  color: white;
+}
+.footer button:hover {
+  color: darkgrey;
+}
+
+
+.options div :active, .options div :hover {
+  background-color: lightgrey;
+}
+
+#ownerSidenav {
+  margin-bottom: 100px;
+}
+

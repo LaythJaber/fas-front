@@ -1,0 +1,8 @@
+export enum DurationType {
+  THREE_MONTHS,
+  SIX_MONTHS,
+  NINE_MONTHS,
+  TWELVE_MONTHS,
+  NUMBER_OF_DAYS,
+  OTHER
+}

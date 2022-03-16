@@ -1,0 +1,63 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{title}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <form [formGroup]="appForm">
+    <div class="row">
+
+      <div class="form-group col-lg-6 col-md-6">
+        <label>Program Name</label>
+          <div class="form-group">
+            <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn" (click)="appForm.controls.programName.setValue(null)">
+                  <i class="ft-x"></i>
+                </span>
+              <input type="text" class="form-control form-control-sm"
+                     placeholder="Program Name"
+                     formControlName="programName"/>
+            </div>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-6 col-md-6">
+        <label>Country</label>
+          <div class="form-group">
+            <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn"  (click)="appForm.controls.country.setValue(null)">
+                  <i class="ft-x"></i>
+                </span>
+              <input type="text" class="form-control form-control-sm"
+                     placeholder="Country"
+                     formControlName="country"/>
+            </div>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-6 col-md-6">
+        <label>{{'DATA_TABLE.CREATED' | translate}}</label>
+        <div class="input-group-icon input-group-icon-right">
+          <input type="text"  [matDatepicker]="createdAtPicker"
+                 class="form-control form-control-sm"
+                 formControlName="createdAt" #createAtElem>
+          <span class="input-icon input-icon-right"
+                (click)="createdAtPicker.opened ? createdAtPicker.close() : createdAtPicker.open()">
+              <i class="fas fa-calendar"></i>
+            </span>
+        </div>
+        <mat-datepicker #createdAtPicker></mat-datepicker>
+      </div>
+
+    </div>
+
+  </form>
+
+
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-outline-primary" [disabled]="appForm.invalid"  (click)="save()">Save</button>
+  <button  class="btn btn-outline-dark" (click)="activeModal.close(null)">Close</button>
+</div>

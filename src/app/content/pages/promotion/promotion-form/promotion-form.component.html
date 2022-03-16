@@ -1,0 +1,153 @@
+<div class="form-container show-container">
+
+  <div class="form-header row">
+    <div class="d-flex align-items-center col-8">
+      <button mat-icon-button color="primary" (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div *ngIf="data?.editMode" class="hide">{{'PROMO_FORM.PROMO_DETAILS' | translate}}</div>
+      <div *ngIf="!data?.editMode">{{'PROMO_FORM.ADD_PROMO' | translate}}</div>
+    </div>
+
+    <div class="d-flex justify-content-end col-4">
+      <button mat-button color="primary" *ngIf="data?.editMode && !editClicked && promo?.status != 'DONE'"
+              (click)="activateEdit()">
+        <mat-icon>edit</mat-icon>
+        {{'BUTTONS.EDIT' | translate}}
+      </button>
+      <button mat-button color="primary" *ngIf="!data?.editMode || editClicked " [disabled]="disableSave||!receivers"
+              (click)="save()" form="promoForm">
+        <mat-icon>save</mat-icon>
+        {{'BUTTONS.SAVE' | translate}}
+      </button>
+    </div>
+  </div>
+  <hr>
+
+  <div mat-dialog-content>
+    <form class="form p-3" [formGroup]="promoForm" id="promoForm">
+      <div class="form-row">
+
+     <!--   <div class="form-group col-lg-6">
+          <label style="margin: 0">{{'PROMO_FORM.TYPE' | translate}} :</label>
+          <div class="d-flex justify-content-around align-items-center pt-2">
+            <label class="checkbox checkbox-outline-primary">
+              <input type="checkbox" [formControl]="mailFormControl" [disabled]="editMode && !editClicked">
+              <span>{{'PROMO_FORM.MAIL' | translate}}</span>
+            </label>
+            <label class="checkbox checkbox-outline-primary">
+              <input type="checkbox" [formControl]="smsFormControl" [disabled]="editMode && !editClicked">
+              <span >{{'PROMO_FORM.SMS' | translate}}</span>
+            </label>
+            <label class="checkbox checkbox-outline-primary">
+              <input type="checkbox" formControlName="shareFacebook" [disabled]="editMode && !editClicked">
+              <span >Facebook</span>
+            </label>
+            <label class="checkbox checkbox-outline-primary">
+              <input type="checkbox" formControlName="shareInstagram" [disabled]="editMode && !editClicked">
+              <span >Instagram</span>
+            </label>
+          </div>
+        </div>
+-->
+
+        <div class="col-lg-3">
+          <label>{{'PROMO_FORM.MODEL' | translate}}:</label>
+          <div class="input-group-icon input-group-icon-right">
+            <ng-select class="ng-select ng-select-sm" [items]="models" [bindLabel]="'name'" [bindValue]="'id'"
+                       formControlName="promoModelId" [virtualScroll]="true"
+                       placeholder="{{'PROMO_FORM.MODEL' | translate}}">
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <label>{{'PROMO_FORM.OBJECT' | translate}} </label>
+          <input type="text" formControlName="object" placeholder="{{'PROMO_FORM.OBJECT' | translate}}"
+                 class="form-control form-control-sm">
+        </div>
+        <div class="form-group col-lg-3 col-md-3">
+          <label>{{'PROMO_FORM.SENT_DATE_HOUR' | translate}}:</label>
+          <div class="input-group input-group-sm" style="display: flex !important;">
+            <input [owlDateTime]="dt2" disabled class="form-control " type="text" formControlName="sendAt">
+            <div class="input-group-append">
+              <button class="btn btn-outline-dark" [owlDateTimeTrigger]="dt2" type="button">
+                <i aria-hidden="true" class="fa fa-calendar"></i>
+              </button>
+            </div>
+          </div>
+          <owl-date-time #dt2></owl-date-time>
+        </div>
+
+        <div class="col-lg-3 col-md-3">
+          <label>{{'PROMO_FORM.RECEIVER' | translate}} </label><span
+          class="badge badge-info badge-circle" (click)="openReceiversContent(content)">{{receivers}}</span>
+          <div class="input-group-append">
+            <button class="btn btn-outline-dark" type="button" style="width: 100%;height: 32px;"
+                    [disabled]="editMode&&!editClicked"
+                    (click)="openFilterClients()">
+              <i aria-hidden="true" class="ft-filter"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <label>{{'PROMO_FORM.MESSAGE' | translate}} </label>
+          <textarea class="form-control" rows="3" style="resize: none" maxlength="153"
+                    formControlName="message"></textarea>
+        </div>
+      </div>
+<!--      <div class="form-row" style="margin-top: 10px">-->
+<!--        -->
+<!--      </div>-->
+    </form>
+    <div *ngIf="template" style="padding: 1rem !important;">
+      <div class="d-flex align-items-center">
+        <h5 class="mb-0"> Template View </h5>
+        <button mat-icon-button color="primary" (click)="openTemplateEditor()" [disabled]="editMode&&!editClicked" class="ml-2">
+          <em class="ft-edit"></em>
+        </button>
+        <a mat-icon-button color="primary" routerLink="/promotion-template-editor"
+           [queryParams]="{'templateId': promoForm.get('promoModelId').value}">
+          <em class="ft-navigation"></em>
+        </a>
+      </div>
+      <hr>
+      <div [innerHtml]="template"></div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content>
+  <div class="modal-header">
+    <h4 mat-dialog-title>{{'PROMO_FORM.RECEIVERS' | translate}}</h4>
+  </div>
+  <div class="modal-body">
+    <table class="table table-bordered table-striped" aria-hidden="true">
+      <caption></caption>
+      <thead>
+      <tr>
+        <td>{{'DATA_TABLE.FULL_NAME' | translate}}</td>
+        <td>{{'DATA_TABLE.GENDER' | translate}}</td>
+        <td>{{'CLIENT_FORM.MOBILE' | translate}}</td>
+        <td>{{'CLIENT_FORM.EMAIL' | translate}}</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let c of clientRows">
+        <td>{{c.firstName + ' ' + c.lastName}}</td>
+        <td>
+          <i aria-hidden="true" class="fas fa-mars" style="color: #06B5B6" *ngIf=" c.gender.toString() === 'MALE'"></i>
+          <i aria-hidden="true" class="fas fa-venus" style="color: #E50054"
+             *ngIf="c.gender.toString() === 'FEMALE'"></i>
+          <i aria-hidden="true" class="fas fa-transgender" id="transgender" *ngIf="c.gender.toString() === 'OTHER'"></i>
+        </td>
+        <td>{{c.mobilePrefix + ' ' + c.mobile}}</td>
+        <td>{{c.email}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" mat-button mat-dialog-close class="btn btn-light"
+            (click)="dialogRef.close()">{{'BUTTONS.CLOSE' | translate}}</button>
+  </div>
+</ng-template>

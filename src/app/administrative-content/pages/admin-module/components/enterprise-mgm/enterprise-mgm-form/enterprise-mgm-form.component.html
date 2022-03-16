@@ -1,0 +1,245 @@
+<h1 mat-dialog-title>
+  {{'ADMIN.ENTERPRISE.ADD_NEW' | translate}}
+</h1>
+<div mat-dialog-content class="py-2">
+  <form [formGroup]="enterpriseForm" id="enterpriseForm" (ngSubmit)="saveEnterprise()">
+    <p class="font-14 font-weight-bold text-black-50">  {{'ADMIN.ENTERPRISE.INFO' | translate}}</p>
+    <hr>
+    <div class="form-row">
+      <div class="form-group col-lg-3">
+        <label>{{'ADMIN.ENTERPRISE.COMPANY_NAME' | translate}}:</label>
+        <input class="form-control form-control-sm required-field" type="text" formControlName="companyName">
+        <div *ngIf="submitted && enterpriseForm.get('companyName').invalid" class="d-block invalid-feedback">
+          {{'ADMIN.ENTERPRISE.COMPANY_NAME_REQUIRED' | translate}}
+        </div>
+      </div>
+      <div class="form-group col-lg-3">
+        <label>{{'ADMIN.ENTERPRISE.VAT_NUMBER' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="vatNumber" (input)="checkPIVA()">
+        <div *ngIf="submitted && enterpriseForm.get('vatNumber').getError('invalid')" class="d-block invalid-feedback">
+          {{'ADMIN.ENTERPRISE.VAT_INVALID' | translate}}
+        </div>
+        <div *ngIf="submitted && enterpriseForm.get('vatNumber').getError('required')" class="d-block invalid-feedback">
+          {{'ADMIN.ENTERPRISE.VAT_REQUIRED' | translate}}
+        </div>
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.ENTERPRISE.FISCAL_CODE' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="fiscalCode" >
+        <div *ngIf="submitted && enterpriseForm.get('fiscalCode').invalid" class="d-block invalid-feedback">
+          {{'ADMIN.ENTERPRISE.FISCAL_CODE_REQUIRED' | translate}}
+        </div>
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.ENTERPRISE.CODE_SDI' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="sdiCode">
+        <div *ngIf="submitted && enterpriseForm.get('sdiCode').invalid" class="d-block invalid-feedback">
+          {{'ADMIN.ENTERPRISE.SDI_REQUIRED' | translate}}
+        </div>
+      </div>
+      <div class="form-group col-lg-2">
+        <label>R.E.A:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="rea">
+      </div>
+      <div class="form-group col-lg-3">
+        <label>{{'ADMIN.ENTERPRISE.TYPE_OF_ACTIVITY' | translate}}:</label>
+        <ng-select placeholder="{{'ADMIN.ENTERPRISE.TYPE_OF_ACTIVITY' | translate}}" formControlName="businessId"
+                   class="ng-select-sm" [items]="activities" bindLabel="description" bindValue="id">
+        </ng-select>
+      </div>
+    </div>
+
+    <p class="font-16 mt-3 font-weight-bold text-black-50">{{'ADMIN.ENTERPRISE.ADDRESS' | translate}}</p>
+    <hr>
+    <!--address-->
+    <div class="form-row">
+      <div class="form-group col-lg-3">
+        <label>{{'ADMIN.ENTERPRISE.ADDRESS' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="address">
+        <div *ngIf="submitted && enterpriseForm.get('address').invalid" class="d-block invalid-feedback">
+          {{'ADMIN.ENTERPRISE.ADDRESS_REQUIRED' | translate}}
+        </div>
+      </div>
+      <div class="form-group col-lg-3">
+        <label>{{'ADMIN.ENTERPRISE.STREET_NUMBER' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="street">
+        <div *ngIf="submitted && enterpriseForm.get('street').invalid" class="d-block invalid-feedback">
+          {{'ADMIN.ENTERPRISE.STREET_NUMBER_REQUIRED' | translate}}
+        </div>
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.ENTERPRISE.COUNTRY' | translate}}:</label>
+        <ng-select class="ng-select-sm ng-select-required" [formControl]="countryFormControl" [items]="[{country: 'IT'}]"
+                   bindLabel="country"
+                   bindValue="country">
+        </ng-select>
+        <div *ngIf="submitted && countryFormControl.invalid" class="d-block invalid-feedback">
+          {{'ADMIN.ENTERPRISE.COUNTRY_REQUIRED' | translate}}
+        </div>
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.ENTERPRISE.ZIP_CODE' | translate}}:</label>
+        <ng-select class="ng-select-sm ng-select-required" [virtualScroll]="true"
+                   [loading]="zipCodeLoading"
+                   formControlName="zipCodeId" [items]="zipCodeList" bindLabel="cap"
+                   bindValue="id">
+          <ng-template ng-option-tmp let-item="item">
+            <span class="font-11"><b>{{item.city}}</b> : {{item.cap}}</span>
+          </ng-template>
+        </ng-select>
+        <div *ngIf="submitted && enterpriseForm.get('zipCodeId').invalid" class="d-block invalid-feedback">
+          {{'ADMIN.ENTERPRISE.CAP_REQUIRED' | translate}}
+        </div>
+      </div>
+      <div class="form-group col-lg-1">
+        <label>{{'ADMIN.ENTERPRISE.PROVINCE' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" [formControl]="provinceFormControl">
+      </div>
+      <div class="form-group col-lg-1">
+        <label>{{'ADMIN.ENTERPRISE.CITY' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" [formControl]="cityFormControl">
+      </div>
+    </div>
+    <p class="font-14 mt-3 font-weight-bold text-black-50">{{'ADMIN.ENTERPRISE.CONTACT' | translate}}</p>
+    <hr>
+    <div class="form-row">
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'ADMIN.ENTERPRISE.PHONE' | translate}}:</label>
+        <div class="input-group input-group-sm">
+
+          <div class="input-group-prepend" ngbDropdown #myDrop="ngbDropdown">
+            <button class="btn btn-outline-secondary" type="button"
+                    ngbDropdownToggle>{{enterpriseForm.get('phonePrefix').value ||  'BUTTONS.CHOOSE' | translate}}
+            </button>
+            <div class="dropdown-menu py-0" tabindex="1" ngbDropdownMenu>
+              <ng-select [items]="prefixList" [bindLabel]="'label'"
+                         [tabIndex]="1"
+                         autofocus
+                         [bindValue]="'prefix'" formControlName="phonePrefix" placeholder="search"
+                         (change)="myDrop.close()">
+              </ng-select>
+            </div>
+          </div>
+          <input type="tel" class="form-control form-control-sm" formControlName="phone">
+          <div *ngIf="submitted && enterpriseForm.get('phone').invalid" class="d-block invalid-feedback">
+            Phone number is invalid
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'ADMIN.ENTERPRISE.MOBILE_PHONE' | translate}}:</label>
+        <div class="input-group input-group-sm">
+
+          <div class="input-group-prepend" ngbDropdown #myDrop="ngbDropdown">
+            <button class="btn btn-outline-secondary" type="button"
+                    ngbDropdownToggle>{{enterpriseForm.get('mobilePrefix').value ||  'BUTTONS.CHOOSE' | translate}}
+            </button>
+            <div class="dropdown-menu py-0" tabindex="1" ngbDropdownMenu>
+              <ng-select [items]="prefixList" [bindLabel]="'label'"
+                         [tabIndex]="1"
+                         autofocus
+                         [bindValue]="'prefix'" formControlName="mobilePrefix" placeholder="search"
+                         (change)="myDrop.close()" #mobileNgSelect>
+              </ng-select>
+            </div>
+          </div>
+          <input type="tel" class="form-control form-control-sm" formControlName="mobile">
+          <div *ngIf="submitted && enterpriseForm.get('mobile').invalid" class="d-block invalid-feedback">
+            Mobile number is invalid
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'ADMIN.ENTERPRISE.FAX' | translate}}:</label>
+        <div class="input-group input-group-sm">
+
+          <div class="input-group-prepend" ngbDropdown #myDrop="ngbDropdown">
+            <button class="btn btn-outline-secondary" type="button"
+                    ngbDropdownToggle>{{enterpriseForm.get('faxPrefix').value ||  'BUTTONS.CHOOSE' | translate}}
+            </button>
+            <div class="dropdown-menu py-0" tabindex="1" ngbDropdownMenu>
+              <ng-select [items]="prefixList" [bindLabel]="'label'"
+                         [tabIndex]="1"
+                         autofocus
+                         [bindValue]="'prefix'" formControlName="faxPrefix" placeholder="search"
+                         (change)="myDrop.close()" #mobileNgSelect>
+              </ng-select>
+            </div>
+          </div>
+          <input type="tel" class="form-control form-control-sm" formControlName="fax">
+          <div *ngIf="submitted && enterpriseForm.get('fax').invalid" class="d-block invalid-feedback">
+            Fax number is invalid
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'ADMIN.ENTERPRISE.EMAIL' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="email">
+        <div *ngIf="submitted && enterpriseForm.get('email').invalid" class="d-block invalid-feedback">
+          E-mail format is invalid
+        </div>
+      </div>
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'ADMIN.ENTERPRISE.REFERENT' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="contact">
+      </div>
+      <div class="form-group col-lg-2 col-md-4">
+        <label>{{'ADMIN.ENTERPRISE.WEB_SITE' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="website">
+        <div *ngIf="submitted && enterpriseForm.get('website').invalid" class="d-block invalid-feedback">
+          website format is invalid
+        </div>
+      </div>
+    </div>
+
+
+    <p class="font-14 mt-3 font-weight-bold text-black-50">{{'ADMIN.ENTERPRISE.BANK' | translate}}</p>
+    <hr>
+    <div class="form-row">
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.ENTERPRISE.BANK' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="bank">
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.ENTERPRISE.BANK_BRANCH' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="branchBank">
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.ENTERPRISE.IBAN' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="iban">
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.ENTERPRISE.CIN' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="cin">
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.ENTERPRISE.ABI' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="abi">
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.ENTERPRISE.CAB' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="cab">
+      </div>
+      <div class="form-group col-lg-2">
+        <label>{{'ADMIN.ENTERPRISE.BIC_SWIFT' | translate}}:</label>
+        <input class="form-control form-control-sm" type="text" formControlName="swift">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>{{'ADMIN.ENTERPRISE.NOTE' | translate}}:</label>
+      <textarea class="form-control" formControlName="note"></textarea>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="secondary" matDialogClose>
+    <mat-icon>close</mat-icon>
+    {{'BUTTONS.CLOSE' | translate}}
+  </button>
+  <button mat-raised-button color="primary" class="ml-2" form="enterpriseForm">
+    <mat-icon>save</mat-icon>
+    {{'BUTTONS.SAVE' | translate}}
+  </button>
+</div>

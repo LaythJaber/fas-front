@@ -1,0 +1,103 @@
+<h1 mat-dialog-title *ngIf="!data.editMode">
+  {{'MOVEMENT_FORM.ADD_PRODUCT' | translate}}
+</h1>
+<h1 mat-dialog-title *ngIf="data.editMode">
+  {{'MOVEMENT_FORM.EDIT_PRODUCT' | translate}}
+</h1>
+<hr>
+<div mat-dialog-content>
+  <form class="form" [formGroup]="priceForm" (ngSubmit)="save()" id="priceForm">
+    <div class="row col-12">
+
+      <div class="form-group col-lg-4 col-md-4 col-sm-6">
+        <label>{{'PRODUCT_FORM.PRODUCT' | translate}}</label>
+        <ng-select [items]="productsList" bindValue="id" bindLabel="description"
+          placeholder="{{'BUTTONS.CHOOSE' | translate}}" class="ng-select-product ng-select-sm"
+          formControlName="productId" [ngClass]="{ 'is-invalid': submitted && priceForm.get('productId').invalid }"
+          (clear)="clear()" (close)="reset()" (open)="open()" [virtualScroll]="true" [loading]="loadProd"
+          (scrollToEnd)="loadProducts({ page: this.productsPage , pageSize: 10})" [typeahead]="searchProducts$">
+        </ng-select>
+      </div>
+
+      <div class="form-group col-lg-6 col-md-6 col-sm-6"></div>
+
+      <div class="form-group col-lg-6 col-md-6 col-sm-6">
+        <label>{{'PRODUCT_FORM.PriceListValue1' | translate}}</label>
+
+        <input currencyMask type="tel" placeholder="{{'PRODUCT_FORM.PriceListValue1' | translate}}"
+          class="form-control form-control-sm" formControlName="priceList1Value">
+      </div>
+
+      <div class="form-group col-lg-6 col-md-6 col-sm-6">
+        <label>{{'PRODUCT_FORM.PriceList1FormulaField' | translate}}</label>
+
+        <input type="text" placeholder="{{'PRODUCT_FORM.PriceList1FormulaField' | translate}}"
+          class="form-control form-control-sm" formControlName="priceList1FormulaField">
+        <div *ngIf=" priceForm.get('priceList1FormulaField').invalid" class="d-block invalid-feedback">
+          X + Y + Z
+        </div>
+      </div>
+
+      <div class="form-group col-lg-6 col-md-6 col-sm-6">
+        <label>{{'PRODUCT_FORM.PriceListValue2' | translate}}</label>
+
+        <input currencyMask type="tel" placeholder="{{'PRODUCT_FORM.PriceListValue2' | translate}}"
+          class="form-control form-control-sm" formControlName="priceList2Value">
+      </div>
+
+      <div class="form-group col-lg-6 col-md-6 col-sm-6">
+        <label>{{'PRODUCT_FORM.PriceList2FormulaField' | translate}}</label>
+
+        <input type="text" placeholder="{{'PRODUCT_FORM.PriceList2FormulaField' | translate}}"
+          class="form-control form-control-sm" formControlName="priceList2FormulaField">
+        <div *ngIf=" priceForm.get('priceList2FormulaField').invalid" class="d-block invalid-feedback">
+          X + Y + Z
+        </div>
+      </div>
+
+      <div class="form-group col-lg-6 col-md-6 col-sm-6">
+        <label>{{'PRODUCT_FORM.PriceListValue3' | translate}}</label>
+
+        <input currencyMask type="tel" placeholder="{{'PRODUCT_FORM.PriceListValue3' | translate}}"
+          class="form-control form-control-sm" formControlName="priceList3Value">
+      </div>
+
+      <div class="form-group col-lg-6 col-md-6 col-sm-6">
+        <label>{{'PRODUCT_FORM.PriceList3FormulaField' | translate}}</label>
+
+        <input type="text" placeholder="{{'PRODUCT_FORM.PriceList3FormulaField' | translate}}"
+          class="form-control form-control-sm" formControlName="priceList3FormulaField">
+        <div *ngIf="priceForm.get('priceList3FormulaField').invalid" class="d-block invalid-feedback">
+          X + Y + Z
+        </div>
+      </div>
+
+      <div class="form-group col-lg-6 col-md-6 col-sm-6">
+        <label>{{'PRODUCT_FORM.PriceListValue4' | translate}}</label>
+
+        <input currencyMask type="tel" placeholder="{{'PRODUCT_FORM.PriceListValue4' | translate}}"
+          class="form-control form-control-sm" formControlName="priceList4Value">
+      </div>
+
+      <div class="form-group col-lg-6 col-md-6 col-sm-6">
+        <label>{{'PRODUCT_FORM.PriceList4FormulaField' | translate}}</label>
+
+        <input type="text" placeholder="{{'PRODUCT_FORM.PriceList4FormulaField' | translate}}"
+          class="form-control form-control-sm" formControlName="priceList4FormulaField">
+        <div *ngIf=" priceForm.get('priceList4FormulaField').invalid" class="d-block invalid-feedback">
+          X + Y + Z
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<hr>
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <div>
+    <button mat-button color="secondary" class="ml-2"
+      (click)="dialogRef.close(false)">{{'BUTTONS.CLOSE' | translate}}</button>
+    <button mat-flat-button color="primary" [disabled]="priceForm.invalid" form="addForm"
+      (click)="save()">{{'BUTTONS.SAVE' | translate}}
+    </button>
+  </div>
+</div>

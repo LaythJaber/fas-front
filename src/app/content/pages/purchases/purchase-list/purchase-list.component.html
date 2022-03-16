@@ -1,0 +1,258 @@
+<div class="subheader">
+  <div class="container-fluid">
+    <form [formGroup]="filterForm">
+      <div class="row">
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'SUBHEADER.SEARCH' | translate}}</label>
+          <div class="search-input">
+            <div class="form-group">
+              <div class="input-group-icon input-group-icon-right">
+                <span class="input-icon input-icon-right reset-search-btn"
+                      (click)="filterForm.controls.textSearch.setValue(null)">
+                  <em class="ft-x"></em>
+                </span>
+                <input type="text" class="form-control form-control-sm"
+                       placeholder="Cerca per ID, Codice, Cliente"
+                       formControlName="textSearch"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'CATEGORY_FORM.STATUS' | translate}}</label>
+            <ng-select [items]="stateList"
+                       formControlName="state"
+                       [bindValue]="'id'"
+                       [bindLabel]="'label'"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       class="ng-select-sm ng-select-required"
+                       [clearable]="true"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{'PURCHASE_FORM.STATE.'+item.label | translate}}</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+                <span>{{'PURCHASE_FORM.STATE.'+item.label | translate}}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'DATA_TABLE.SELL_POINTS' | translate}}</label>
+            <ng-select [items]="sellPointList"
+                       formControlName="sellPointId"
+                       [bindValue]="'id'"
+                       [bindLabel]="'name'"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       class="ng-select-sm"
+                       [clearable]="true"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'DATA_TABLE.SHIPMENT' | translate}}</label>
+            <ng-select [items]="shipmentList"
+                       formControlName="shipmentId"
+                       [bindValue]="'id'"
+                       [bindLabel]="'id'"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       class="ng-select-sm"
+                       [clearable]="true"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{ item | localTranslate: 'description' }}</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+                <span >{{ item | localTranslate: 'description' }}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <div class="input-group-icon input-group-icon-right">
+            <label>{{'DATA_TABLE.PAYMENT' | translate}}</label>
+            <ng-select [items]="paymentList"
+                       formControlName="paymentId"
+                       [bindValue]="'id'"
+                       [bindLabel]="'description'"
+                       placeholder="{{'BUTTONS.CHOOSE' | translate}}"
+                       class="ng-select-sm ng-select-required"
+                       [clearable]="true"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                <span>{{ item | localTranslate: 'descriptionWeb' }}</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+                <span>{{ item | localTranslate: 'descriptionWeb' }}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-2 d-flex justify-content-between">
+          <button mat-mini-fab color="primary" (click)="resetFilter()"
+                  placement="left" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'PRODUCT_FORM.RESET_FILTER'|translate}}">
+            <em class="ft-refresh-ccw" style="font-size: 20px;"></em>
+          </button>
+          <button mat-mini-fab color="primary" (click)="showHideMoreFilters()"
+                  placement="left" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'PRODUCT_FORM.MORE_FILTER'|translate}}">
+            <em class="ft-filter" style="font-size: 20px;"></em>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="row" [hidden]="!showMoreFilters">
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'DATA_TABLE.CREATED' | translate}}</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/aaaa" [matDatepicker]="createdAtPicker"
+                   class="form-control form-control-sm"
+                   formControlName="createdAt" #createAtElem>
+            <span class="input-icon input-icon-right"
+                  (click)="createdAtPicker.opened ? createdAtPicker.close() : createdAtPicker.open()">
+              <em class="fas fa-calendar"></em>
+            </span>
+          </div>
+          <mat-datepicker #createdAtPicker></mat-datepicker>
+        </div>
+
+        <div class="form-group col-lg-2 col-md-3">
+          <label>{{'DATA_TABLE.UPDATED' | translate}}</label>
+          <div class="input-group-icon input-group-icon-right">
+            <input type="text" placeholder="dd/mm/aaaa" [matDatepicker]="updatedAtPicker"
+                   class="form-control form-control-sm"
+                   formControlName="updatedAt" #createAtElem>
+            <span class="input-icon input-icon-right"
+                  (click)="updatedAtPicker.opened ? updatedAtPicker.close() : updatedAtPicker.open()">
+              <em class="fas fa-calendar"></em>
+            </span>
+          </div>
+          <mat-datepicker #updatedAtPicker></mat-datepicker>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<div class="card card-fullheight">
+  <div class="card-body table-responsive pt-1">
+
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table table-sm table-hover">
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns" scope="col" class="text-center">
+          {{c | translate}}
+        </th>
+        <th scope="col" class="text-center" *ngIf="pluginConfiguration && pluginConfiguration.foodManagerEnabled">
+          {{'DATA_TABLE.SENT_FM' | translate}}
+        </th>
+        <th scope="col" class="text-center" *ngIf="pluginConfiguration && pluginConfiguration.sellPointEnabled">
+          {{'DATA_TABLE.SENT_SP' | translate}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let purchase of purchaseResponse?.data, let i = index" (click)="goToPurchaseDetails(purchase)">
+
+        <td class="text-center">
+          <ngb-highlight [result]="purchase?.id.toString()" [term]="filterForm.controls.textSearch.value?.trim()"></ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <ngb-highlight [result]="purchase?.code" [term]="filterForm.controls.textSearch.value?.trim()"></ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          <ngb-highlight [result]="purchase.client?.firstName + ' ' + purchase.client?.lastName"
+                         [term]="filterForm.controls.textSearch.value?.trim()">
+          </ngb-highlight>
+        </td>
+
+        <td class="text-center">
+          {{'PURCHASE_FORM.STATE.' + purchase.state.toString() | translate}}
+        </td>
+
+        <td class="text-center">
+          {{purchase.sellPoint?.name}}
+        </td>
+
+        <td class="text-center">
+          {{purchase.shipment | localTranslate: 'description'}}
+        </td>
+
+        <td class="text-center">
+          {{purchase.payment | localTranslate: 'descriptionWeb' }}
+        </td>
+
+        <td class="text-center">
+          {{purchase.createdAt |date : 'dd-MM-yyyy HH:mm'}}
+        </td>
+
+        <td class="text-center">
+          {{purchase.updatedAt |date : 'dd-MM-yyyy HH:mm'}}
+        </td>
+
+        <td class="text-center" *ngIf="pluginConfiguration && pluginConfiguration.foodManagerEnabled">
+          {{purchase.sentToFoodManager ? 'Si' : 'No'}}
+          <span *ngIf="purchase.sentToFoodManager">
+            <br/>
+            {{purchase.foodManagerPurchaseId}}
+            <br/>
+            {{purchase.sentToFoodManagerAt |date : 'dd-MM-yyyy HH:mm'}}
+          </span>
+        </td>
+
+        <td class="text-center" *ngIf="pluginConfiguration && pluginConfiguration.sellPointEnabled">
+          {{purchase.sentToSellPoint ? 'Si' : 'No'}}
+          <span *ngIf="purchase.sentToSellPoint">
+            <br/>
+            {{purchase.sellPointPurchaseId}}
+            <br/>
+            {{purchase.sentToSellPointAt |date : 'dd-MM-yyyy HH:mm'}}
+          </span>
+        </td>
+
+      </tr>
+      <tr *ngIf="purchaseResponse?.totalRecords === 0" class="text-center">
+        <td colspan="8">Nessun ordine trovato</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center"
+                    *ngIf="purchaseResponse?.totalRecords > 0"
+                    [collectionSize]="purchaseResponse?.totalRecords"
+                    size="sm"
+                    [pageSize]="request.pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="request.page"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="request.pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<ul class="tree-view row">
+  <li class="parent-node" *ngFor="let p of data; let i=index" class="col-6">
+    <button mat-icon-button (click)="p.expand = !p.expand">
+      <mat-icon *ngIf="!p.expand">keyboard_arrow_down</mat-icon>
+      <mat-icon *ngIf="p.expand">keyboard_arrow_up</mat-icon>
+    </button>
+    <mat-checkbox [value]="p.value" class="mr-2" (change)="parentChange(i, p)"
+                  [checked]="p.checked"
+                  [indeterminate]="p.indeterminate"
+    ></mat-checkbox>{{p.name}} <small class="ml-3" *ngIf="getChecked(i) !== ''">(<i>{{getChecked(i)}}</i>)</small>
+    <ul [ngClass]="{'expand': p.expand}" class="children">
+      <li *ngFor="let c of p.children; let j = index">
+        <mat-checkbox [value]="c.value" class="mr-2" (change)="childChange(i, j, p)"
+                      [checked]="c.checked"
+        ></mat-checkbox>{{c.name}}
+      </li>
+    </ul>
+  </li>
+</ul>

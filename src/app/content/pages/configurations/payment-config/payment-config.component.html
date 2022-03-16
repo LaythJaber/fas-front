@@ -1,0 +1,30 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <mat-tab-group [selectedIndex]="0" mat-align-tabs="left">
+            <mat-tab>
+              <ng-template matTabLabel>Statico</ng-template>
+              <ng-template matTabContent>
+                <app-cash-form></app-cash-form>
+              </ng-template>
+            </mat-tab>
+            <mat-tab>
+              <ng-template matTabLabel>Stripe</ng-template>
+              <ng-template matTabContent>
+                <app-stripe-form></app-stripe-form>
+              </ng-template>
+            </mat-tab>
+            <mat-tab>
+              <ng-template matTabLabel>PayPal</ng-template>
+              <ng-template matTabContent>
+                <app-paypal-form></app-paypal-form>
+              </ng-template>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

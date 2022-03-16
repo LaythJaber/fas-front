@@ -1,0 +1,23 @@
+.subheader {
+  display: flex;
+  justify-content: space-between;
+}
+.mat-column-action {
+  text-align: right;
+}
+
+.btn-badge {
+  border-radius: 100%;
+  background-color: #fa3e3e;
+  color: white;
+  font-size: 9.5px;
+  width: 25px;
+  padding: 5px;
+  position: absolute;
+  text-align: center !important;
+  align-items: center !important;
+  justify-content: center !important;
+  bottom: 20px;
+  left: 40% !important;
+  margin: 0 auto !important;
+}

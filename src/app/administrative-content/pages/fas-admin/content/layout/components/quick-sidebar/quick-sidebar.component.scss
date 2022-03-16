@@ -1,0 +1,12 @@
+
+@import 'src/@theme/scss/components/functions';
+@import 'src/@theme/scss/components/mixins';
+@import 'src/@theme/scss/components/variables';
+
+:host {
+    ngb-tabset .nav-pills {
+        height: 80px;
+        display: flex;
+        align-items: center;
+    }
+}

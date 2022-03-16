@@ -1,0 +1,79 @@
+<div class="subheader">
+  <div class="search-input w-250">
+    <div class="form-group">
+      <div class="input-group-icon input-group-icon-right">
+        <span class="input-icon input-icon-right reset-search-btn" (click)="searchFormControl.setValue(null)">
+          <em class="ft-x"></em>
+        </span>
+        <input type="text" class="form-control" placeholder="{{'SUBHEADER.SEARCH' | translate}}"
+               [formControl]="searchFormControl">
+      </div>
+    </div>
+  </div>
+  <div class="action-btns">
+    <button mat-mini-fab color="primary" (click)="openFormDialog()"
+            placement="left"
+            tooltipClass="custom-tooltip"
+            ngbTooltip="{{'PROVIDER_FORM.ADD_PROVIDER'|translate}}">
+      <em class="ft-plus" style="font-size: 18px"></em>
+    </button>
+  </div>
+</div>
+
+<div class="card card-fullheight">
+  <div class="card-body table-responsive">
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+    <table class="table  table-sm  table-hover table-bordered">
+      <thead>
+      <tr>
+        <th *ngFor="let c of columns" scope="col">{{c | translate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let provider of rows; let i = index" (click)="openEditProvider(provider, i, $event)">
+        <td>{{provider.id}}</td>
+        <td>
+          <ngb-highlight [result]="provider.businessName" [term]="searchFormControl.value?.trim()"></ngb-highlight>
+        </td>
+        <td class="text-right">
+          <button mat-icon-button color="primary" (click)="openEditProvider(provider, i, $event)"
+                  placement="top" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'BUTTONS.EDIT'|translate}}">
+            <em class="ft-edit-1"></em>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteProvider(provider, i, $event)"
+                  placement="top" tooltipClass="custom-tooltip"
+                  ngbTooltip="{{'BUTTONS.DELETE'|translate}}">
+            <em class="ft-trash-2"></em>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="rows.length === 0 && !loading" class="text-center">
+        <td colspan="3">{{'DATA_TABLE.NO_CONFIGURATION_FOUND' | translate }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination class="d-flex justify-content-center"
+                    [collectionSize]="totalRecords"
+                    size="sm"
+                    [pageSize]="pageSize"
+                    [ellipses]="true"
+                    [maxSize]="5"
+                    [page]="page"
+                    *ngIf="!loading && totalRecords !== 0 && totalRecords > this.pageSize"
+                    (pageChange)="pageChange($event)">
+    </ngb-pagination>
+    <div class="col-12 d-flex justify-content-center">
+      <ng-select class="ng-select ng-select-sm" appendTo="body" style="width: min-content" [clearable]="false"
+                 [(ngModel)]="pageSize" [items]="pageSizesValues"
+                 (change)="changePageSize()">
+      </ng-select>
+    </div>
+  </div>
+</div>

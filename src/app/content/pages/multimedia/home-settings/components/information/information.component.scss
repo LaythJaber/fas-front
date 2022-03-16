@@ -1,0 +1,13 @@
+@import "~@angular/material/theming";
+.color-input-container {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+.color-picker-square {
+  width: 50px;
+  height: 25px;
+  border-radius: 5px;
+  margin-right: 10px;
+  @include mat-elevation(1)
+}

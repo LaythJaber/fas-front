@@ -1,0 +1,72 @@
+<div mat-dialog-title>
+  <ng-container *ngIf="data.carousel; then OK else KO"></ng-container>
+  <ng-template #OK>{{'MULTIMEDIA.EDIT_SECONDARY_SLIDE' | translate}}</ng-template>
+  <ng-template #KO>{{'MULTIMEDIA.ADD_SECONDARY_SLIDE' | translate}}</ng-template>
+</div>
+
+<div mat-dialog-content>
+  <div class="row">
+    <div class="col-lg-6 col-12">
+      <div class="image-display">
+        <img [src]="imageFileResult" alt="image result">
+        <div class="overlay" *ngIf="saveProgress > 0">
+          <mat-spinner diameter="60" mode="determinate"
+                       [value]="saveProgress"
+                       strokeWidth="5"></mat-spinner>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 col-12">
+      <div class="d-flex justify-content-center">
+        <mat-spinner mode="indeterminate" diameter="60" strokeWidth="5" *ngIf="categories.length === 0"></mat-spinner>
+      </div>
+      <div class="form-group" *ngIf="categories?.length > 0">
+        <input type="text" class="form-control form-control-sm" [formControl]="filterCategoriesCtrl">
+      </div>
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        [formControl]="categoryFormCtrl">
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+          <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+            <li class="mat-tree-node">
+              <!-- use a disabled button to provide padding for tree leaf -->
+              <button mat-icon-button disabled></button>
+              <mat-radio-button class="checklist-leaf-node" [value]="node.value">
+                {{node.text}}
+              </mat-radio-button>
+            </li>
+          </mat-tree-node>
+          <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+            <li>
+              <div class="mat-tree-node">
+                <button mat-icon-button matTreeNodeToggle
+                        [attr.aria-label]="'toggle ' + node.text">
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                  </mat-icon>
+                </button>
+                <mat-radio-button [value]="node.value">{{node.text}}</mat-radio-button>
+              </div>
+              <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                <ng-container matTreeNodeOutlet></ng-container>
+              </ul>
+            </li>
+          </mat-nested-tree-node>
+        </mat-tree>
+      </mat-radio-group>
+    </div>
+  </div>
+
+</div>
+
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button mat-flat-button color="warn" matDialogClose>
+    <mat-icon>clear</mat-icon>
+    {{'BUTTONS.CANCEL' | translate}}
+  </button>
+  <button mat-flat-button class="ml-3" color="primary" (click)="save()">
+    <mat-icon>save</mat-icon>
+    {{'BUTTONS.SAVE' | translate}}
+  </button>
+</div>

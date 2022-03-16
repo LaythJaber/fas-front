@@ -1,0 +1,46 @@
+<div class="container" style="height: 400px !important; overflow-y: scroll !important;" #main>
+  <div class="product-wrapper-grid grid-view">
+    <div class="form-row">
+      <div class="col-lg-3 col-md-6" *ngFor="let product of wishResponse?.data">
+        <div class="card p-1 m-1" style="border: 1px solid rgba(0,0,0,0.2)">
+          <div class="form-row">
+            <div class="form-group col-lg-12 col-md-12 text-center">
+              <img src="assets/img/empty-box.png" style="height: 150px;"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-lg-12 col-md-12">
+              <span style="font-size: 11px; font-weight: 900;">{{product?.commercialDescription}}</span>
+              <p>{{product?.price | number: "1.2-2" | numberCommaseparator }}€</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Infinite Scroll -->
+  <div infiniteScroll
+       [infiniteScrollContainer]="main"
+       [infiniteScrollDistance]="1"
+       [infiniteScrollThrottle]="1000"
+       (scrolled)="onScroll()"
+       *ngIf="wishResponse && wishResponse.totalRecords !==0 && wishRequest.page < wishResponse.totalPages">
+  </div>
+  <div class="product-infinitescroll" *ngIf="wishResponse && wishResponse.totalRecords !==0">
+    <div class="theme-paggination-block">
+      <div class="container-fluid p-0">
+        <div class="row">
+          <div class="text-center col-sm-12">
+            <div class="infinite-scrolling mt-3 mb-3 d-inline-block">
+              <i class="fa fa-spin fa-spinner" *ngIf="wishResponse && wishRequest.page < wishResponse.totalPages"></i>
+              <div class="loading-more active" *ngIf="wishResponse && wishRequest.page >= wishResponse.totalPages">
+                No More Products
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

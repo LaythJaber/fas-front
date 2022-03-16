@@ -1,0 +1,81 @@
+.list-group {
+  .active {
+    background-color: #2B333D;
+    border: none;
+
+    button {
+      color: white !important;
+    }
+  }
+
+  .mat-icon {
+    font-size: 18px !important;
+  }
+
+  button {
+    color: #2B333D !important;
+  }
+
+  .list-group-item {
+    cursor: pointer;
+  }
+}
+
+.col-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.active:focus {
+  outline: 0;
+}
+
+
+.tasks-list > li {
+  padding-right: 0;
+  padding-left: 0;
+  padding: .8rem 1.5rem;
+}
+
+.task-actions {
+  display: none;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  margin-top: -15px;
+}
+
+.task-actions > a.dropdown-toggle {
+  color: #aaa;
+  height: 30px;
+  width: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-info {
+  padding-left: 34px;
+}
+
+.tasks-list > li .checkbox input:checked ~ span {
+  text-decoration: line-through;
+}
+
+.tasks-list > li:hover .task-actions {
+  display: block
+}
+
+
+.page-content {
+  padding: 30px !important;
+}
+
+
+a:hover {
+  cursor: pointer;
+}
+
+/deep/ .ng-select-type.ng-dropdown-panel {
+  z-index: 1500;
+}

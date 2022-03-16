@@ -1,0 +1,13 @@
+.page-heading{
+    padding-bottom:0 ;
+}
+
+
+@media (max-width: 425px) {
+  .hideSmall{
+    display: none;
+  }
+  .smaller{
+    font-size:10px;
+  }
+}

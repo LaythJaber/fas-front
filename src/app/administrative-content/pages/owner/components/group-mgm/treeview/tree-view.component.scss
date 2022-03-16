@@ -1,0 +1,17 @@
+ul {
+  list-style: none;
+}
+
+.tree-view{
+  padding: 0;
+  font-size: 12px;
+}
+.children {
+  height: 0;
+  padding-left: 70px;
+  overflow: hidden;
+  transition: .2s ease-in-out all;
+}
+.expand {
+  height: 50px;
+}

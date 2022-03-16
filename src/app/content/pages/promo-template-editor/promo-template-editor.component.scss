@@ -1,0 +1,16 @@
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .action-btns {
+    button:first-child {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-right: 1px solid #9b9b9b;
+    }
+    button:last-child {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+<h1 mat-dialog-title>{{'IMAGE.ADD_PICTURE' | translate}}</h1>
+<mat-divider></mat-divider>
+<div mat-dialog-content style="min-height: 400px; text-align: center">
+  <input type="file" (change)="fileChange($event)" style="display: none" #fileInput>
+  <div class="img-dropzone text-center" (drop)="onDrop($event)" (dragover)="$event.preventDefault();" *ngIf="!selectedImage">
+    <div class="msg-icon">
+      <i class="ft-image" style="font-size: 6rem"></i>
+      <p>{{'IMAGE.DRAG' | translate}}</p>
+      <p style="font-size: 1.5rem">- {{'IMAGE.OR' | translate}} -</p>
+      <button mat-stroked-button class="mat-stroked-button mat-primary ng-star-inserted" tabindex="-1" (click)="fileInput.click()">{{'IMAGE.CLICK' | translate}}</button>
+    </div>
+  </div>
+
+  <div *ngIf="selectedImage && imageLoad" class="d-flex justify-content-center"  style="height: 300px;">
+    <mat-spinner diameter="30" style="top: 50%;"></mat-spinner>
+  </div>
+
+  <image-cropper
+    style="max-height: 300px"
+    [imageChangedEvent]="imageChangeEvent"
+    [imageFile]="imageFile"
+    [format]="'jpeg'"
+    [maintainAspectRatio]="data?.aspectRatio"
+    [aspectRatio]="data?.aspectRatio || 0"
+    outputType="both"
+    (imageLoaded)="imageLoaded()"
+    (cropperReady)="cropperReady()"
+    (imageCropped)="imageCropped($event)"
+    *ngIf="selectedImage"></image-cropper>
+  <button mat-stroked-button  tabindex="-1" class="my-2" (click)="fileInput.click()" *ngIf="selectedImage">{{'IMAGE.ANOTHER' | translate}}</button>
+</div>
+<mat-divider></mat-divider>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">{{'IMAGE.CANCEL' | translate}}</button>
+  <button mat-button color="primary" class="mr-3" tabindex="-1" (click)="close()">{{'IMAGE.ADD' | translate}}</button>
+</div>

@@ -1,0 +1,96 @@
+<div class="container" style="padding-top: 10px !important; margin-top: 0 !important;" >
+
+  <div class="row">
+    <div class="form-group col-lg-3 col-md-3">
+      <div class="search-input">
+      <div class="form-group">
+        <div class="input-group-icon input-group-icon-right">
+        <span class="input-icon input-icon-right reset-search-btn" >
+          <i class="ft-x"></i>
+        </span>
+          <input type="text" class="form-control" placeholder="{{'SUBHEADER.SEARCH' | translate}}" [(ngModel)]="searchText">
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="card card-fullheight">
+
+
+    <div class="card-body table-responsive" style="height: 500px;  overflow-y: scroll">
+      <table class="table table-sm table-hover table-bordered" >
+        <thead>
+        <tr>
+
+          <th style="width: 40px !important;">{{'PRODUCT_FORM.ID' | translate}}</th>
+          <th *ngFor="let c of columns_1" scope="col" >{{c | translate}} <i class="fas fa-sort" style="margin-left: 10px"
+                                                                           (click)="sortRows(c)"></i></th>
+          <!--<th>{{'PRODUCT_FORM.CODE' | translate}} EAN</th>-->
+          <th *ngFor="let c of columns_2" scope="col">{{c | translate}} <i class="fas fa-sort" style="margin-left: 10px"
+                                                                           (click)="sortRows(c)"></i></th>
+          <th style="width: 20px !important;"> {{'PRODUCT_FORM.ACTIVE' | translate}}</th>
+          <th>In Evidenza</th>
+        </tr>
+        </thead>
+        <tbody >
+        <tr *ngFor="let product of products | filter:searchText; let i = index "  >
+
+          <td>{{product.id}}</td>
+          <td>{{product.updatedAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+          <td>{{getDefaultProductCode(product)?.code}}
+            <i class="fa fa-barcode" (click)="showCodes($event, product, productCode)" style="margin: 7px;"
+               placement="left"></i></td>
+          <!--<td>{{getDefaultProductCode(product)?.code}} </td>-->
+          <td>{{product.code}}</td>
+          <td>{{setDescriptionByLang(product.transInfo)?.description}}
+            <i class="fa fa-globe" (click)="showDescription($event, product)" style="margin: 7px;" placement="left"></i>
+          </td>
+          <td>{{product.priceSale | number: "1.2-2" | numberCommaseparator }}€</td>
+          <td>{{product.stock}}</td>
+          <td>
+            <button mat-icon-button color="primary" *ngIf="product.enabled">
+              <em class="ft-power"></em>
+            </button>
+            <button mat-icon-button color="warn" *ngIf="!product.enabled" >
+              <em class="ft-power"></em>
+            </button>
+          </td>
+
+          <td>
+            <i
+               [ngStyle]="{'color':product.inEvidenza ? '#237db3':'#E50054'}"
+               class="ft-power" placement="top" tooltipClass="custom-tooltip"
+               ngbTooltip="{{'PROVIDER_FORM.ACTIVE'|translate}} / {{'PROVIDER_FORM.DEACTIVATED'|translate}}">
+            </i>
+          </td>
+
+        </tr>
+         </tbody>
+      </table>
+     </div>
+  </div>
+
+
+  <ng-template #productCode>
+    <div class="modal-header">
+      <h4 mat-dialog-title>{{'PRODUCT_FORM.CODE' | translate}}</h4>
+      <button type="button" mat-button mat-dialog-close>
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="flexbox mb-3" *ngFor="let pct of altProdCodes">
+        <div><span> {{pct.code }}</span>
+        </div>
+        <span class="mb-0 text-muted small-text">{{pct.codeType}}</span>
+      </div>
+    </div>
+  </ng-template>
+
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-flat-button color="warn" [matDialogClose]="" class="ml-2"><i  aria-hidden="true"
+                                                                            class="ft-x"></i> {{'BUTTONS.CLOSE' | translate}}
+  </button>
+</div>

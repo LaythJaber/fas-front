@@ -1,0 +1,54 @@
+<div class="pb-2 pr-4 d-flex justify-content-end">
+  <button type="button" class="btn btn-light" (click)="openAddSellPoint()" *ngIf="isOwner">
+    {{'ADMIN.SELL_POINT.ADD' | translate}}  <em class="ti-plus"></em>
+  </button>
+</div>
+
+<div class="text-muted font-13"
+     *ngIf="sellPointsList.length === 0 && !loading">{{'ADMIN.SELL_POINT.NO_SELL_POINT' | translate}}
+  [{{enterprise?.companyName}}]
+</div>
+<table class="table table-sm table-hover" *ngIf="sellPointsList.length > 0 && !loading">
+  <thead>
+  <tr>
+    <th *ngFor="let c of columns" scope="col">
+      {{c | translate}}
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let sp of sellPointsList, let i = index">
+    <td>{{sp.id}}</td>
+    <td>{{sp.name}}</td>
+    <td>{{sp.startHour?.substr(0, 5)}}</td>
+    <td>{{sp.finishHour?.substr(0, 5)}}</td>
+    <td>{{sp.mobilePrefix}} {{sp.mobile}}</td>
+    <td>
+      <a class="text-muted" (click)="chooseSellPoint(sp)" *ngIf="currentUser?.profile === 'SUPER_ADMIN'"> <i
+        class="ft-link-2"></i></a>
+      <a mat-icon-button color="primary" (click)="openEditSellPoint(sp)">
+        <em class="ft-edit-1" tooltipClass="custom-tooltip" ngbTooltip="{{'BUTTONS.EDIT'|translate}}"></em></a>
+      <a mat-icon-button color="warn" (click)="deleteSellPoint(sp)">
+        <em class="ft-trash-2" tooltipClass="custom-tooltip"
+            ngbTooltip="{{'BUTTONS.DELETE'|translate}}"></em></a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<!--
+<ul class="list-group list-group-flush tasks-list" perfectScrollbar>
+  <li class="list-group-item" *ngFor="let sp of sellPointsList">
+    <h6>{{sp.name}}</h6>
+    <div class="task-info mt-2 font-13"><i class="ti-time mr-2"></i>{{sp.startHour?.substr(0, 5)}}
+      -  {{sp.finishHour?.substr(0, 5)}}</div>
+    <div class="task-info mt-2 font-13" *ngIf="sp.mobilePrefix !=null && sp.mobile.length>0"><i
+      class="fas fa-phone-alt"></i>{{sp.mobilePrefix}} {{sp.mobile}}</div>
+    <div class="task-info mt-2 font-13" *ngIf="sp.contact !=null"><i class="fas fa-bookmark"></i>{{sp.contact}}</div>
+    <div class="task-actions">
+      <a class="text-muted" (click)="chooseSellPoint(sp)" *ngIf="currentUser?.profile === 'SUPER_ADMIN'"> <i
+        class="ft-link-2"></i></a>
+      <a class="text-muted" (click)="openEditSellPoint(sp)"><i class="ti-pencil"></i></a>
+      <a class="text-danger" (click)="deleteSellPoint(sp)"><i class="ti-close ml-2"></i></a></div>
+  </li>
+</ul>
+-->

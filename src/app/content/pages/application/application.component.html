@@ -1,0 +1,41 @@
+
+<div class=" text-center p-5">
+  <h1 class="display-4">My Applications</h1>
+  <p class="lead"><strong>These are</strong> your current and past applications</p>
+</div>
+
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Application Code</th>
+                <th>Job Description</th>
+                <th>Country</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr class="alert" role="alert" *ngFor="let application of applications">
+                <td class="d-flex align-items-center">
+                  <div class="pl-3 ">
+                    <span class="d-block">{{application?.application.id}}</span>
+                    <span class="d-block gray small">{{'ADDED' | translate}}: {{application?.application.createdAt}} </span>
+                  </div>
+                </td>
+                <td>{{application?.application.programName}}</td>
+                <td>{{application?.application.country}}</td>
+                <td class="status"><span class="active" *ngIf="application?.status === 'ACCEPTED'" >Accepted</span>
+                  <span class="inactive" *ngIf="application?.status === 'REJECTED'">Rejected</span>
+                <span class="waiting" *ngIf="application?.status === 'PENDING'">Pending</span></td>
+
+                 <td>
+
+                   <button class="btn custom-no-bg" data-dismiss="alert" aria-label="edit"  *ngIf="application?.status === 'pending'" (click)="edit()">
+                     <span aria-hidden="true" class="gray"><i class="far fa-edit"></i></span>
+                   </button>
+                 </td>
+
+              </tr>
+              </tbody>
+            </table>
+

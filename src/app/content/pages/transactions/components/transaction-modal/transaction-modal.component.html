@@ -1,0 +1,70 @@
+<div mat-dialog-title style="border-bottom: 1px solid gainsboro;">
+  <h3>
+    Cronologia della transazione
+    <button mat-raised-button color="primary" type="button" class="pull-right" style="margin-top: -5px;" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </h3>
+</div>
+
+<div class="row mt-5">
+  <div class="col-4">
+    <div class="form-group">
+      <label><strong>Codice transazione: </strong></label>
+      <span style="float: right">
+            {{transaction?.code}}
+          </span>
+    </div>
+  </div>
+
+  <div class="col-2">
+    <div class="form-group">
+      <label><strong>Profilo: </strong></label>
+      <span style="float: right">
+            {{transaction?.purchase?.client?.firstName + " " + transaction?.purchase?.client?.lastName}}
+          </span>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-12">
+    <table class="table table-sm table-bordered">
+      <tr>
+        <th scope="col">Data</th>
+        <th scope="col">Stato Transazione</th>
+        <th scope="col">Codice Risultato</th>
+        <th scope="col">Messagio</th>
+        <th scope="col">Link</th>
+        <th scope="col">Importo</th>
+      </tr>
+      <tbody>
+      <tr *ngIf="rowList && !rowList?.length">
+        <td colspan="10" class="text-center">
+          Nessun row trovato
+        </td>
+      </tr>
+      <tr *ngFor="let row of rowList; let i=index">
+        <td>
+          {{row?.createdAt | date: 'dd/MM/yyyy \'alle\' HH:mm'}}
+        </td>
+        <td>
+          {{'TRANSACTION_FORM.STATE.' + row?.status.toString() | translate}}
+        </td>
+        <td>
+          {{row?.errorCode}}
+        </td>
+        <td>
+          {{row?.errorMessage}}
+        </td>
+        <td>
+          {{row?.errorLink}}
+        </td>
+        <td>
+          {{row?.amount | number: "1.2-2" | numberCommaseparator }}€
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

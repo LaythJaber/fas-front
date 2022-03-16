@@ -1,0 +1,66 @@
+<nav class="navbar navbar-expand navbar-light admin-header">
+  <a class="nav-link navbar-icon sidebar-toggler" id="sidebar-toggler" href="javascript:" style="color: red"
+     (click)="toggleSidebar($event)">
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </a>
+
+
+  <a class="navbar-brand" routerLink="{{isOwner ? '/admin/owner' : '/admin'}}">
+    <a class="navbar-brand" routerLink="{{isOwner ? '/admin/owner' : '/admin'}}">
+      {{'ADMIN.GROUP.ADMINISTRATOR_PANEL' | translate}}
+      <div class="group-name" *ngIf="showGroupName">{{(userService.getAuthenticationState() | async).groupName}}</div>
+    </a>
+  </a>
+
+  <ul class="navbar-nav align-items-center ml-auto">
+<!--
+    <li class="nav-item">
+      <a href="javascript:;" (click)="alertBeforeGoHome()" appHasAnyAuthority [module]="'SELL_POINT'"
+         class="nav-link"><em class="fas fa-store-alt"></em> {{'HEADER.HOME' | translate}}</a>
+    </li>
+    <li class="nav-divider"></li> -->
+    <li class="nav-item" display="dynamic" ngbDropdown>
+      <a class="nav-link d-inline-flex align-items-center no-arrow" ngbDropdownToggle href="javascript:;">
+        <img src="{{translationLoaderService.selectedLanguage.flag}}" alt="language" width="24">
+      </a>
+      <div ngbDropdownMenu>
+        <a *ngFor="let lang of translationLoaderService.languages" class="dropdown-item d-flex align-items-center"
+           (click)="setLanguage(lang.lang)" href="javascript:;">
+          <img class="mr-3" src="{{lang.flag}}" width="24" alt="">{{lang.name}}
+        </a>
+      </div>
+    </li>
+
+
+    <li class="nav-item dropdown" ngbDropdown display="dynamic">
+      <a class="nav-link dropdown-toggle no-arrow d-inline-flex align-items-center" ngbDropdownToggle
+         href="javascript:;">
+        <span class="d-none d-sm-inline-block mr-2">{{user.firstName}} {{user.lastName}}</span>
+        <img class="rounded-circle" src="assets/img/users/dummy-avatar.jpg" alt="image" width="36"/>
+      </a>
+      <div class="dropdown-menu pt-0 pb-4" ngbDropdownMenu style="min-width: 280px;">
+        <div class="p-4 mb-4 media align-items-center text-white" style="background-color: #2c2f48;">
+          <img class="rounded-circle mr-3" src="assets/img/users/dummy-avatar.jpg" alt="image" width="55"/>
+          <div class="media-body">
+            <h5 class="mb-1">{{user.firstName}} {{user.lastName}}</h5>
+            <div class="font-13">{{user.profile | titlecase}}</div>
+          </div>
+        </div>
+        <a class="dropdown-item d-flex align-items-center" href="javascript:;" (click)="onProfileClick()">
+          <em class="ft-user mr-3 font-18 text-muted"></em>Profile</a>
+
+<!--        <a *ngFor="let nav of navData" routerLink="{{nav?.url}}" class="dropdown-item d-flex align-items-center">-->
+<!--          <em class="{{nav?.icon}} mr-3 font-18 text-muted"></em> {{nav?.translation | translate}}</a>-->
+
+
+        <div class="dropdown-divider my-3"></div>
+        <div class="mx-4">
+          <a class="btn btn-link p-0" href="javascript:;" (click)="logout()"><span class="btn-icon">
+              <em class="ft-power mr-2 font-18"></em>Logout</span></a>
+        </div>
+      </div>
+    </li>
+  </ul>
+</nav>

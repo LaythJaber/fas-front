@@ -1,0 +1,29 @@
+<div mat-dialog-title>
+  <ng-container  *ngIf="data.carousel; then OK else KO"></ng-container>
+  <ng-template #OK>{{'MULTIMEDIA.EDIT_CAROUSEL_IMAGE' | translate}}</ng-template>
+  <ng-template #KO>{{'MULTIMEDIA.ADD_CAROUSEL_IMAGE' | translate}}</ng-template>
+</div>
+
+<div mat-dialog-content>
+  <div class="image-display">
+    <img [src]="imageFileResult" alt="image result">
+    <div class="overlay" *ngIf="saveProgress > 0">
+      <mat-spinner diameter="60" mode="determinate"
+                   [value]="saveProgress"
+                   strokeWidth="5"></mat-spinner>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input type="text" placeholder="{{'MULTIMEDIA.LINK' | translate}}" class="form-control" [formControl]="linkFormControl">
+  </div>
+</div>
+
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button mat-flat-button color="warn" matDialogClose>
+    <mat-icon>clear</mat-icon> {{'BUTTONS.CANCEL' | translate}}
+  </button>
+  <button mat-flat-button class="ml-3" color="primary" (click)="save()">
+    <mat-icon>save</mat-icon> {{'BUTTONS.SAVE' | translate}}
+  </button>
+</div>
