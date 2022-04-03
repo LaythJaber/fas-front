@@ -1,5 +1,6 @@
 import {Application} from "./application.model";
 import {UserApplications} from "./user-applications";
+import {Ds} from "./ds";
 
 export class Account {
   constructor(
@@ -25,7 +26,8 @@ export class Account {
     public status?: string,
     public address?: string,
     public dateNewMeet?: string,
-    public userApplications?: UserApplications[]
+    public userApplications?: UserApplications[],
+    public ds?: Ds
   ) {
   }
 }

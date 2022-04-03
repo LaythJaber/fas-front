@@ -57,7 +57,7 @@ export class AuthService {
   }
 
   changePassword(request: ChangePasswordRequest) {
-    return this.http.post<boolean>(environment.api + '/auth/change-password', request)
+    return this.http.post<boolean>(this.PUBLIC_API + '/auth/change-password', request)
       .pipe(map(response => response));
   }
 

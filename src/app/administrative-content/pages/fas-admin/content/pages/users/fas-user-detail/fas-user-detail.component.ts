@@ -113,8 +113,16 @@ export class FasUserDetailComponent implements OnInit {
           else {
 
             if (this.student.dateNewMeet != null){
-              this.sharedDataService.nextMeeting(data);
-              this.router.navigateByUrl('/fas-admin/fas-meet');
+              const date = new Date();
+              const formattedDate= date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear()
+              if (this.student.dateNewMeet === formattedDate) {
+                this.sharedDataService.nextMeeting(data);
+                this.router.navigateByUrl('/fas-admin/fas-meet');
+              } else {
+                this._snackBar.open('The meeting did not start yet', 'close', {
+                  duration: 2000,
+                });
+              }
             }
             else{  this._snackBar.open('The meeting did not start yet', 'close', {
               duration: 2000,

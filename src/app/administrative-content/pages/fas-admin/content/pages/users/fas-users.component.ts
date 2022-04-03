@@ -32,7 +32,7 @@ export class FasUsersComponent  implements OnInit{
   }
 
   sendBreadCrumb(): void {
-    this.breadcrumbService.sendBreadcrumb(['APPLICATIONS']);
+    this.breadcrumbService.sendBreadcrumb(['USERS']);
   }
 
   add() {

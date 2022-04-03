@@ -20,7 +20,7 @@ interface LanguageFlag {
 export class TranslationLoaderService {
 
   selectedLanguage: LanguageFlag;
-  DEFAULT_LANG: string = 'it';
+  DEFAULT_LANG: string = 'en';
 
   siteLanguage = new BehaviorSubject(this.DEFAULT_LANG);
 
@@ -29,11 +29,6 @@ export class TranslationLoaderService {
       lang: 'en',
       name: 'English',
       flag: 'assets/img/flags/us.png'
-    },
-    {
-      lang: 'it',
-      name: 'Italian',
-      flag: 'assets/img/flags/Italy.png'
     },
     {
       lang: 'fr',

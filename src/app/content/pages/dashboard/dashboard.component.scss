@@ -1,4 +1,6 @@
 
+$page-content-padding: 50px;
+
 .heading-section {
   font-size: 28px;
   color: #000; }
@@ -94,4 +96,19 @@
   background-color: white;
   border: 0;
   -webkit-appearance: none;
+}
+
+
+.dashboard-content {
+  padding: $page-content-padding;
+  position: relative;
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  .content-top-heading {
+    margin-top: -$page-content-padding;
+    margin-left: -$page-content-padding;
+    margin-right: -$page-content-padding;
+  }
+
 }

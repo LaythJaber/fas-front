@@ -1,3 +1,1354 @@
 <div class=" text-center">
-  <h1 class="display-4">DS documents</h1>
+  <h1 class="display-4">DS</h1>
+</div>
+
+
+<div>
+    <form [formGroup]="formGroup">
+      <mat-vertical-stepper  #stepper formArrayName="formArray">
+        <mat-step  [completed]="false" formGroupName="0" [stepControl]="formArray?.get([0])">
+          <ng-template matStepLabel>Personal Info</ng-template>
+
+          <h4 class="p-4">Personal Informations</h4>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Surname
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantSurname">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Given Name
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantName">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " for="inputGroupSelect0">Sex</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" id="inputGroupSelect0" formControlName="applicantSex">
+                <option selected>Choose...</option>
+                <option value="1">Male</option>
+                <option value="2">Female</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " for="inputGroupSelect01">Material Status</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" id="inputGroupSelect01" formControlName="applicantMartialStatus">
+                <option selected>Choose...</option>
+                <option value="1">Single</option>
+                <option value="2">Married</option>
+                <option value="3">Divorced</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Date of birth
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantDateOfBirth">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Place of birth
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantPlaceOfBirth">
+            </div>
+          </div>
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                City
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantCity">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                State
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantState">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Country
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantCountry">
+            </div>
+          </div>
+
+
+
+          <div class="d-flex justify-content-end">
+            <button mat-raised-button matStepperNext >Next</button>
+          </div>
+        </mat-step>
+        <mat-step  [completed]="false" formGroupName="1" [stepControl]="formArray?.get([1])">
+          <ng-template matStepLabel>Personal Info 2</ng-template>
+
+          <h4 class="p-4">Personal Informations 2</h4>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Country of Origin
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantOriginCountry">
+            </div>
+          </div>
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Do you hold any other nationality?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantOtherNat">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12" *ngIf="formGroup.get(['formArray', 1, 'applicantOtherNat']).value == 1">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Other nationalities
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantOtherNatContent">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Do hold any passport of any other country ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm"  formControlName="applicantOtherPass">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12" *ngIf="formGroup.get(['formArray', 1, 'applicantOtherPass']).value == 1">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Other Countries
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantOtherPassContent">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Are you permit resident of a country other than your country ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantPermitOtherCountry">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12" *ngIf="formGroup.get(['formArray', 1, 'applicantPermitOtherCountry']).value == 1">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Other Countries Permit
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantPermitOtherCountryContent">
+            </div>
+          </div>
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                National identification Number
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantNationalIdentificationNumber">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Purpose of trip to the US </label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantPurposeTrip">
+                <option selected>Choose...</option>
+                <option value="1">Student</option>
+                <option value="2">Tourist</option>
+                <option value="3">Work</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Do you have any relatives in the usa ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantRelatives">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12" *ngIf="formGroup.get(['formArray', 1, 'applicantRelatives']).value == 1">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Relatives in the usa
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantRelativesContent">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext >Next</button>
+          </div>
+        </mat-step>
+        <mat-step  [completed]="false" formGroupName="2" [stepControl]="formArray?.get([2])">
+          <ng-template matStepLabel>Travel History</ng-template>
+
+
+          <h4 class="p-4">Travel History</h4>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Did travel to any country in the last 5 years ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantTravelHistory">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12" *ngIf="formGroup.get(['formArray', 2, 'applicantTravelHistory']).value == 1">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Countries visited
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantTravelHistoryContent">
+            </div>
+          </div>
+
+
+          <h5 class="ml-3">Person who will pay for your trip </h5>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Surname
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="payerSurname">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Given Name
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="payerName">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Number
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="payerNumber">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Email
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="payerEmail">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Relationship to you
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="payerRelationship">
+            </div>
+          </div>
+
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Do you live in the same address with this person ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="payerSameAddress">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <ng-container *ngIf="formGroup.get(['formArray', 2, 'payerSameAddress']).value == 2">
+            <div class="form-group col-12">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Street Address
+                              </span>
+                </div>
+                <input type="text" class="form-control form-control-sm" formControlName="payerStreetAddress">
+              </div>
+            </div>
+
+            <div class="form-group col-12">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                City
+                              </span>
+                </div>
+                <input type="text" class="form-control form-control-sm" formControlName="payerCity">
+              </div>
+            </div>
+
+            <div class="form-group col-12">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                State
+                              </span>
+                </div>
+                <input type="text" class="form-control form-control-sm" formControlName="payerState">
+              </div>
+            </div>
+
+            <div class="form-group col-12">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Zip Code
+                              </span>
+                </div>
+                <input type="text" class="form-control form-control-sm" formControlName="payerZipCode">
+              </div>
+            </div>
+
+            <div class="form-group col-12">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Country
+                              </span>
+                </div>
+                <input type="text" class="form-control form-control-sm" formControlName="payerCountry">
+              </div>
+            </div>
+
+          </ng-container>
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext >Next</button>
+          </div>
+        </mat-step>
+        <mat-step  [completed]="false" formGroupName="3" [stepControl]="formArray?.get([3])">
+          <ng-template matStepLabel>Travel Companions Info</ng-template>
+
+          <h4 class="p-4">Travel Companions Info</h4>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Are there other persons traveling with you ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="companion">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <ng-container *ngIf="formGroup.get(['formArray', 3, 'companion']).value == 1">
+
+            <div class="form-group col-12">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Surname
+                              </span>
+                </div>
+                <input type="text" class="form-control form-control-sm" formControlName="companionSurname">
+              </div>
+            </div>
+
+            <div class="form-group col-12">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Given Name
+                              </span>
+                </div>
+                <input type="text" class="form-control form-control-sm" formControlName="companionName">
+              </div>
+            </div>
+
+            <div class="form-group col-12">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Relationship to you
+                              </span>
+                </div>
+                <input type="text" class="form-control form-control-sm" formControlName="companionRelationship">
+              </div>
+            </div>
+
+          </ng-container>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Have you ever been in the us?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantVisitedUs">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Have you ever been issued a us visa?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantUsVisa" >
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Date last visa was issued
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantUsVisaDate">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Visa number
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantVisanNumber">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Have you ever been refused ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantRejectedVisa">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12" *ngIf="formGroup.get(['formArray', 3, 'applicantRejectedVisa']).value == 1">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Explain
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantRejectedVisaContent">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Have you ever filled immigrant petition to the united state ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantImmigrantPetition">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12" *ngIf="formGroup.get(['formArray', 3, 'applicantImmigrantPetition']).value == 1">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Explain
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantImmigrantPetitionContent">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext >Next</button>
+          </div>
+        </mat-step>
+        <mat-step  [completed]="false" formGroupName="4" [stepControl]="formArray?.get([4])">
+          <ng-template matStepLabel>Address and phone information</ng-template>
+
+          <h4 class="p-4">Address and phone information</h4>
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                State Address
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="stateAddress">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                City
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="city">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                State
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="state">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Zip Code
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="zipCode">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Country
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="country">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Phone
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantPhone">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Email
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantEmail">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text ">Social platform </label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantSocial">
+                <option selected>Choose...</option>
+                <option value="1">Facebook</option>
+                <option value="2">Instagram</option>
+                <option value="3">LinkedIn</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Name on social media
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantSocialContent">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext >Next</button>
+          </div>
+        </mat-step>
+
+        <mat-step  [completed]="false" formGroupName="5" [stepControl]="formArray?.get([5])">
+          <ng-template matStepLabel>Passport info</ng-template>
+
+          <h4 class="p-4">Passport info</h4>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Passport number
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantPassportNumber">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Passport country
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantPassportCountry">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Issuance date
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantPassportIssuanceDate">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Expiration date
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantPassportExpirationDate">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Have you ever lost a passport ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantLostPassport">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12" *ngIf="formGroup.get(['formArray', 5, 'applicantLostPassport']).value == 1">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Explain
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantLostPassportContent">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext >Next</button>
+          </div>
+        </mat-step>
+
+
+        <mat-step  [completed]="false" formGroupName="6" [stepControl]="formArray?.get([6])">
+          <ng-template matStepLabel>Family information</ng-template>
+
+          <h4 class="p-4">Family information</h4>
+
+          <h5 class="ml-3">Father</h5>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Surname
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="fatherSurname">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Given Name
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="fatherName">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Date of birth
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="fatherBirthDate">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Is your father alive ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="fatherAlive" >
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                State Address
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="fatherStreetAddress">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                City
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="fatherCity">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                State
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="fatherState">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Zip Code
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="fatherZipCode">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Country
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="fatherCountry">
+            </div>
+          </div>
+
+
+          <h5 class="ml-3">Mother</h5>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Surname
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="motherSurname">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Given Name
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="motherName">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Date of birth
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="motherBirthDate">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Is your mother alive ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="motherAlive">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                State Address
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="motherStreetAddress">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                City
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="motherCity">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                State
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="motherState">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Zip Code
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="motherZipCode">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Country
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="motherCountry">
+            </div>
+          </div>
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Do you have any relatives in the united state ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantOtherRelativesUsa">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext >Next</button>
+          </div>
+        </mat-step>
+
+
+
+
+        <mat-step  [completed]="false" formGroupName="7" [stepControl]="formArray?.get([7])">
+          <ng-template matStepLabel>Work, Education and Training</ng-template>
+
+          <h4 class="p-4">Work, Education and Training</h4>
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Primary occupation </label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantPrimaryOccupation">
+                <option selected>Choose...</option>
+                <option value="1">Student</option>
+                <option value="2">Work</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                               Present employer or school name
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantPresentEmployerOrSchool">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Street Address
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="empStreetAddress">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                City
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="empCity">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                State
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="empState">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Zip Code
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="empZipCode">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Country
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="empCountry">
+            </div>
+          </div>
+
+
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                               Previous employer or school
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantPreviousEmployerOrSchool">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                               Previous position
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantPreviousPosition">
+            </div>
+          </div>
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Street Address
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="empPreviousStreetAddress">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                City
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="empPreviousCity">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                State
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="empPreviousState">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Zip Code
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="empPreviousZipCode">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Country
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="empPreviousCountry">
+            </div>
+          </div>
+
+
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext >Next</button>
+          </div>
+        </mat-step>
+
+
+
+        <mat-step  [completed]="false" formGroupName="8" [stepControl]="formArray?.get([8])">
+          <ng-template matStepLabel>Education background</ng-template>
+
+          <h4 class="p-4">Education background</h4>
+
+          <h5 class="ml-3">Your last educational institution</h5>
+
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                               Name of institution
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantHsName">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Street Address
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantHsStreetAddress">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                City
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantHsCity">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                State
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantHsState">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Zip Code
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantHsZipCode">
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Country
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantHsCountry">
+            </div>
+          </div>
+
+
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Date attendance from
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantHsDateFrom">
+            </div>
+          </div>
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Date of attendance to
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantHsDateTo">
+            </div>
+          </div>
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Language</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantLanguage">
+                <option selected>Choose...</option>
+                <option value="1">Arabic</option>
+                <option value="2">English</option>
+                <option value="3">French</option>
+              </select>
+            </div>
+          </div>
+
+
+
+          <div class="form-group col-12">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text " >Have you ever travel to any other country ?</label>
+              </div>
+              <select class="custom-select form-control form-control-sm" formControlName="applicantTravelOtherCountries">
+                <option selected>Choose...</option>
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-12" *ngIf="formGroup.get(['formArray', 8, 'applicantTravelOtherCountries']).value == 1">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                Other countries
+                              </span>
+              </div>
+              <input type="text" class="form-control form-control-sm" formControlName="applicantTravelOtherCountriesContent">
+            </div>
+          </div>
+
+
+          <div class="d-flex justify-content-end">
+            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button matStepperNext  >Confirm</button>
+          </div>
+        </mat-step>
+
+        <!--
+        <mat-step>
+          <ng-template matStepLabel>Done</ng-template>
+          <p>You are now done.</p>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </mat-step>
+        -->
+      </mat-vertical-stepper>
+    </form>
 </div>

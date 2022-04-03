@@ -63,19 +63,23 @@ export class VideoComponent implements OnInit {
         });
         }
         else {
-          if(data.meetPwd != null){
-            const dialogRef = this.dialog.open(MeetConfirmDialogComponent, {
-              data:  data ,
-              hasBackdrop: false
-            });
+          const date = new Date();
+          const formattedDate= date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear();
+          if (data.meetDate === formattedDate) {
+            if (data.meetPwd != null) {
+              const dialogRef = this.dialog.open(MeetConfirmDialogComponent, {
+                data: data,
+                hasBackdrop: false
+              });
 
-            dialogRef.afterClosed().subscribe(result => {
-              if (result) {
-                this.sharedDataService.nextMeeting(data);
-                this.router.navigateByUrl('meet/call');
+              dialogRef.afterClosed().subscribe(result => {
+                if (result) {
+                  this.sharedDataService.nextMeeting(data);
+                  this.router.navigateByUrl('meet/call');
 
-              }
-            });
+                }
+              });
+            }
           }
           else{  this._snackBar.open('Meeting did not start yet', 'close', {
             duration: 2000,

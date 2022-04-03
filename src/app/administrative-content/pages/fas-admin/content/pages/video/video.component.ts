@@ -4,6 +4,7 @@ import {SharedDataService} from "../../../../../../shared/services/shared-data.s
 import {MeetService} from "../../../../../../shared/services/meet.service";
 import {UserService} from "../../../../../../shared/services/user.service";
 import {Account} from "../../../../../../shared/models/account.model";
+import {BreadcrumbService} from "../../../../../../core/services/breadcrumb.service";
 declare var JitsiMeetExternalAPI: any;
 
 @Component({
@@ -28,7 +29,8 @@ export class VideoComponent implements OnInit {
   constructor(
     private sharedDataService: SharedDataService,
     private meetService: MeetService,
-    private userService: UserService
+    private userService: UserService,
+    private breadcrumbService: BreadcrumbService,
   )
   {
     // Set the private defaults
@@ -40,6 +42,7 @@ export class VideoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.breadcrumbService.sendBreadcrumb(['VIDEO']);
 
 
     this.userService.identity().subscribe(response => {

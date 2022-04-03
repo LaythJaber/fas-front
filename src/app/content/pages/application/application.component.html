@@ -11,7 +11,6 @@
                 <th>Job Description</th>
                 <th>Country</th>
                 <th>Status</th>
-                <th></th>
               </tr>
               </thead>
               <tbody>
@@ -24,17 +23,21 @@
                 </td>
                 <td>{{application?.application.programName}}</td>
                 <td>{{application?.application.country}}</td>
+                <!--
                 <td class="status"><span class="active" *ngIf="application?.status === 'ACCEPTED'" >Accepted</span>
                   <span class="inactive" *ngIf="application?.status === 'REJECTED'">Rejected</span>
                 <span class="waiting" *ngIf="application?.status === 'PENDING'">Pending</span></td>
-
-                 <td>
+                -->
+                <td>{{application?.note}}</td>
+                <!-- <td>
 
                    <button class="btn custom-no-bg" data-dismiss="alert" aria-label="edit"  *ngIf="application?.status === 'pending'" (click)="edit()">
                      <span aria-hidden="true" class="gray"><i class="far fa-edit"></i></span>
                    </button>
-                 </td>
-
+                 </td> -->
+              </tr>
+              <tr *ngIf="applications.length === 0 " class="text-center">
+                <td colspan="5">{{'DATA_TABLE.NO_APP_FOUND' | translate }}</td>
               </tr>
               </tbody>
             </table>

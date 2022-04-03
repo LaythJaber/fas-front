@@ -10,6 +10,7 @@
     <th>Program Name</th>
     <th>Country</th>
     <th>Status</th>
+    <th>Status Details</th>
     <th class="d-flex align-items-center">
       <button class="btn custom-no-bg"
               tooltipClass="custom-tooltip"
@@ -35,6 +36,20 @@
       <span class="inactive" *ngIf="userApp?.status === 'REJECTED'">Rejected</span>
       <span class="waiting" *ngIf="userApp?.status === 'PENDING'">Pending</span></td>
 
+    <td>
+      <a *ngIf="userApp?.editNote" mat-icon-button (click)="confirmUpdateNote(userApp?.application, i, userApp?.note )">
+        <em class="ft-check" tooltipClass="custom-tooltip"
+            ngbTooltip="confirm update"></em></a>
+      <a *ngIf="userApp?.editNote" mat-icon-button (click)="cancelUpdate(userApp?.application, i)">
+        <em class="ft-x" tooltipClass="custom-tooltip"
+            ngbTooltip="cancel update"></em></a>
+      <a *ngIf="!userApp?.editNote" mat-icon-button (click)="updateNote(userApp?.application, i)">
+        <em class="ft-edit-2" tooltipClass="custom-tooltip"
+            ngbTooltip="update note"></em></a>
+      <input *ngIf="userApp?.editNote" class="form-control form-control-sm"  [(ngModel)]="userApp.note"
+             placeholder="{{'DATA_TABLE.DESCRIPTION' | translate}}" type="text">
+      <span *ngIf="!userApp?.editNote">{{userApp?.note}}</span>
+    </td>
     <td class="d-flex align-items-center">
 
 
@@ -42,6 +57,9 @@
         <em class="ft-trash-2" tooltipClass="custom-tooltip"
             ngbTooltip="{{'BUTTONS.DELETE'|translate}}"></em></a>
     </td>
+  </tr>
+  <tr *ngIf="applications.length === 0 " class="text-center">
+    <td colspan="5">{{'DATA_TABLE.NO_APP_FOUND' | translate }}</td>
   </tr>
   </tbody>
 </table>

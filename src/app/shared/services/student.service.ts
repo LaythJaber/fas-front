@@ -82,6 +82,10 @@ export class StudentService {
     return this.http.put(`${this.API}/toggle-app-status/${userId}/${appId}`, {}, {observe: 'response'});
   }
 
+  updateApplicationNote(userId, appId, note) {
+    return this.http.put(`${this.API}/app-note/${userId}/${appId}/${note}`, {}, {observe: 'response'});
+  }
+
   changeAccountStatus(userId) {
     return this.http.put(`${this.API}/toggle-account-status/${userId}`, {}, {observe: 'response'});
   }

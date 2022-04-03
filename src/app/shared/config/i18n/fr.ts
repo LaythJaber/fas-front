@@ -17,6 +17,9 @@ export const locale = {
         RETURN_PRODUCT: 'Retours',
         SIZE_GUIDE: 'Guide des tailles',
         COUPON: 'Coupon',
+        USERS: ' Users',
+        VIDEO: 'Video meet',
+        CALENDAR: 'Calendar',
         GENERAL_CONFIGURATION: 'Général',
         PLUGIN: 'Plugin',
         PAYMENT: 'Paiement',
@@ -145,6 +148,7 @@ export const locale = {
     },
     LOADING: 'Chargement',
     DATA_TABLE: {
+      NO_APP_FOUND: 'Encore pas d\'applicaitons',
       CONDITION: 'Condition',
       SKU: 'Sku',
       EAN_CODE: 'Code EAN',
@@ -1473,6 +1477,7 @@ export const locale = {
       CONFIRM_PASSWORD: 'Confirmer le mot de passe',
       MOBILE: 'Mobile',
       CONFIRM: 'Confirmer',
+      HAVE_ACCOUNT: 'J\'ai un compte',
       EMAIL_EXISTS: 'Cette adresse email n\'est pas disponible',
       THANKS_FOR_SIGNUP: 'Merci pour votre inscription!',
       // tslint:disable-next-line:max-line-length

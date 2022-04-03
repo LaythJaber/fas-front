@@ -14,7 +14,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {TranslationLoaderService} from './core/services/translation-loader.service';
 import {BackdropService} from './core/services/backdrop.service';
 import {locale as enLang} from './shared/config/i18n/en';
-import {locale as itLang} from './shared/config/i18n/it';
 import {locale as frLang} from './shared/config/i18n/fr';
 
 @Component({
@@ -33,8 +32,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     private _backdropService: BackdropService,
   ) {
     // Set translations
-    this._translateService.addLangs(['en', 'it', 'fr']);
-    this._translationLoaderService.loadTranslations(enLang, itLang, frLang);
+    this._translateService.addLangs(['en', 'fr']);
+    this._translationLoaderService.loadTranslations(enLang, frLang);
     this._translateService.setDefaultLang('en');
     this._translationLoaderService.setInitLang();
   }

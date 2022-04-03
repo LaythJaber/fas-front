@@ -8,4 +8,8 @@ export class UserApplications {
   application: Application;
 
   status: string;
+
+  note: string;
+
+  editNote: boolean = false;
 }

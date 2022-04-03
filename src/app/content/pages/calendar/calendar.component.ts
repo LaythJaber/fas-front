@@ -29,6 +29,7 @@ import {UserService} from "../../../shared/services/user.service";
 import {Account} from "../../../shared/models/account.model";
 import {AppointmentService} from "../../../shared/services/appointment.service";
 import {Appointment} from "../../../shared/models/appointment";
+import {BreadcrumbService} from "../../../core/services/breadcrumb.service";
 
 
 @Component({
@@ -103,7 +104,8 @@ export class CalendarComponent implements OnInit {
   constructor(@Inject(LOCALE_ID) locale: string, private calendarService: CalendarService,
               private dateAdapter: DateAdapter,
               private userService: UserService,
-              private appointmentService: AppointmentService) {
+              private appointmentService: AppointmentService,
+              private breadcrumbService: BreadcrumbService) {
     this.locale = locale;
 
     // this.dayModifier = ((day: SchedulerViewDay): void => {
@@ -127,6 +129,9 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.breadcrumbService.sendBreadcrumb(['APPOINTMENT']);
+
+
     this.userService.identity().subscribe(response => {
       this.user = response;
     })

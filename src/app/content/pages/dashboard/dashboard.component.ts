@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
   }
 
   countAcceptedApplications() {
-    this.studentService.countAcceptedStudents().subscribe( response => {
+    this.studentService.countAcceptedApplicationsByUser().subscribe( response => {
       this.acceptedApplications = response;
     })
   }

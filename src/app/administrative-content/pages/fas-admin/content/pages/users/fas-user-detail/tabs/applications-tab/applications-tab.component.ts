@@ -60,6 +60,24 @@ export class ApplicationsTabComponent implements OnInit {
   }
 
 
+  confirmUpdateNote(application: Application, index: number, note: string) {
+
+    this.studentService.updateApplicationNote(this.userId, application.id, note).subscribe(d => {
+      this.applications[index].editNote = false;
+      this.applications[index].note = note;
+
+    });
+  }
+
+  updateNote(application: Application, index: number) {
+
+      this.applications[index].editNote = true;
+
+  }
+
+  cancelUpdate(application: Application, index: number ) {
+    this.applications[index].editNote = false;
+}
 
    detachApp(application: Application, index: number) {
     Swal.default.fire({

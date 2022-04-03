@@ -91,7 +91,7 @@ export class RegisterComponent implements OnInit {
       password       : ['', Validators.required],
       passwordConfirm: ['', [Validators.required, confirmPasswordValidator]],
       address: ['', Validators.required],
-      country: ['', Validators.required]
+      country: [null, Validators.required]
     });
 
     // Update the validity of the 'passwordConfirm' field
