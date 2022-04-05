@@ -63,6 +63,13 @@ export class StudentService {
     return this.http.get<number>(this.API + '/count-accepted-applications');
   }
 
+  countTotalApplicationsByUser() {
+    return this.http.get<number>(this.API + '/count-total-applications');
+  }
+
+  countRejectedApplicationsByUser() {
+    return this.http.get<number>(this.API + '/count-rejected-applications');
+  }
 
 
   getStudentDetails(studentId: number) {

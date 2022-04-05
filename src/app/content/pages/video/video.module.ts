@@ -9,6 +9,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 
@@ -26,16 +27,17 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [VideoComponent, MeetComponent, MeetConfirmDialogComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    MatIconModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    MatInputModule,
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        MatIconModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatDialogModule,
+        MatInputModule,
+        TranslateModule,
 
-  ],
+    ],
   entryComponents: [MeetConfirmDialogComponent]
 })
 export class VideoModule { }

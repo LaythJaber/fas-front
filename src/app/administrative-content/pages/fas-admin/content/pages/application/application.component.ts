@@ -5,6 +5,7 @@ import {BreadcrumbService} from "../../../../../../core/services/breadcrumb.serv
 import {Application} from "../../../../../../shared/models/application.model";
 import {ApplicationService} from "../../../../../../shared/services/application.service";
 import * as Swal from 'sweetalert2';
+import {TranslateService} from "@ngx-translate/core";
 
 
 @Component({
@@ -19,7 +20,8 @@ export class ApplicationComponent implements OnInit {
 
   constructor(private modalService: NgbModal,
               private applicationService: ApplicationService,
-              private breadcrumbService: BreadcrumbService) {
+              private breadcrumbService: BreadcrumbService,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -33,7 +35,7 @@ export class ApplicationComponent implements OnInit {
 
   add() {
     const modalRef = this.modalService.open(ApplicationFormComponent);
-    modalRef.componentInstance.title = 'New Application';
+    modalRef.componentInstance.title = this.translate.instant('APPLICATIONS.NEW_APP');
     modalRef.result.then((result) => {if (result) { this.applications.push(result) }});
 
   }
@@ -41,7 +43,7 @@ export class ApplicationComponent implements OnInit {
   edit(app: Application) {
     const modalRef = this.modalService.open(ApplicationFormComponent);
     modalRef.componentInstance.application = app;
-    modalRef.componentInstance.title = 'Edit Application';
+    modalRef.componentInstance.title = this.translate.instant('APPLICATIONS.UPDATE_APP');;
 
     modalRef.result.then((result) => { if (result) {
 

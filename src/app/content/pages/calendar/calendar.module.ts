@@ -9,6 +9,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { registerLocaleData } from '@angular/common';
 import localeIt from '@angular/common/locales/it';
 import {CalendarComponent} from "./calendar.component";
+import {TranslateModule} from "@ngx-translate/core";
 registerLocaleData(localeIt);
 
 
@@ -23,16 +24,17 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [CalendarComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory
-    }),
-    SchedulerModule.forRoot({ locale: 'en', headerDateFormat: 'daysRange', logEnabled: true }),
-    FormsModule,
-    MatProgressSpinnerModule,
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        CalendarModule.forRoot({
+            provide: DateAdapter,
+            useFactory: adapterFactory
+        }),
+        SchedulerModule.forRoot({locale: 'en', headerDateFormat: 'daysRange', logEnabled: true}),
+        FormsModule,
+        MatProgressSpinnerModule,
+        TranslateModule,
+    ]
 })
 export class MeetSchedulerModule { }

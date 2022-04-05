@@ -7,7 +7,7 @@
 <div class="modal-body">
 
   <div class="form-group col-6">
-    <label>Application name :</label>
+    <label>{{'APPLICATIONS.APP_NAME' | translate}} :</label>
     <div class="input-group-icon input-group-icon-right">
       <ng-select class="ng-select-type ng-select-sm" [items]="applications" [bindLabel]="'programName'"
                  [bindValue]="'id'" appendTo="body"
@@ -19,6 +19,6 @@
 
 </div>
 <div class="modal-footer">
-  <button type="submit" class="btn btn-outline-primary"  (click)="assign()">Assign</button>
-  <button  class="btn btn-outline-dark" (click)="activeModal.close(null)">Close</button>
+  <button type="submit" class="btn btn-outline-primary"  (click)="assign()">{{'BUTTONS.ASSIGN' | translate}}</button>
+  <button  class="btn btn-outline-dark" (click)="activeModal.close(null)">{{'BUTTONS.CLOSE' | translate}}</button>
 </div>

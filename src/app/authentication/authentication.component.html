@@ -39,7 +39,7 @@
           <input type="checkbox" formControlName="rememberMe"><span class="ml-0"></span>
           {{'LOGIN.REMEMBER_ME' | translate}}</label>
 
-        <small class="form-text text-right"><a routerLink="register" class="text-muted">You don't have an account ?</a></small>
+        <small class="form-text text-right"><a routerLink="register" class="text-muted">{{'LOGIN.NO_ACCOUNT' | translate}}</a></small>
 
         <!--    <a routerLink='/snippets/auth/forgot-password'>{{'LOGIN.FORGET_PASSWORD' | translate}}</a>-->
       </div>
@@ -56,8 +56,6 @@
            [ngClass]="{disabled: translationLoaderService.getActiveLanguage() === 'en'}">English</a>
         <a href="javascript:;" (click)="changeLang('fr')"
            [ngClass]="{disabled: translationLoaderService.getActiveLanguage() === 'fr'}">Français</a>
-        <a href="javascript:;" (click)="changeLang('ar')"
-           [ngClass]="{disabled: translationLoaderService.getActiveLanguage() === 'ar'}">عربي</a>
       </div>
     </div>
   </div>

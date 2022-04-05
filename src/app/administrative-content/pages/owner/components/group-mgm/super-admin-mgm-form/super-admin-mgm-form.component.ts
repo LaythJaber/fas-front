@@ -24,7 +24,7 @@ export class SuperAdminMgmFormComponent implements OnInit {
   submitted = false;
   pwdVisible = true;
   loading = new BehaviorSubject<boolean>(false);
-  title = 'Add Super Admin'
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -35,7 +35,7 @@ export class SuperAdminMgmFormComponent implements OnInit {
     private translateService: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data) {
   }
-
+  title = this.translateService.instant('OWNER.ADD_ADMIN');
   ngOnInit() {
     this.adminForm = this.fb.group({
       id: null,
@@ -48,7 +48,7 @@ export class SuperAdminMgmFormComponent implements OnInit {
     });
 
     if (this.data.account) {
-   this.title = "Edit Super Admin";
+   this.title = this.translateService.instant('OWNER.EDIT_ADMIN');
   this.adminForm.patchValue(this.data.account);
     }
   }

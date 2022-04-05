@@ -141,8 +141,8 @@ export class GroupMgmComponent implements OnInit {
     $event.stopPropagation();
     Swal.default.fire({
       icon: 'warning',
-      titleText: this.translateService.instant('ADMIN.GROUP.ATTENTION'),
-      html: this.translateService.instant('ADMIN.GROUP.YOU_ARE_ABOUT_TO_DELETE', {name: `${g.name}`}),
+      titleText: this.translateService.instant('OWNER.DELETE_ADMIN'),
+      html: this.translateService.instant('OWNER.DELETE_CONFIRM', {name: `${g.name}`}),
       showCancelButton: true,
       cancelButtonText: this.translateService.instant('BUTTONS.CANCEL')
     }).then(e => {
@@ -152,7 +152,7 @@ export class GroupMgmComponent implements OnInit {
           this.lazySearch();
         }, (err: HttpErrorResponse) => {
           if (err.error.message.includes('ConstraintViolationException')) {
-            this.matSnackBar.open(this.translateService.instant('ADMIN.GROUP.CANNOT_DELETE_GROUP'), 'Ok', {
+            this.matSnackBar.open(this.translateService.instant('ERROR'), 'Ok', {
               duration: 5000,
               panelClass: 'white-snackbar',
             });
@@ -290,8 +290,8 @@ export class GroupMgmComponent implements OnInit {
   deleteSuperAdmin(a) {
     Swal.default.fire({
       icon: 'warning',
-      titleText: this.translateService.instant('ADMIN.GROUP.ATTENTION'),
-      html: this.translateService.instant('ADMIN.GROUP.YOU_ARE_ABOUT_TO_DELETE', {name: `${a.firstName} ${a.lastName}`}),
+      titleText: this.translateService.instant('OWNER.DELETE_ADMIN'),
+      html: this.translateService.instant('OWNER.DELETE_CONFIRM', {name: `${a.firstName} ${a.lastName}`}),
       showCancelButton: true,
       cancelButtonText: this.translateService.instant('BUTTONS.CANCEL')
     }).then(e => {

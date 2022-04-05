@@ -1,15 +1,15 @@
 
 <div class=" text-center p-5">
-  <h1 class="display-4">Applications</h1>
-  <p class="lead"><strong>These are</strong> the current and past applications</p>
+  <h1 class="display-4">{{'APPLICATIONS.APPS' | translate}}</h1>
+  <p class="lead">{{'APPLICATIONS.SUBTITLE' | translate}}</p>
 </div>
 
             <table class="table">
               <thead>
               <tr>
-                <th>Application Code</th>
-                <th>Program Name</th>
-                <th>Country</th>
+                <th>{{'DATA_TABLE.APP_CODE' | translate}}</th>
+                <th>{{'DATA_TABLE.JOB_DESC' | translate}}</th>
+                <th>{{'DATA_TABLE.COUNTRY' | translate}}</th>
                   <th>
                     <button class="btn custom-no-bg" aria-label="add" (click)="add()">
                       <span aria-hidden="true" class="gray"><i class="fas fa-plus"></i></span>
@@ -21,7 +21,7 @@
                 <td class="d-flex align-items-center">
                   <div class="pl-3 ">
                     <span class="d-block">{{application?.id}}</span>
-                    <span class="d-block gray small">{{'ADDED' | translate}}: {{application?.createdAt}} </span>
+                    <span class="d-block gray small">{{'DATA_TABLE.CREATION_DATE' | translate}}: {{application?.createdAt}} </span>
                   </div>
                 </td>
                 <td>{{application?.programName}}</td>

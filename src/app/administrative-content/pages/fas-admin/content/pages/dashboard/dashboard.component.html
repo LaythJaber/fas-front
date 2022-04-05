@@ -5,13 +5,13 @@
         <div class="card-body">
           <div class="d-flex justify-content-between mb-5">
             <div>
-              <h5 class="box-title mb-2">Total Users: </h5>
+              <h5 class="box-title mb-2">{{'DASHBOARD.TOTAL_USERS' | translate}}</h5>
               <div class="flexbox mb-2">
                 <div class="h1 mb-0">{{totalUsers}}</div>
               </div>
               <div class="text-success font-13" style="cursor:pointer;"
                    [routerLink]="['/fas-admin/fas-users']"
-                   routerLinkActive="active">users list
+                   routerLinkActive="active">{{'DASHBOARD.USERS_LIST' | translate}}
               </div>
             </div>
           </div>
@@ -23,13 +23,13 @@
         <div class="card-body">
           <div class="d-flex justify-content-between mb-5">
             <div>
-              <h5 class="box-title mb-2">Total Applications: </h5>
+              <h5 class="box-title mb-2">{{'DASHBOARD.TOTAL_APPS' | translate}}</h5>
               <div class="flexbox mb-2">
                 <div class="h1 mb-0">{{totalApps}}</div>
               </div>
               <div class="text-success font-13" style="cursor:pointer;"
                    [routerLink]="['/fas-admin/fas-applications']"
-                   routerLinkActive="active">applications list
+                   routerLinkActive="active">{{'DASHBOARD.APP_LIST' | translate}}
               </div>
             </div>
           </div>
@@ -41,7 +41,7 @@
         <div class="card-body">
           <div class="d-flex justify-content-between mb-5">
             <div>
-              <h5 class="text-success box-title mb-2" >Accepted Applications: </h5>
+              <h5 class="text-success box-title mb-2" >{{'DASHBOARD.ACCEPTED_APPS' | translate}}</h5>
               <div class="flexbox mb-2">
                 <div class="h1 mb-0">{{acceptedUsers}}</div>
               </div>
@@ -58,14 +58,14 @@
     <div class="card p-4 ">
       <div class="card-body">
         <div class="text-center p-4">
-          <h3 class="display-4">Recent User Applications</h3>
+          <h3 class="display-4">{{'DASHBOARD.RECENT_APPS' | translate}}</h3>
         </div>
         <table class="table">
           <thead>
           <tr>
-            <th>Application Code</th>
-            <th>Job Description</th>
-            <th>Country</th>
+            <th>{{'DATA_TABLE.APP_CODE' | translate}}</th>
+            <th>{{'DATA_TABLE.JOB_DESC' | translate}}</th>
+            <th>{{'DATA_TABLE.COUNTRY' | translate}}</th>
           </tr>
           </thead>
           <tbody>
@@ -73,7 +73,7 @@
             <td class="d-flex align-items-center">
               <div class="pl-3 ">
                 <span class="d-block">{{application?.id}}</span>
-                <span class="d-block gray small">{{'ADDED' | translate}}: {{application?.createdAt}} </span>
+                <span class="d-block gray small">{{'DATA_TABLE.CREATION_DATE' | translate}} :  {{application?.createdAt}} </span>
               </div>
             </td>
             <td>{{application?.programName}}</td>

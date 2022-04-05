@@ -1,20 +1,20 @@
 <div class=" text-center">
-  <h1 class="display-4">User Applications</h1>
+  <h1 class="display-4">{{'USERS.USER_APPS' | translate}}</h1>
 </div>
 
 
 <table class="table">
   <thead>
   <tr>
-    <th>Application Code</th>
-    <th>Program Name</th>
-    <th>Country</th>
-    <th>Status</th>
-    <th>Status Details</th>
+    <th>{{'DATA_TABLE.APP_CODE' | translate}}</th>
+    <th>{{'DATA_TABLE.JOB_DESC' | translate}}</th>
+    <th>{{'DATA_TABLE.COUNTRY' | translate}}</th>
+    <th>{{'DATA_TABLE.STATUS' | translate}}</th>
+    <th>{{'DATA_TABLE.DETAILS' | translate}}</th>
     <th class="d-flex align-items-center">
       <button class="btn custom-no-bg"
               tooltipClass="custom-tooltip"
-              ngbTooltip="assign new application"
+              ngbTooltip="{{'APPLICATIONS.ASSIGN_APP' | translate}}"
               (click)="assign()">
         <span aria-hidden="true" class="gray"><i class="fa fa-globe"></i></span>
 
@@ -27,25 +27,25 @@
     <td class="d-flex align-items-center">
       <div class="pl-3 ">
         <span class="d-block">{{userApp?.application.id}}</span>
-        <span class="d-block gray small">{{'ADDED' | translate}}: {{userApp?.application.createdAt}} </span>
+        <span class="d-block gray small">{{'DATA_TABLE.CREATION_DATE' | translate}}: {{userApp?.application.createdAt}} </span>
       </div>
     </td>
     <td>{{userApp?.application.programName}}</td>
     <td>{{userApp?.application.country}}</td>
-    <td class="status pointer" (click)="changeApplicationStatus(userApp?.application, i)"><span class="active" *ngIf="userApp?.status === 'ACCEPTED'" >Accepted</span>
-      <span class="inactive" *ngIf="userApp?.status === 'REJECTED'">Rejected</span>
-      <span class="waiting" *ngIf="userApp?.status === 'PENDING'">Pending</span></td>
+    <td class="status pointer" (click)="changeApplicationStatus(userApp?.application, i)"><span class="active" *ngIf="userApp?.status === 'ACCEPTED'" >{{'STATUS.ACCEPTED' | translate}}</span>
+      <span class="inactive" *ngIf="userApp?.status === 'REJECTED'">{{'STATUS.REJECTED' | translate}}</span>
+      <span class="waiting" *ngIf="userApp?.status === 'PENDING'">{{'STATUS.PENDING' | translate}}</span></td>
 
     <td>
       <a *ngIf="userApp?.editNote" mat-icon-button (click)="confirmUpdateNote(userApp?.application, i, userApp?.note )">
         <em class="ft-check" tooltipClass="custom-tooltip"
-            ngbTooltip="confirm update"></em></a>
+            ngbTooltip="{{'APPLICATIONS.CONFIRM_UPDATE' | translate}}"></em></a>
       <a *ngIf="userApp?.editNote" mat-icon-button (click)="cancelUpdate(userApp?.application, i)">
         <em class="ft-x" tooltipClass="custom-tooltip"
-            ngbTooltip="cancel update"></em></a>
+            ngbTooltip="{{'APPLICATIONS.CANCEL_UPDATE' | translate}}"></em></a>
       <a *ngIf="!userApp?.editNote" mat-icon-button (click)="updateNote(userApp?.application, i)">
         <em class="ft-edit-2" tooltipClass="custom-tooltip"
-            ngbTooltip="update note"></em></a>
+            ngbTooltip="{{'APPLICATIONS.UPDATE_NOTE' | translate}}"></em></a>
       <input *ngIf="userApp?.editNote" class="form-control form-control-sm"  [(ngModel)]="userApp.note"
              placeholder="{{'DATA_TABLE.DESCRIPTION' | translate}}" type="text">
       <span *ngIf="!userApp?.editNote">{{userApp?.note}}</span>

@@ -1,8 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {BreadcrumbService} from '../../../core/services/breadcrumb.service';
-import {DashboardService} from '../../../shared/services/dashboard.service';
-import {ApplicationFormComponent} from "../application/application-form/application-form.component";
-import {Application} from "../../../shared/models/application.model";
 import {ApplicationService} from "../../../shared/services/application.service";
 import {StudentService} from "../../../shared/services/student.service";
 
@@ -14,21 +11,19 @@ import {StudentService} from "../../../shared/services/student.service";
 export class DashboardComponent implements OnInit {
 
   acceptedApplications = 0;
-  inscriptionPerDay = 0;
-  purchasePerDay = 0;
-  finishedLastImport= false;
-  applications: Application[];
+  rejectedApplications = 0;
+  totalApplications= 0;
 
   constructor(private breadcrumbService: BreadcrumbService,
               private applicationService: ApplicationService,
-              private studentService: StudentService,
-              private dashboardService: DashboardService) {
+              private studentService: StudentService,) {
   }
 
   ngOnInit() {
     this.sendBreadCrumb();
-    this.getApps();
+    this.countTotalApplicationsByUser();
     this.countAcceptedApplications();
+    this.countRejectedApplications();
 
   }
 
@@ -37,15 +32,24 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  getApps() {
-    this.applicationService.getApplications().subscribe( response => {
-      this.applications = response;
-    })
-  }
 
   countAcceptedApplications() {
     this.studentService.countAcceptedApplicationsByUser().subscribe( response => {
       this.acceptedApplications = response;
     })
   }
+
+  countTotalApplicationsByUser() {
+    this.studentService.countTotalApplicationsByUser().subscribe( response => {
+      this.totalApplications = response;
+    })
+  }
+
+  countRejectedApplications() {
+    this.studentService.countRejectedApplicationsByUser().subscribe( response => {
+      this.rejectedApplications = response;
+    })
+  }
+
+
 }

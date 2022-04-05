@@ -2,74 +2,74 @@
   <div class="card-body">
 
 <div class=" text-center">
-  <h1 class="display-4">My documents</h1>
-  <p class="lead"><strong>Please upload your documents</strong> to let us know who you are.</p>
+  <h1 class="display-4">{{'DOCUMENTS.MY_DOCS' | translate}}</h1>
+  <p class="lead">{{'DOCUMENTS.MY_DOCS_SUBTITLE' | translate}}</p>
 </div>
 
 
     <div class="documents">
       <mat-vertical-stepper >
         <mat-step  [completed]="false" >
-          <ng-template matStepLabel>Baccalaureate</ng-template>
+          <ng-template matStepLabel>{{'DOCUMENTS.BAC' | translate}}</ng-template>
 
           <app-upload-file [fileType]="'BAC'"></app-upload-file>
           <app-showcase-files [fileType]="'BAC'"> </app-showcase-files>
 
           <div class="d-flex justify-content-end">
-            <button mat-raised-button matStepperNext>Next</button>
+            <button mat-raised-button matStepperNext>{{'FORMS.NEXT' | translate}}</button>
           </div>
         </mat-step>
         <mat-step [completed]="false"  >
-          <ng-template  matStepLabel>Transcripts</ng-template>
+          <ng-template  matStepLabel>{{'DOCUMENTS.TRANSCRIPTS' | translate}}</ng-template>
 
           <app-upload-file [fileType]="'TRANSCRIPTS'"></app-upload-file>
           <app-showcase-files  [fileType]="'TRANSCRIPTS'"> </app-showcase-files>
 
           <div class="d-flex justify-content-end">
-            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
-            <button mat-raised-button matStepperNext>Next</button>
+            <button class="mx-2" mat-raised-button matStepperPrevious>{{'FORMS.BACK' | translate}}</button>
+            <button mat-raised-button matStepperNext>{{'FORMS.NEXT' | translate}}</button>
           </div>
         </mat-step>
         <mat-step  [completed]="false" >
-          <ng-template matStepLabel>Certificates</ng-template>
+          <ng-template matStepLabel>{{'DOCUMENTS.CERTIFICATES' | translate}}</ng-template>
 
           <app-upload-file [fileType]="'CERTIFICATES'"></app-upload-file>
           <app-showcase-files [fileType]="'CERTIFICATES'"> </app-showcase-files>
 
           <div class="d-flex justify-content-end">
-            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
-            <button mat-raised-button matStepperNext>Next</button>
+            <button class="mx-2" mat-raised-button matStepperPrevious>{{'FORMS.BACK' | translate}}</button>
+            <button mat-raised-button matStepperNext>{{'FORMS.NEXT' | translate}}</button>
           </div>
         </mat-step>
         <mat-step [completed]="false" >
-          <ng-template matStepLabel>Passport</ng-template>
+          <ng-template matStepLabel>{{'DOCUMENTS.PASSPORT' | translate}}</ng-template>
 
           <app-upload-file [fileType]="'PASSPORT'"></app-upload-file>
           <app-showcase-files  [fileType]="'PASSPORT'"> </app-showcase-files>
 
           <div class="d-flex justify-content-end">
-            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
-            <button mat-raised-button matStepperNext>Next</button>
+            <button class="mx-2" mat-raised-button matStepperPrevious>{{'FORMS.BACK' | translate}}</button>
+            <button mat-raised-button matStepperNext>{{'FORMS.NEXT' | translate}}</button>
           </div>
         </mat-step>
         <mat-step [completed]="false" >
-          <ng-template matStepLabel>Internships</ng-template>
+          <ng-template matStepLabel>{{'DOCUMENTS.INTERNSHIPS' | translate}}</ng-template>
 
           <app-upload-file [fileType]="'INTERNSHIPS'"></app-upload-file>
           <app-showcase-files  [fileType]="'INTERNSHIPS'"> </app-showcase-files>
           <div class="d-flex justify-content-end">
-            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
-            <button mat-raised-button matStepperNext>Next</button>
+            <button class="mx-2" mat-raised-button matStepperPrevious>{{'FORMS.BACK' | translate}}</button>
+            <button mat-raised-button matStepperNext>{{'FORMS.NEXT' | translate}}</button>
           </div>
         </mat-step>
         <mat-step [completed]="false" >
-          <ng-template matStepLabel>Recommendations</ng-template>
+          <ng-template matStepLabel>{{'DOCUMENTS.RECOMMENDATIONS' | translate}}</ng-template>
 
           <app-upload-file [fileType]="'RECOMMENDATIONS'"></app-upload-file>
           <app-showcase-files  [fileType]="'RECOMMENDATIONS'"> </app-showcase-files>
 
           <div class="d-flex justify-content-end">
-            <button class="mx-2" mat-raised-button matStepperPrevious>Back</button>
+            <button class="mx-2" mat-raised-button matStepperPrevious>{{'FORMS.BACK' | translate}}</button>
           </div>
         </mat-step>
 

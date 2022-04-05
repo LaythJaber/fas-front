@@ -7,6 +7,7 @@ import {AssignApplicationDialogComponent} from "./assign-application-dialog/assi
 import {StudentService} from "../../../../../../../../../shared/services/student.service";
 import * as Swal from 'sweetalert2';
 import {UserApplications} from "../../../../../../../../../shared/models/user-applications";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-applications-tab',
@@ -21,7 +22,8 @@ export class ApplicationsTabComponent implements OnInit {
 
   constructor(private modalService: NgbModal,
               private applicationService: ApplicationService,
-              private studentService: StudentService) { }
+              private studentService: StudentService,
+              private translate: TranslateService) { }
 
   ngOnInit() {
   }
@@ -32,7 +34,7 @@ export class ApplicationsTabComponent implements OnInit {
 
   assign() {
     const modalRef = this.modalService.open(AssignApplicationDialogComponent);
-    modalRef.componentInstance.title = 'Assign Application';
+    modalRef.componentInstance.title = this.translate.instant('APPLICATIONS.ASSIGN_APP');;
     modalRef.componentInstance.userId = this.userId;
     modalRef.componentInstance.userApplications = this.applications;
     modalRef.result.then((result) => {if (result) { this.applications.push(result)}});

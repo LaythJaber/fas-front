@@ -68,7 +68,7 @@ export class FasUserDetailComponent implements OnInit {
 
 
   sendBreadCrumb(): void {
-    this.breadcrumbService.sendBreadcrumb(['DOCUMENTS']);
+    this.breadcrumbService.sendBreadcrumb(['USERS']);
   }
 
 

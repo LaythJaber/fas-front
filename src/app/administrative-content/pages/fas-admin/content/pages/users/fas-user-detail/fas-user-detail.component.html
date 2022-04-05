@@ -7,24 +7,24 @@
     </div>
 
     <div class="m-3">
-      <div class="py-2"><a>First Name: {{student?.firstName}}</a></div>
-    <div class="py-2"><a> Last Name: {{student?.lastName}}</a></div>
-    <div class="py-2"><a>Address: {{student?.address}}</a></div>
-    <div class="py-2"><a>Country: {{student?.country}}</a></div>
-    <div class="py-2"><a>Number: {{student?.mobile}}</a></div>
+      <div class="py-2"><a>{{'DATA_TABLE.FIRST_NAME' | translate}}: {{student?.firstName}}</a></div>
+    <div class="py-2"><a> {{'DATA_TABLE.LAST_NAME' | translate}}: {{student?.lastName}}</a></div>
+    <div class="py-2"><a>{{'DATA_TABLE.ADDRESS' | translate}}: {{student?.address}}</a></div>
+    <div class="py-2"><a>{{'DATA_TABLE.COUNTRY' | translate}}: {{student?.country}}</a></div>
+    <div class="py-2"><a>{{'DATA_TABLE.MOBILE' | translate}}: {{student?.mobile}}</a></div>
     </div>
 
 
     <ul class="list-unstyled components">
 
       <li (click)="tabController('DOCUMENTS')" [class.active]= "documentActive">
-        <a>Documents</a>
+        <a>{{'USERS.DOCUMENTS' | translate}}</a>
       </li>
       <li (click)="tabController('DS')" [class.active]= "dsActive">
-        <a>Ds</a>
+        <a>{{'USERS.DS' | translate}}</a>
       </li>
       <li (click)="tabController('APPLICATIONS')" [class.active]= "applicationsActive">
-        <a>Applications</a>
+        <a>{{'USERS.APPS' | translate}}</a>
       </li>
     </ul>
 
@@ -40,7 +40,7 @@
           <div class="container-fluid">
 
             <button type="button" id="sidebarCollapse" class="btn btn-info">
-              <span>ID : {{student?.id}}</span>
+              <span>{{'USERS.ID' | translate}} : {{student?.id}}</span>
             </button>
             <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <i class="fas fa-align-justify"></i>
@@ -52,10 +52,10 @@
                   <a class="nav-link" ></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pointer" (click)="addMeet()">Make appointment</a>
+                  <a class="nav-link pointer" (click)="addMeet()">{{'USERS.APPOINTMENT' | translate}}</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link pointer text-warning" (click)="meet()">Video call</a>
+                  <a class="nav-link pointer text-warning" (click)="meet()">{{'USERS.VIDEO' | translate}}</a>
                 </li>
               </ul>
             </div>

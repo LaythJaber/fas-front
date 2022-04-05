@@ -1,6 +1,6 @@
 <div class=" text-center p-5">
-  <h1 class="display-4">Welcome to FAS Exchange Platform</h1>
-  <p class="lead"><strong>Here</strong> you can manage your documents, schedule meetings, and follow up applications </p>
+  <h1 class="display-4">{{'DASHBOARD.USER_TITLE' | translate}}</h1>
+  <p class="lead">{{'DASHBOARD.USER_SUBTITLE' | translate}}</p>
 </div>
 
 <div class="dashboard-content ">
@@ -10,13 +10,13 @@
         <div class="card-body">
           <div class="d-flex justify-content-between mb-5">
             <div>
-              <h5 class="box-title mb-2">Total Applications: </h5>
+              <h5 class="box-title mb-2">{{'DASHBOARD.TOTAL_APPS' | translate}}: </h5>
               <div class="flexbox mb-2">
-                <div class="h1 mb-0">{{inscriptionPerDay}}</div>
+                <div class="h1 mb-0">{{totalApplications}}</div>
               </div>
               <div class="text-success font-13" style="cursor:pointer;"
-                   [routerLink]="['/client-mgm']"
-                   routerLinkActive="active">application list
+                   [routerLink]="['/applications']"
+                   routerLinkActive="active">{{'DASHBOARD.APP_LIST' | translate}}
               </div>
             </div>
           </div>
@@ -28,13 +28,13 @@
         <div class="card-body">
           <div class="d-flex justify-content-between mb-5">
             <div>
-              <h5 class="box-title mb-2">Accepted Applications: </h5>
+              <h5 class="box-title mb-2">{{'DASHBOARD.ACCEPTED_APPS' | translate}}: </h5>
               <div class="flexbox mb-2">
                 <div class="h1 mb-0">{{acceptedApplications}}</div>
               </div>
               <div class="text-success font-13" style="cursor:pointer;"
-                   [routerLink]="['/purchases']"
-                   routerLinkActive="active">get an appointment
+                   [routerLink]="['/calendar']"
+                   routerLinkActive="active">{{'DASHBOARD.GET_APPOINTMENT' | translate}}
               </div>
             </div>
           </div>
@@ -46,13 +46,13 @@
         <div class="card-body">
           <div class="d-flex justify-content-between mb-5">
             <div>
-              <h5 class="box-title mb-2" style="color: #b0320e">Rejected Applications: </h5>
+              <h5 class="box-title mb-2" style="color: #b0320e">{{'DASHBOARD.REJECTED_APPS' | translate}}: </h5>
               <div class="flexbox mb-2">
-                <div class="h1 mb-0">{{purchasePerDay}}</div>
+                <div class="h1 mb-0">{{rejectedApplications}}</div>
               </div>
               <div class="text-success font-13" style="cursor:pointer;"
-                   [routerLink]="['/purchases']"
-                   routerLinkActive="active">improve my ds
+                   [routerLink]="['/ds']"
+                   routerLinkActive="active">{{'DASHBOARD.IMPROVE_DS' | translate}}
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 <div class="card auth-content mb-0">
-  <div class="card-body py-5" *ngIf="!response">
-    <div class="text-center mb-5">
+  <div class="card-body " *ngIf="!response">
+    <div class="text-center">
       <h3 class="mb-3 text-primary"><img src="/assets/img/fas.svg" alt="logo" width="200" class="my-3"></h3>
     </div>
     <form [formGroup]="registerForm" (ngSubmit)="submitForm()" id="login-form">
@@ -122,8 +122,6 @@
            [ngClass]="{disabled: translationLoaderService.getActiveLanguage() === 'en'}">English</a>
         <a href="javascript:;" (click)="changeLang('fr')"
            [ngClass]="{disabled: translationLoaderService.getActiveLanguage() === 'fr'}">Français</a>
-        <a href="javascript:;" (click)="changeLang('ar')"
-           [ngClass]="{disabled: translationLoaderService.getActiveLanguage() === 'ar'}">عربي</a>
       </div>
     </div>
   </div>

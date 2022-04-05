@@ -164,7 +164,7 @@ const OWNER_MENU: any[] = [
     title: 'MENU'
   },
   {
-    title: 'Administrators Management',
+    title: 'SIDENAV.ADMIN_MGM',
     icon: 'ft-user',
     exact: true,
     url: '/admin/owner/',

@@ -9,7 +9,7 @@
 
   <a class="navbar-brand" routerLink="{{isOwner ? '/admin/owner' : '/admin'}}">
     <a class="navbar-brand" routerLink="{{isOwner ? '/admin/owner' : '/admin'}}">
-      {{'ADMIN.GROUP.ADMINISTRATOR_PANEL' | translate}}
+      {{'SIDENAV.ADMIN_MGM' | translate}}
       <div class="group-name" *ngIf="showGroupName">{{(userService.getAuthenticationState() | async).groupName}}</div>
     </a>
   </a>
@@ -58,7 +58,7 @@
         <div class="dropdown-divider my-3"></div>
         <div class="mx-4">
           <a class="btn btn-link p-0" href="javascript:;" (click)="logout()"><span class="btn-icon">
-              <em class="ft-power mr-2 font-18"></em>Logout</span></a>
+              <em class="ft-power mr-2 font-18"></em>{{'HEADER.LOGOUT' | translate}}</span></a>
         </div>
       </div>
     </li>

@@ -4,41 +4,41 @@ export const NAVIGATION: any[] = [
     title: 'MENU'
   },
   {
-    title: 'Dashboard',
+    title: 'SIDENAV.DASHBOARD',
     icon: 'fas fa-store-alt',
     exact: true,
     url: '/dashboard'},
   {
-    title: 'My Applications',
+    title: 'SIDENAV.MY_APPS',
     icon: 'fas fa-globe',
     exact: true,
     url: '/applications'
   },
   {
-    title: 'My documents',
+    title: 'SIDENAV.MY_DOCS',
     icon: 'fas fa-file-alt',
     exact: true,
     url: '/documents'
   },
   {
-    title: 'My Ds',
+    title: 'SIDENAV.MY_DS',
     icon: 'fab fa-artstation',
     exact: true,
     url: '/ds'
   },
   {
-    title: 'My Appointments',
+    title: 'SIDENAV.MY_APPOINTMENTS',
     icon: 'far fa-handshake',
     exact: true,
     url: '',
     children: [
       {
-        title: 'Video call',
+        title: 'SIDENAV.VIDEO',
         url: '/meet',
         exact: true,
       },
       {
-        title: 'Get an Appointment',
+        title: 'SIDENAV.APPOINTMENT',
         url: '/calendar',
         exact: true,
       }
@@ -53,42 +53,42 @@ export const FASNAVIGATION: any[] = [
     title: 'MENU'
   },
   {
-    title: 'Dashboard',
+    title: 'SIDENAV.DASHBOARD',
     icon: 'fas fa-store-alt',
     exact: true,
     url: '/fas-dashboard'
   },
   {
-    title: 'My Applications',
+    title: 'SIDENAV.MY_APPS',
     icon: 'fas fa-globe',
     exact: true,
     url: '/fas-applications'
   },
   {
-    title: 'My documents',
+    title: 'SIDENAV.MY_DOCS',
     icon: 'fas fa-file-alt',
     exact: true,
     url: '/fas-documents'
   },
   {
-    title: 'My Ds',
+    title: 'SIDENAV.MY_DS',
     icon: 'fab fa-artstation',
     exact: true,
     url: '/fas-ds'
   },
   {
-    title: 'My Appointments',
+    title: 'SIDENAV.MY_APPOINTMENTS',
     icon: 'far fa-handshake',
     exact: true,
     url: '',
     children: [
       {
-        title: 'Video call',
+        title: 'SIDENAV.VIDEO',
         url: '/fas-meet',
         exact: true,
       },
       {
-        title: 'Get an Appointment',
+        title: 'SIDENAV.APPOINTMENT',
         url: '/fas-calendar',
         exact: true,
       }

@@ -1,8 +1,8 @@
-<h1 mat-dialog-title>Use this password to join the meet </h1>
+<h1 mat-dialog-title>{{'VIDEO.USE_PASS' | translate}}</h1>
 
 <mat-dialog-content class="d-flex align-items-center  justify-content-center">
 <mat-form-field appearance="outline">
-  <mat-label>Mot de passe</mat-label>
+  <mat-label>{{'VIDEO.PASSWORD' | translate}}</mat-label>
   <input matInput value ="{{pwd}}"  readonly>
   <mat-icon matSuffix>lock</mat-icon>
 </mat-form-field>
@@ -10,6 +10,6 @@
 </mat-dialog-content>
 
 <div class="d-flex align-items-end  justify-content-end">
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="data">Enter the meet</button>
+  <button mat-button (click)="onNoClick()">{{'BUTTONS.CANCEL' | translate}}</button>
+  <button mat-button [mat-dialog-close]="data">{{'VIDEO.ENTER_MEET' | translate}}</button>
 </div>

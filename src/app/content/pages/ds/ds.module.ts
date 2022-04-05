@@ -5,6 +5,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {MatStepperModule} from "@angular/material/stepper";
 import {MatButtonModule} from "@angular/material/button";
 import {ReactiveFormsModule} from "@angular/forms";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 const routes: Routes = [
@@ -17,13 +18,14 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [DsComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    MatStepperModule,
-    MatButtonModule,
-    ReactiveFormsModule,
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        MatStepperModule,
+        MatButtonModule,
+        ReactiveFormsModule,
+        TranslateModule,
 
-  ]
+    ]
 })
 export class DsModule { }

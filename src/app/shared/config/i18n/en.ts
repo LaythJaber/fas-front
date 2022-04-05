@@ -3,6 +3,9 @@ export const locale = {
   data: {
     UNAUTHORIZED_MSG: 'You are unauthorized to access this page',
     HEADER: {
+      PROFILE: 'Profile',
+      LOGOUT: 'Logout',
+      OPERATOR_INFORMATIONS: 'User Informations',
       BREADCRUMB: {
         APPLICATIONS: ' Applications',
         APPOINTMENT: ' Appointment',
@@ -15,6 +18,7 @@ export const locale = {
         LOGIN: 'Login',
         DASHBOARD: 'Dashboard',
         PROFILE: 'Profile',
+        ADMIN_MGM: 'Administrators management'
       }
     },
     ALERT_DIALOG: {
@@ -22,6 +26,7 @@ export const locale = {
       MSG: 'You are going back to the home page'
     },
     BUTTONS: {
+      ASSIGN: 'Assign',
       APPLY: 'Apply',
       SAVE: 'Save',
       EDIT: 'Edit',
@@ -81,19 +86,33 @@ export const locale = {
       APP_CODE: 'Application Code',
       JOB_DESC: 'Job Description',
       COUNTRY: 'Country',
-      FIRST_NAME: 'First name',
-      LAST_NAME: 'Last name',
-      FULL_NAME: 'Full name',
+      FIRST_NAME: 'First Name',
+      LAST_NAME: 'Last Name',
+      FULL_NAME: 'Full Name',
       STATUS: 'Status',
       DETAILS: 'Details',
+      DESCRIPTION: 'Description',
+      ADDRESS:'Address',
       EMAIL: 'E-mail',
       MOBILE: 'Phone',
       CREATION_DATE: 'ADDED',
       PROGRAM_NAME: 'Program Name',
-      NO_APP_FOUND: 'No Applications yet'
+      NO_APP_FOUND: 'No Applications yet',
+      CREATED: 'Created'
     },
     SIDENAV: {
-      APP_MOBILE: 'Mobile Application',
+      DASHBOARD: 'Dashboard',
+      APPS: 'Applications',
+      USERS: 'Users',
+      CALENDAR: 'Calendar',
+      MY_APPS: 'My Applications',
+      MY_DOCS: 'My Documents',
+      MY_DS: 'My Ds',
+      MY_APPOINTMENTS: 'My Appointments',
+      VIDEO: 'Video call',
+      APPOINTMENT: 'Get an Appointment',
+      ADMIN_MGM: 'Administrators management'
+
     },
     DIALOG: {
       YOU_WANT_TO_DELETE: 'Are you sure you want to delete ',
@@ -108,6 +127,7 @@ export const locale = {
       USERNAME: 'Username',
       PASSWORD: 'password',
       FORGET_PASSWORD: 'Forget password?',
+      NO_ACCOUNT: 'No account ?',
       REMEMBER_ME: 'Remember me',
       LOGIN: 'Login',
       WELCOME_BACK: 'Welcome back',
@@ -203,5 +223,91 @@ export const locale = {
       IS_INVALID_FISCAL: 'Invalid Fiscal Code',
       IS_INVALID_MAIL: 'Invalid Email',
     },
+    DASHBOARD: {
+      TOTAL_USERS: 'Total users',
+      TOTAL_APPS: 'Total Applications',
+      ACCEPTED_APPS: 'Accepted Applications',
+      RECENT_APPS: 'Recent User Applications',
+      APP_LIST: 'applications list',
+      USERS_LIST: 'users list',
+      USER_TITLE: 'Welcome to FAS Exchange Platform',
+      USER_SUBTITLE:'Here you can manage your documents, schedule meetings, and follow up applications',
+      IMPROVE_DS: 'improve my ds',
+      REJECTED_APPS: 'Rejected Applications',
+      GET_APPOINTMENT: 'Get an appointment'
+    },
+
+    APPLICATIONS: {
+      APP_NAME:'Application name',
+      APPS: 'Applications',
+      SUBTITLE: 'These are the current and past applications',
+      NEW_APP: 'New Application',
+      UPDATE_APP: 'Update Application',
+      ASSIGN_APP: 'Assign new application',
+      CONFIRM_UPDATE:'Confirm update',
+      CANCEL_UPDATE:'Cancel update',
+      UPDATE_NOTE:'update note',
+      MY_APPS: 'My Applications',
+      MY_APPS_SUBTITLE:'These are your current and past applications'
+    },
+    USERS: {
+      APPLICANTS: 'Our Applicants',
+      SUBTITLE: 'This is the list of our lovely applicants',
+      ID: 'ID',
+      APPOINTMENT: 'Make Appointment',
+      VIDEO: 'Video call',
+      DOCUMENTS: 'Documents',
+      DS: 'Ds',
+      APPS: 'Applications',
+      USER_DOCS: 'User Documents',
+      USER_APPS: 'User Applications'
+
+    },
+    CALENDAR: {
+      CALENDAR: 'Calendar'
+    },
+    FORMS: {
+      SAVE: 'Save',
+      CLOSE: 'Close',
+      NEXT: 'Next',
+      BACK: 'Back'
+    },
+    STATUS: {
+      PENDING: 'Pending',
+      BLOCKED: 'Blocked',
+      ACCEPTED: 'Accepted'
+    },
+    DOCUMENTS: {
+      BAC: 'Baccalaureate',
+      TRANSCRIPTS:'Transcripts',
+      CERTIFICATES:'Certificates',
+      PASSPORT:'Passport',
+      INTERNSHIPS:'Internships',
+      RECOMMENDATIONS:'Recommendations',
+      MY_DOCS: 'My Documents',
+      MY_DOCS_SUBTITLE:'Please upload your documents to let us know who you are.'
+    },
+    DS: {
+      MY_DS: 'My Ds',
+      MY_DS_SUBTITLE:'Please complete this form to ensure we know the right informations about you.'
+    },
+    VIDEO: {
+      VIDEO_CALL: 'Make A video call',
+      VIDEO_SUBTITLE: 'Contact our administrators directly by video call',
+      ENTER_MEET:'Enter Meet',
+      USE_PASS: 'Use this password to join the meet ',
+      PASSWORD: 'Password'
+    },
+    APPOINTMENT: {
+      APPOINTMENT_TITLE: 'Get An Appointment',
+      APPOINTMENT_SUBTITLE: 'Please choose a free date to schedule a meeting with us'
+    },
+    OWNER: {
+      ADMIN_PANEL: 'Administration Panel',
+      ADD_ADMIN: 'Add an Administrator',
+      EDIT_ADMIN: 'Update an Administrator',
+      DELETE_ADMIN: 'Delete an Administrator',
+      DELETE_CONFIRM: 'Your are about to delete and Administrator'
+    }
   }
 };

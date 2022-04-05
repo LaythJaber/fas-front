@@ -8,6 +8,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {SharedModule} from "../../../shared/shared.module";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 const routes: Routes = [
@@ -20,16 +21,17 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [DocumentComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    MatButtonModule,
-    MatStepperModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    SharedModule,
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        MatButtonModule,
+        MatStepperModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        SharedModule,
+        TranslateModule,
 
-  ]
+    ]
 })
 export class DocumentModule { }
